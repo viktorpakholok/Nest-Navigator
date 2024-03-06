@@ -1,0 +1,193 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    background-color:#E4EBF3  
+}
+
+.long-content {
+    min-height: 1350px; /* Це гарантує, що зміст буде достатнім для скролінгу */
+}
+
+header {
+    height: 10vh; /* Висота header і footer як 10% від висоти вікна перегляду */
+    display: flex;
+    align-items: center; /* Центрування логотипу вертикально */
+    justify-content: center; 
+    background-color: #011128;
+    color: #E4EBF3;
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+}
+.header_text{
+    font-size: 1.3em;
+}
+.logo {
+    max-height: 80%; /* Максимальна висота логотипу відносно контейнера */
+    max-width: 100%; /* Максимальна ширина логотипу відносно контейнера */
+    /* Автоматичне зменшення розміру, якщо необхідно, але збереження пропорцій */
+}
+
+.bi-arrow-up-circle-fill{
+    margin-left: 70vh;
+    margin-top: -10vh
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #FFFCF2;
+    text-decoration: none;
+}
+
+h1 {
+    margin-bottom: 0.5em;
+    font-size: 6em;
+}
+
+main {
+    text-align: center;
+    padding: 25vh 0;
+    background-color: #E4EBF3
+}
+
+.find_ap{
+    font-size: 2em;
+}
+.adress{
+    font-size: 1.5em;
+}
+button {
+    padding: 0.5em 1em;
+    margin-top: 2em;
+    background-color: #011128;
+    color:  #FFFCF2
+}
+.main-text {
+    padding-top: 20vh;
+    margin: 5vh;
+    text-align: left;
+    font-size: 24px;
+    padding-left: 10vh;
+    padding-right: 10vh;
+    line-height: 1.5;
+}
+.photo-desciption{
+    width: 100%;
+    height: 100%;
+
+}
+.styled-button {
+    background-color: #011128; /* колір фону кнопки */
+    color: #FFFCF2; /* колір тексту */
+    border: none; /* без рамки */
+    padding: 25px 50px; /* відступи всередині кнопки */
+    border-radius: 10px; /* закруглення країв */
+    font-size: 22px; /* розмір шрифту */
+    cursor: pointer; /* тип курсора при наведенні */
+    transition: background-color 0.3s; /* анімація для фону */
+}
+  
+.styled-button:hover {
+    background-color: #1A2E8C; /* колір фону кнопки при наведенні */
+}
+
+.footer-distributed {
+    background-color:#011128;;
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    font: bold 16px sans-serif;
+    padding: 5vh 5vh;
+  }
+  
+  .footer-distributed .footer-left,
+  .footer-distributed .footer-center,
+  .footer-distributed .footer-right {
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  /* Footer left */
+  
+  .footer-distributed .footer-left {
+    width: 40%;
+  }
+  
+  /* Footer links */
+  
+  .footer-distributed .footer-links {
+    color: #FFFCF2;
+    margin: 2vh 0 3vh;
+    padding: 0;
+  }
+  
+  .footer-distributed .footer-links a {
+    display: inline-block;
+    line-height: 1.8;
+    text-decoration: none;
+    color: inherit;
+    font-size: 1.5em;
+  }
+  
+  .footer-distributed .footer-company-name {
+    color: #8f9296;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+  }
+  
+  /* Footer Center */
+  
+  .footer-distributed .footer-center {
+    width: 35%;
+  }
+
+   .footer-distributed .footer-center i {
+    background-color: #33383b;
+    color: #FFFCF2;
+    font-size: 8px;
+    width: 5vh;
+    height: 5vh;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    margin: 10px 15px;
+    vertical-align: middle;
+  }
+  
+   
+ .footer-distributed .footer-center p {
+    display: inline-block;
+    color: #ffffff;
+    vertical-align: middle;
+    margin: 0;
+  } 
+  
+  .footer-distributed .footer-center p span {
+    display: block;
+    font-weight: normal;
+    font-size: 8px;
+    line-height: 0;
+  }
+  
+  .footer-distributed .footer-center p a {
+    color: #072f75;
+    text-decoration: none;
+  }
+  
