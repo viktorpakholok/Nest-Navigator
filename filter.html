@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nest Navigator</title>
+    <link rel="stylesheet" href="filters.css">
+</head>
+<body>
+    <header>
+        <img src="./Screenshot 2024-02-28 at 01.57.44.png" alt="Nest Navigator" class="logo">
+        <nav>
+            <ul class="header_text">
+                <li><a href="#">Головна сторінка</a></li>
+                <li><a href="#">Пошук</a></li>
+                <li><a href="#">Акаунт</a></li>
+                <li><a href="#">Про нас</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="filters">
+            <form id="searchForm">
+                <div class="filter-item">
+                    <label for="city">Місто:</label>
+                    <select id="city">
+                        <option value="">Виберіть місто</option>
+                        <option value="Львів">Львів</option>
+                        <option value="Київ">Київ</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="price">Ціна:</label>
+                    <input type="number" id="priceMin" placeholder="Мін">
+                    <input type="number" id="priceMax" placeholder="Макс">
+                </div>
+                <div class="filter-item">
+                    <label for="rooms">Кімнати:</label>
+                    <select id="rooms">
+                        <option value="">Будь-яка кількість</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3+</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="area">Площа (м²):</label>
+                    <input type="number" id="areaMin" placeholder="Мін">
+                    <input type="number" id="areaMax" placeholder="Макс">
+                </div>
+                <div class="filter-item">
+                    <label for="region">Район:</label>
+                    <select id="region">
+                        <option value="">Спочатку виберіть місто</option>
+                    </select>
+                </div>
+                <button type="submit">Пошук</button>
+            </form>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var citySelect = document.getElementById('city');
+            var regionSelect = document.getElementById('region');
+    
+            var regionsByCity = {
+                'Львів': ['Галицький', 'Шевченківський', 'Сихівський', 'Залізничний', 'Франківський', 'Личаківський'],
+                'Київ': ['Печерський', 'Шевченківський', 'Солом\'янський', 'Подільський', 'Дарницький']
+            };
+    
+            citySelect.addEventListener('change', function() {
+                var selectedCity = this.value;
+                var regions = regionsByCity[selectedCity] || [];
+    
+                regionSelect.innerHTML = '<option value="">Виберіть район</option>';
+                regions.forEach(function(region) {
+                    var option = new Option(region, region);
+                    regionSelect.add(option);
+                });
+            });
+        });
+    </script>
+</body>

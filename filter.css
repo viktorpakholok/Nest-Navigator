@@ -33,8 +33,6 @@ header {
     /* Автоматичне зменшення розміру, якщо необхідно, але збереження пропорцій */
 }
 
-
-
 nav ul {
     list-style: none;
     padding: 0;
@@ -51,57 +49,50 @@ nav ul li a {
     text-decoration: none;
 }
 
-h1 {
-    margin-bottom: 0.5em;
-    font-size: 6em;
+.filters {
+    max-width: 20vh;
+    margin-left: -10vh;
+    padding: 15vh;
 }
 
-main {
-    text-align: center;
-    padding: 25vh 0;
-    background-color: #E4EBF3
+.filter-item {
+    margin-bottom: 15px;
 }
 
-.find_ap{
-    font-size: 2em;
+.filter-item label {
+    display: block;
+    margin-bottom: 5px;
 }
-.adress{
-    font-size: 1.5em;
-}
-button {
-    padding: 0.5em 1em;
-    margin-top: 2em;
-    background-color: #011128;
-    color:  #FFFCF2
-}
-.main-text {
-    padding-top: 20vh;
-    margin: 5vh;
-    text-align: left;
-    font-size: 24px;
-    padding-left: 10vh;
-    padding-right: 10vh;
-    line-height: 1.5;
-}
-.photo-desciption{
+
+.filter-item input[type="number"],
+.filter-item select {
     width: 100%;
-    height: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
-.styled-button {
-    background-color: #011128; /* колір фону кнопки */
-    color: #FFFCF2; /* колір тексту */
-    border: none; /* без рамки */
-    padding: 25px 50px; /* відступи всередині кнопки */
-    border-radius: 10px; /* закруглення країв */
-    font-size: 22px; /* розмір шрифту */
-    cursor: pointer; /* тип курсора при наведенні */
-    transition: background-color 0.3s; /* анімація для фону */
+
+button[type="submit"]:hover {
+    background-color: #45a049;
 }
-  
-.styled-button:hover {
-    background-color: #1A2E8C; /* колір фону кнопки при наведенні */
+
+
+
+.content-container {
+    display: flex;
+    flex-wrap: wrap;
 }
+
 
 .footer-distributed {
     background-color:#011128;;
@@ -121,10 +112,6 @@ button {
   }
   
   /* Footer left */
-  .bi-arrow-up-circle-fill{
-    margin-left: 70vh;
-    margin-top: -10vh
-}
   
   .footer-distributed .footer-left {
     width: 40%;
