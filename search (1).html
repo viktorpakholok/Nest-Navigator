@@ -1,0 +1,198 @@
+!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nest Navigator</title>
+    <link rel="stylesheet" href="new_serach_style.css">
+</head>
+<body>
+    <header>
+        <img src="./Screenshot 2024-02-29 at 14.27.16.png" alt="Nest Navigator" class="logo">
+        <nav>
+            <ul class="header_text">
+                <li><a href="#">Головна сторінка</a></li>
+                <li><a href="#">Пошук</a></li>
+                <li><a href="#">Акаунт</a></li>
+                <li><a href="#">Про нас</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- <button class="button_search">Search</button> -->
+        <div class="container">
+            <button class="button_search">Search</button>
+
+            <div class="adver_section">
+                <img class='img_adver_section' src="./photo1.jpeg" alt="Фотографія кнопки">
+                <div class='adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+
+            <div href=# class="adver_section">
+                <img class = 'img_adver_section' src="./photo2.jpeg" alt="Фотографія кнопки">
+                <div class = 'adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+            <div href=# class="adver_section">
+                <img class = 'img_adver_section' src="./photo1_2.webp" alt="Фотографія кнопки">
+                <div class = 'adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+            <div href=# class="adver_section">
+                <img class = 'img_adver_section' src="./Screenshot 2024-02-29 at 14.27.16.png" alt="Фотографія кнопки">
+                <div class = 'adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+            <div href=# class="adver_section">
+                <img class = 'img_adver_section' src="./Screenshot 2024-02-29 at 14.27.16.png" alt="Фотографія кнопки">
+                <div class = 'adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+            <div href=# class="adver_section">
+                <img class = 'img_adver_section' src="./Screenshot 2024-02-29 at 14.27.16.png" alt="Фотографія кнопки">
+                <div class = 'adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+            <div href=# class="adver_section">
+                <img class = 'img_adver_section' src="./Screenshot 2024-02-29 at 14.27.16.png" alt="Фотографія кнопки">
+                <div class = 'adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+            <div href=# class="adver_section">
+                <img class = 'img_adver_section' src="./Screenshot 2024-02-29 at 14.27.16.png" alt="Фотографія кнопки">
+                <div class = 'adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+            <div href=# class="adver_section">
+                <img class = 'img_adver_section' src="./Screenshot 2024-02-29 at 14.27.16.png" alt="Фотографія кнопки">
+                <div class = 'adver_text'>
+                    <h2>Назва</h2>
+                    <p>Опис пропозиції.</p>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="filters">
+            <form id="searchForm">
+                <div class="filter-item">
+                    <label for="city">Місто:</label>
+                    <select id="city">
+                        <option value="">Виберіть місто</option>
+                        <option value="Львів">Львів</option>
+                        <option value="Київ">Київ</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="price">Ціна:</label>
+                    <input type="number" id="priceMin" placeholder="Мін">
+                    <input type="number" id="priceMax" placeholder="Макс">
+                </div>
+                <div class="filter-item">
+                    <label for="rooms">Кімнати:</label>
+                    <select id="rooms">
+                        <option value="">Будь-яка кількість</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3+</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="area">Площа (м²):</label>
+                    <input type="number" id="areaMin" placeholder="Мін">
+                    <input type="number" id="areaMax" placeholder="Макс">
+                </div>
+                <div class="filter-item">
+                    <label for="region">Район:</label>
+                    <select id="region">
+                        <option value="">Спочатку виберіть місто</option>
+                    </select>
+                </div>
+                <button type="submit">Пошук</button>
+            </form>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var citySelect = document.getElementById('city');
+            var regionSelect = document.getElementById('region');
+    
+            var regionsByCity = {
+                'Львів': ['Галицький', 'Шевченківський', 'Сихівський', 'Залізничний', 'Франківський', 'Личаківський'],
+                'Київ': ['Печерський', 'Шевченківський', 'Солом\'янський', 'Подільський', 'Дарницький']
+            };
+    
+            citySelect.addEventListener('change', function() {
+                var selectedCity = this.value;
+                var regions = regionsByCity[selectedCity] || [];
+    
+                regionSelect.innerHTML = '<option value="">Виберіть район</option>';
+                regions.forEach(function(region) {
+                    var option = new Option(region, region);
+                    regionSelect.add(option);
+                });
+            });
+        });
+
+    </script>
+    <footer class="footer-distributed">
+
+        <div class="footer-left">
+  
+          <IMG SRC="./Screenshot 2024-02-29 at 14.27.16.png" ALT="" WIDTH=225 HEIGHT=100>
+  
+          <p class="footer-links">
+            <a href="#">Головна сторінка</a> ·
+            <a href="#">Пошук</a> ·
+            <a href="#">Акаунт</a> ·
+            <a href="#">Про нас</a> ·
+          </p>
+  
+          <p class="footer-company-name">N&N &copy; 2024</p>
+        </div>
+  
+        <div class="footer-center">
+  
+          <div class='adress'>
+            <i class="fa fa-map-marker"></i>
+            <p>УКУ, Козельницької 2а <br> Львів, Україна</p>
+          </div>
+        
+          <div>
+            <i class="fa fa-phone"></i>
+            <p>+380990900001</p>
+          </div>
+  
+          <div>
+            <i class="fa fa-envelope"></i>
+            <p><a href="mailto:support@company.com">nnavigator@gmail.com</a></p>
+          </div>
+          <a href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="#E4EBF3" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z"/>
+          </svg>
+        </a>
+        </div>
+      </footer>
+
+
+</body>
+
+</html>
