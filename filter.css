@@ -1,181 +1,180 @@
 /* styles.css */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    height: 100%;
-    width: 100%;
-    background-color:#E4EBF3  
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background-color:#E4EBF3  
 }
 
 .long-content {
-    min-height: 1350px; /* Це гарантує, що зміст буде достатнім для скролінгу */
+  min-height: 1350px; /* Це гарантує, що зміст буде достатнім для скролінгу */
 }
 
 header {
-    height: 10vh; /* Висота header і footer як 10% від висоти вікна перегляду */
-    display: flex;
-    align-items: center; /* Центрування логотипу вертикально */
-    justify-content: center; 
-    background-color: #011128;
-    color: #E4EBF3;
-    padding: 15px 0;
-    position: fixed;
-    width: 100%;
+  height: 10vh; /* Висота header і footer як 10% від висоти вікна перегляду */
+  display: flex;
+  align-items: center; /* Центрування логотипу вертикально */
+  justify-content: center; 
+  background-color: #011128;
+  color: #E4EBF3;
+  padding: 15px 0;
+  position: fixed;
+  width: 100%;
 }
 .header_text{
-    font-size: 1.3em;
+  font-size: 1.3em;
 }
 .logo {
-    max-height: 80%; /* Максимальна висота логотипу відносно контейнера */
-    max-width: 100%; /* Максимальна ширина логотипу відносно контейнера */
-    /* Автоматичне зменшення розміру, якщо необхідно, але збереження пропорцій */
+  max-height: 80%; /* Максимальна висота логотипу відносно контейнера */
+  max-width: 100%; /* Максимальна ширина логотипу відносно контейнера */
+  /* Автоматичне зменшення розміру, якщо необхідно, але збереження пропорцій */
 }
 
 nav ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
 }
 
 nav ul li {
-    margin: 0 20px;
+  margin: 0 20px;
 }
 
 nav ul li a {
-    color: #FFFCF2;
-    text-decoration: none;
+  color: #FFFCF2;
+  text-decoration: none;
 }
 
 .filters {
-    max-width: 20vh;
-    margin-left: -10vh;
-    padding: 15vh;
+  max-width: 20vh;
+  margin-left: -10vh;
+  padding: 15vh;
 }
 
 .filter-item {
-    margin-bottom: 15px;
+  margin-bottom: 1vh;
 }
 
 .filter-item label {
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 0.33vh;
 }
 
 .filter-item input[type="number"],
 .filter-item select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  padding: 1vh;
+  margin-bottom: 1vh;
+  border: 1px solid #ccc;
+  border-radius: 0.5vh;
 }
 
 button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  padding: 1vh 1.5vh;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 button[type="submit"]:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 
 
 .content-container {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 
 .footer-distributed {
-    background-color:#011128;;
-    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.12);
-    box-sizing: border-box;
-    width: 100%;
-    text-align: left;
-    font: bold 16px sans-serif;
-    padding: 5vh 5vh;
-  }
-  
-  .footer-distributed .footer-left,
-  .footer-distributed .footer-center,
-  .footer-distributed .footer-right {
-    display: inline-block;
-    vertical-align: top;
-  }
-  
-  /* Footer left */
-  
-  .footer-distributed .footer-left {
-    width: 40%;
-  }
-  
-  /* Footer links */
-  
-  .footer-distributed .footer-links {
-    color: #FFFCF2;
-    margin: 2vh 0 3vh;
-    padding: 0;
-  }
-  
-  .footer-distributed .footer-links a {
-    display: inline-block;
-    line-height: 1.8;
-    text-decoration: none;
-    color: inherit;
-    font-size: 1.5em;
-  }
-  
-  .footer-distributed .footer-company-name {
-    color: #8f9296;
-    font-size: 14px;
-    font-weight: normal;
-    margin: 0;
-  }
-  
-  /* Footer Center */
-  
-  .footer-distributed .footer-center {
-    width: 35%;
-  }
+  background-color:#011128;;
+  box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+  width: 100%;
+  text-align: left;
+  font: bold 16px sans-serif;
+  padding: 5vh 5vh;
+}
 
-   .footer-distributed .footer-center i {
-    background-color: #33383b;
-    color: #FFFCF2;
-    font-size: 8px;
-    width: 5vh;
-    height: 5vh;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 32px;
-    margin: 10px 15px;
-    vertical-align: middle;
-  }
-  
-   
- .footer-distributed .footer-center p {
-    display: inline-block;
-    color: #ffffff;
-    vertical-align: middle;
-    margin: 0;
-  } 
-  
-  .footer-distributed .footer-center p span {
-    display: block;
-    font-weight: normal;
-    font-size: 8px;
-    line-height: 0;
-  }
-  
-  .footer-distributed .footer-center p a {
-    color: #072f75;
-    text-decoration: none;
-  }
-  
+.footer-distributed .footer-left,
+.footer-distributed .footer-center,
+.footer-distributed .footer-right {
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* Footer left */
+
+.footer-distributed .footer-left {
+  width: 40%;
+}
+
+/* Footer links */
+
+.footer-distributed .footer-links {
+  color: #FFFCF2;
+  margin: 2vh 0 3vh;
+  padding: 0;
+}
+
+.footer-distributed .footer-links a {
+  display: inline-block;
+  line-height: 1.8;
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.5em;
+}
+
+.footer-distributed .footer-company-name {
+  color: #8f9296;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0;
+}
+
+/* Footer Center */
+
+.footer-distributed .footer-center {
+  width: 35%;
+}
+
+ .footer-distributed .footer-center i {
+  background-color: #33383b;
+  color: #FFFCF2;
+  font-size: 8px;
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 32px;
+  margin: 10px 15px;
+  vertical-align: middle;
+}
+
+ 
+.footer-distributed .footer-center p {
+  display: inline-block;
+  color: #ffffff;
+  vertical-align: middle;
+  margin: 0;
+} 
+
+.footer-distributed .footer-center p span {
+  display: block;
+  font-weight: normal;
+  font-size: 8px;
+  line-height: 0;
+}
+
+.footer-distributed .footer-center p a {
+  color: #072f75;
+  text-decoration: none;
+}
