@@ -54,13 +54,15 @@ with open('test.txt', 'w', encoding='UTF-8') as file:
                 print(text)
                 links.append(text)
                 url_add = 'https://www.olx.ua/d' if '/uk/' in text else 'https://www.olx.ua/d/uk'
-                print(f'url_add: {url_add}')
+                # print(f'url_add: {url_add}')
                 url_off = url_add + text[2:]
                 print(url_off)
                 response_1 = requests.get(url_off)
                 soup_1 = BeautifulSoup(response_1.content, 'html.parser')
                 with open('sth.txt', 'w', encoding='UTF-8') as file_:
                     file_.write(str(soup_1))
+
+                    dict_off['url'] = url_off
 
                     dict_off['name'] = soup_1.find('h4', class_ = 'css-1juynto').get_text()
 
@@ -86,6 +88,7 @@ with open('test.txt', 'w', encoding='UTF-8') as file:
                             dict_off['num_of_rooms'] = get_t.split('Кількість кімнат: ')[1]
                     for ind, el in enumerate(soup_1.find_all('a', class_ = 'css-tyi2d1')):
                         get_t = el.get_text()
+                        dict_off['district'] = ''
                         # print(ind, get_t)
                         if ind == 5:
                             dict_off['city'] =  get_t.split(' - ')[1]
@@ -94,7 +97,7 @@ with open('test.txt', 'w', encoding='UTF-8') as file:
 
                     dict_off['images'] = [el['src'] for el in soup_1.find_all('img', class_ = 'css-1bmvjcs')]
                 # print(dict_off)
-                dct_all[url_off] = dict_off
+                dct_all[len(dct_all)] = dict_off
                 # break
             # print(f'link: {link}')
 
