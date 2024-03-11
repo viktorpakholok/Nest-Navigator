@@ -1,4 +1,3 @@
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -33,7 +32,10 @@ header {
     /* Автоматичне зменшення розміру, якщо необхідно, але збереження пропорцій */
 }
 
-
+.bi-arrow-up-circle-fill{
+    margin-left: 70vh;
+    margin-top: -10vh
+}
 
 nav ul {
     list-style: none;
@@ -58,51 +60,27 @@ h1 {
 
 main {
     text-align: center;
-    padding: 25vh 0;
+    padding: 15vh 0;
     background-color: #E4EBF3
 }
 
-.find_ap{
-    font-size: 2em;
-}
-.adress{
-    font-size: 1.5em;
-}
-button {
-    padding: 0.5em 1em;
-    margin-top: 2em;
-    background-color: #011128;
-    color:  #FFFCF2
-}
-.main-text {
-    padding-top: 20vh;
+.main_text{
     margin: 5vh;
-    text-align: left;
+    text-align: center;
     font-size: 24px;
     padding-left: 10vh;
     padding-right: 10vh;
+    padding-bottom: 10vh;
     line-height: 1.5;
 }
-.photo-desciption{
-    width: 100%;
+.photos{
+    padding-bottom: 10vh;
+}
+.big_photo{
+    width: 80%;
     height: 100%;
 
 }
-.styled-button {
-    background-color: #011128; /* колір фону кнопки */
-    color: #FFFCF2; /* колір тексту */
-    border: none; /* без рамки */
-    padding: 25px 50px; /* відступи всередині кнопки */
-    border-radius: 10px; /* закруглення країв */
-    font-size: 22px; /* розмір шрифту */
-    cursor: pointer; /* тип курсора при наведенні */
-    transition: background-color 0.3s; /* анімація для фону */
-}
-  
-.styled-button:hover {
-    background-color: #1A2E8C; /* колір фону кнопки при наведенні */
-}
-
 .footer-distributed {
     background-color:#011128;;
     box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.12);
@@ -121,10 +99,6 @@ button {
   }
   
   /* Footer left */
-  .bi-arrow-up-circle-fill{
-    margin-left: 70vh;
-    margin-top: -10vh
-}
   
   .footer-distributed .footer-left {
     width: 40%;
