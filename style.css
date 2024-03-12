@@ -31,7 +31,7 @@ header {
     position: fixed;
     width: 100%;
 }
-.header_text{
+.header-text{
     font-size: 1.3em;
 }
 .logo {
@@ -197,6 +197,10 @@ button {
     background-color: #1A2E8C; 
 }
 
+.big-photo{
+    width: 80%;
+    height: 100%;
+}
 /* search page */
 
 .flex{
@@ -276,7 +280,7 @@ button {
   }
 
     /* filters */
-.filters {
+.filters{
     max-width: 20vh;
     margin-left: -10vh;
     padding: 15vh;
@@ -330,7 +334,4 @@ background-color: #FFFCF2;
 .photos{
     padding-bottom: 10vh;
 }
-.big_photo{
-    width: 80%;
-    height: 100%;
-}
+
