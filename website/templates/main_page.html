@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nest Navigator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
 </head>
 <body>
     <header>
         <img src="img/logo.png" alt="Nest Navigator" class="logo">
         <nav>
             <ul class="header_text">
-                <li><a href="main_page.html">Головна сторінка</a></li>
-                <li><a href="search_page.html">Пошук</a></li>
-                <li><a href="team_page.html">Про нас</a></li>
+                <li><a href="./main_page.html">Головна сторінка</a></li>
+                <li><a href="./search_page.html">Пошук</a></li>
+                <li><a href="./team_page.html">Про нас</a></li>
             </ul>
         </nav>
     </header>
