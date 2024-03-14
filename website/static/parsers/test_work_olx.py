@@ -27,10 +27,10 @@ headers_['User-Agent'] = random.choice(user_agents)
 dct_all = {}
 
 def parse_olx():
-    count = 25
+    count = 1
     url = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/\
 dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
-    while count <= 28:
+    while count <= 25:
 
         response = requests.get(url+str(count), headers=headers_)
 
