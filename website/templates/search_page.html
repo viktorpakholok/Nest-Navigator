@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nest Navigator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
 </head>
 <body>
     <header>
-        <img src="img/logo.png" alt="Nest Navigator" class="logo">
+        <img src="{{ url_for('static', filename = 'imgs/logo.png') }}" alt="Nest Navigator" class="logo">
         <nav>
             <ul class="header-text">
-                <li><a href="main_page.html">Головна сторінка</a></li>
+                <li><a href="{{ url_for('main') }}">Головна сторінка</a></li>
                 <li><a href="search_page.html">Пошук</a></li>
-                <li><a href="team_page.html">Про нас</a></li>
+                <li><a href="{{ url_for('team') }}">Про нас</a></li>
             </ul>
         </nav>
     </header>
@@ -65,7 +65,7 @@
     
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -101,7 +101,7 @@
                 </div>
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -119,7 +119,7 @@
                 </div>
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -137,7 +137,7 @@
                 </div>
                 <div class="adver-section">
                     <div class="flex desc">
-                        <img class='img-adver-section' src="img/photo1.jpeg" alt="Фотографія кнопки">
+                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}" alt="Фотографія кнопки">
                         <div class='adver-text'>
                             <h2>Назва</h2>
                             <p>Опис пропозиції.</p>
@@ -190,12 +190,12 @@
 
         <div class="footer-left">
   
-          <IMG SRC="img/logo.png" ALT="" WIDTH=225 HEIGHT=100>
+          <IMG src="{{ url_for('static', filename = 'imgs/logo.png') }}" ALT="" WIDTH=225 HEIGHT=100>
   
           <p class="footer-links">
-            <a href="main_page.html">Головна сторінка</a> ·
+            <a href="{{ url_for('main') }}">Головна сторінка</a> ·
             <a href="search_page.html">Пошук</a> ·
-            <a href="team_page.html">Про нас</a> 
+            <a href="{{ url_for('team') }}">Про нас</a> 
           </p>
   
           <p class="footer-company-name">N&N &copy; 2024</p>
