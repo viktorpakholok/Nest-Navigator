@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <img src="img/logo.png" alt="Nest Navigator" class="logo">
+        <img src="{{ url_for('static', filename = 'imgs/logo.png') }}" alt="Nest Navigator" class="logo">
         <nav>
             <ul class="header_text">
                 <li><a href="./main_page.html">Головна сторінка</a></li>
@@ -37,12 +37,12 @@
             
             З <strong>Nest Navigator</strong> пошук житла стає простішим, швидшим та приємнішим. Розпочніть свій пошук вже сьогодні та зробіть крок назустріч новому дому!</p>
     </main>
-    <img src="img/photo_over.jpg" class="photo-desciption">
+    <img src="{{ url_for('static', filename = 'imgs/photo_over.jpg')}}" class="photo-desciption">
     <footer class="footer-distributed">
 
         <div class="footer-left">
   
-          <IMG SRC="img/logo.png" ALT="" WIDTH=225 HEIGHT=100>
+          <IMG SRC="{{ url_for('static', filename = 'imgs/logo.png')}}" ALT="" WIDTH=225 HEIGHT=100>
   
           <p class="footer-links">
             <a href="main_page.html">Головна сторінка</a> ·

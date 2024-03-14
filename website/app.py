@@ -4,12 +4,13 @@ from flask_sqlalchemy import SQLAlchemy
 
 import json
 import os
-with open("js.json", "r") as file:
-    data_json = json.load(file)
-    data_json = data_json['mainEntity']['itemListElement'][0]['offers']['offers']
 
-with open('result.json', 'r') as file:
-    data_json_olx = json.load(file)
+# with open("js.json", "r") as file:
+#     data_json = json.load(file)
+#     data_json = data_json['mainEntity']['itemListElement'][0]['offers']['offers']
+
+# with open('result.json', 'r') as file:
+#     data_json_olx = json.load(file)
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -50,13 +51,25 @@ class Apartament(db.Model):
         return f"{self.name} {self.price} {self.currency}"
 
 @app.route("/")
-def index():
-    apartaments = Apartament.query.filter().all()
-    # print('************************')
-    # print(apartaments)
-    # print('************************')
-    return render_template('index.html', apartaments = apartaments)
+def main():
+    return render_template('main_page.html')
 
+
+# def index():
+#     apartaments = Apartament.query.filter().all()
+#     # print('************************')
+#     # print(apartaments)
+#     # print('************************')
+#     return render_template('index.html', apartaments = apartaments)
+
+
+@app.route("/our_team")
+def team():
+    return render_template('team_page.html')
+
+@app.route("/search")
+def search():
+    return render_template('search_page.html')
 
 if __name__ == "__main__":
 #    with app.app_context():         # <--- without these two lines,
