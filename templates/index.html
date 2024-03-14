@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XD</title>
+</head>
+<body>
+  <div class="container">
+    <p><h2>COOL TEXT</h2></p>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <strong>Search for : {{ tag }}</strong>
+    </div>
+    <div class="col-4">
+      <form action="" method="post" autocomplete="off">
+        <div class="row">
+         </div class=col-6>
+          <input type="text" class="form-control" name="city_tag" placeholder="Enter city"/>
+          </div class=col-6>
+          <input type="text" class="form-control" name="district_tag" placeholder="Enter district"/>
+          </div class=col-6>
+          <input type="text" class="form-control" name="min_area_tag" placeholder="Enter min area"/>
+          </div class=col-6>
+          <input type="text" class="form-control" name="max_area_tag" placeholder="Enter max area"/>
+          </div class=col-6>
+          <input type="text" class="form-control" name="min_price_tag" placeholder="Enter min price"/>
+          </div class=col-6>
+          <input type="text" class="form-control" name="max_price_tag" placeholder="Enter max price"/>
+          </div class=col-6>
+          <input type="text" class="form-control" name="min_rooms_tag" placeholder="Enter min rooms"/>
+          </div class=col-6>
+          <input type="text" class="form-control" name="max_rooms_tag" placeholder="Enter max rooms"/>
+         </div>
+         
+         <div class="col-6" align="left">
+          <input type="submit" value="Search" class="form-control btn btn-primary " name="">
+         </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <table id="example" class="table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th><input type = "checkbox" onclick="chackAll(this)"></th>
+            <th>Images</th>
+            <th>Name</th>
+            <th>Url</th>
+            <th>Area</th>
+            <th>Price</th>
+            <th>Currency</th>
+            <th>Rooms</th>
+            <th>District</th>
+            <th>City</th>
+        </thead>
+        <tbody>
+          {% for apartament in apartaments.items %}
+          <tr>
+            <td><input type = "checkbox" name = ""> {{ apartament.images}}</td>
+              <td>{{ apartament.name }}</td>
+              <td>{{ apartament.url }}</td>
+              <td>{{ apartament.area }}</td>
+              <td>{{ apartament.price }}</td>
+              <td>{{ apartament.currency }}</td>
+              <td>{{ apartament.rooms }}</td>
+              <td>{{ apartament.district }}</td>
+              <td>{{ apartament.city }}</td>
+          </tr>
+          {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          {% if apartaments.has_prev %}
+          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.prev_num)  }}">Previous</a></li>
+          {% else %}
+          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
+          {% endif %}
+
+          {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
+          {% if page %}
+
+              {% if page == apartaments.page %}
+                  <li class = "page-item active"><a class="page-link" href="{{ url_for('index', page=page)}}">{{ page }}</a></li>
+              {% else %}
+              <li class = "page-item"><a class="page-link" href="{{ url_for('index', page=page)}}">{{ page }}</a></li>
+              {% endif %}
+
+
+          {% else %}
+              <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">...</a></li>
+          {% endif %}
+          {% endfor %}
+
+          {% if apartaments.has_next %}
+          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.next_num)  }}">Next</a></li>
+          {% else %}
+          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
+          {% endif %}
+        </ul>
+
+      </nav>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
+<!-- <tr>
+  <th>Images</th>
+  <th>Name</th>
+  <th>Url</th>
+  <th>Area</th>
+  <th>Price</th>
+  <th>Currency</th>
+  <th>Rooms</th>
+  <th>District</th>
+  <th>City</th> -->
