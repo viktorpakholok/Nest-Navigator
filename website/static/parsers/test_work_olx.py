@@ -3,26 +3,30 @@ import requests
 import random
 import json
 
-# headers = {'Accept-Encoding': 'gzip'}
 
 session = requests.Session()
 
-# user_agents = [
-#     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
-#     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
-#     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
-#     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
-#     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
-#     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15'
-#     'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15'
-# ]
-user_agents = ['Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; \
-Googlebot/2.1; +http://www.google.com/bot.html) Chrome/W.X.Y.Z Safari/537.36']
+user_agents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Geck\
+o) Chrome/109.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, lik\
+e Gecko) Chrome/109.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Geck\
+o) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, lik\
+e Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/\
+108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, l\
+ike Gecko) Version/16.1 Safari/605.1.15',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/605.1.15 (KHTML, like\
+ Gecko) Version/16.1 Safari/605.1.15',
+    'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; \
++http://www.google.com/bot.html) Chrome/W.X.Y.Z Safari/537.36'
+]
 
 headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
-# session.headers.update({'User-Agent': headers_['User-Agent']})
-# lst_ = []
 
 
 def parse_olx():
@@ -51,7 +55,7 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
                 url_add = 'https://www.olx.ua/d' if '/uk/' in text else 'https://www.olx.ua/d/uk'
                 # print(f'url_add: {url_add}')
                 url_off = url_add + text[2:]
-                print(url_off)
+                # print(url_off)
                 response_1 = requests.get(url_off, headers=headers_)
                 soup_1 = BeautifulSoup(response_1.content, 'html.parser')
 
@@ -83,8 +87,10 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
 ('img', class_ = 'css-1bmvjcs')]
                 # print(dict_off)
                 dct_all[len(dct_all)] = dict_off
-                with open('result.json', 'w', encoding='UTF-8') as json_file:
-                    json.dump(dct_all, json_file, indent=4, ensure_ascii=False)
+
+                # with open('result.json', 'w', encoding='UTF-8') as json_file:
+                #     json.dump(dct_all, json_file, indent=4, ensure_ascii=False)
+
                 # break
         count += 1
     return dct_all

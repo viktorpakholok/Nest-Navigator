@@ -16,7 +16,7 @@
     <div class="col-4">
       <form action="" method="post" autocomplete="off">
         <div class="row">
-         </div class=col-6>
+          </div class=col-6>
           <input type="text" class="form-control" name="city_tag" placeholder="Enter city"/>
           </div class=col-6>
           <input type="text" class="form-control" name="district_tag" placeholder="Enter district"/>
@@ -76,7 +76,7 @@
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           {% if apartaments.has_prev %}
-          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.prev_num)  }}">Previous</a></li>
+          <li class = "page-item"> <a class="page-link" href = "{{ url_for('main', page = apartaments.prev_num)  }}">Previous</a></li>
           {% else %}
           <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
           {% endif %}
@@ -85,9 +85,9 @@
           {% if page %}
 
               {% if page == apartaments.page %}
-                  <li class = "page-item active"><a class="page-link" href="{{ url_for('index', page=page)}}">{{ page }}</a></li>
+                  <li class = "page-item active"><a class="page-link" href="{{ url_for('main', page=page)}}">{{ page }}</a></li>
               {% else %}
-              <li class = "page-item"><a class="page-link" href="{{ url_for('index', page=page)}}">{{ page }}</a></li>
+              <li class = "page-item"><a class="page-link" href="{{ url_for('main', page=page)}}">{{ page }}</a></li>
               {% endif %}
 
 
@@ -97,7 +97,7 @@
           {% endfor %}
 
           {% if apartaments.has_next %}
-          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.next_num)  }}">Next</a></li>
+          <li class = "page-item"> <a class="page-link" href = "{{ url_for('main', page = apartaments.next_num)  }}">Next</a></li>
           {% else %}
           <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
           {% endif %}
