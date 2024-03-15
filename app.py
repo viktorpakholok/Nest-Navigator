@@ -1,5 +1,5 @@
 """HOuses"""
-from flask import Flask, request, render_template, Blueprint, url_for
+from flask import Flask, request, render_template, Blueprint, url_for, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 import json
 import os
@@ -8,10 +8,10 @@ Integer, CHAR, ARRAY, BLOB, REAL, and_, true
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import random
-with open("js.json", "r") as file:
-    data_json = json.load(file)
-    data_json = data_json['mainEntity']['itemListElement'][0]['offers']['offers']
-    print(data_json)
+# with open("js.json", "r") as file:
+#     data_json = json.load(file)
+#     data_json = data_json['mainEntity']['itemListElement'][0]['offers']['offers']
+#     print(data_json)
 
 # with open('result.json', 'r') as file:
 #     data_json_olx = json.load(file)
@@ -26,7 +26,7 @@ import json
 
 # headers = {'Accept-Encoding': 'gzip'}
 
-session = requests.Session()
+session1 = requests.Session()
 
 user_agents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
@@ -53,7 +53,7 @@ def parser_dom():
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
-    while count <= 5:
+    while count <= 100:
 
         response = requests.get(url+str(count), headers=headers_)
 
@@ -205,6 +205,7 @@ class DatabaseManipulation:
         
         '''
         for dictinary in dictinary_list:
+            print(dictinary)
             names = dictinary['name'].split(',')[2:]
             if 'р‑н.' in names[2]:
                 area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()),\
@@ -290,36 +291,49 @@ class Apartament(db.Model):
 @app.route('/', methods = ["POST", "GET"], defaults = {'page': 5})
 @app.route('/<int:page>', methods = ["GET", "POST"])
 def index(page):
-    '''
-    ***Filtering***
-    
-    
-    '''
     pages = 5
-    apartaments = Apartament.query.paginate(page, pages, error_out = False)
     if request.method == 'POST':
-        query = Apartament.query
-        if "city_tag" in request.form and request.form["city_tag"]:
-            query = query.filter(Apartament.city.like(request.form["city_tag"]))
-        if "district_tag" in request.form and request.form["district_tag"]:
-            query = query.filter(Apartament.district.like(request.form["district_tag"]))
-        if "min_area_tag" in request.form and request.form["min_area_tag"]:
-            query = query.filter(Apartament.area >= float(request.form["min_area_tag"]))
-        if "max_area_tag" in request.form and request.form["max_area_tag"]:
-            query = query.filter(Apartament.area <= float(request.form["max_area_tag"]))
-        if "min_price_tag" in request.form and request.form["min_price_tag"]:
-            query = query.filter(Apartament.area >= float(request.form["min_price_tag"]))
-        if "max_price_tag" in request.form and request.form["max_price_tag"]:
-            query = query.filter(Apartament.area <= float(request.form["max_price_tag"]))
-        if "min_rooms_tag" in request.form and request.form["min_rooms_tag"]:
-            query = query.filter(Apartament.area >= float(request.form["min_rooms_tag"]))
-        if "max_rooms_tag" in request.form and request.form["max_rooms_tag"]:
-            query = query.filter(Apartament.area <= float(request.form["max_rooms_tag"]))
-        apartaments = query.paginate(per_page = pages, error_out = False)
+        # Save filters into session
+        session['filters'] = {
+            'city': request.form.get('city_tag'),
+            'district': request.form.get('district_tag'),
+            'min_area': request.form.get('min_area_tag'),
+            'max_area': request.form.get('max_area_tag'),
+            'min_price': request.form.get('min_price_tag'),
+            'max_price': request.form.get('max_price_tag'),
+            'min_rooms': request.form.get('min_rooms_tag'),
+            'max_rooms': request.form.get('max_rooms_tag'),
+        }
+        return redirect(url_for('index', page=page))
+
+    # Get filters from session
+    filters = session.get('filters', {})
+
+    # Use filters to fetch data
+    query = Apartament.query
+    if filters.get('city'):
+        query = query.filter(Apartament.city.like(filters['city']))
+    if filters.get('district'):
+        query = query.filter(Apartament.district.like(filters['district']))
+    if filters.get('min_area'):
+        query = query.filter(Apartament.area >= float(filters['min_area']))
+    if filters.get('max_area'):
+        query = query.filter(Apartament.area <= float(filters['max_area']))
+    if filters.get('min_price'):
+        query = query.filter(Apartament.price >= float(filters['min_price']))
+    if filters.get('max_price'):
+        query = query.filter(Apartament.price <= float(filters['max_price']))
+    if filters.get('min_rooms'):
+        query = query.filter(Apartament.rooms >= int(filters['min_rooms']))
+    if filters.get('max_rooms'):
+        query = query.filter(Apartament.rooms <= int(filters['max_rooms']))
+
+    apartaments = query.paginate(page, pages, error_out = False)
+    # session.clear()
     return render_template('index.html', apartaments=apartaments)
 
 if __name__ == "__main__":
     data = DatabaseManipulation('houses_test_db.db')
-    data.read_dictinary_to_objects_olx(parse_olx())
+    # data.read_dictinary_to_objects_olx(parse_olx())
     data.read_dictinary_to_objects_dom(parser_dom())
     app.run(debug=True, use_reloader = False)
