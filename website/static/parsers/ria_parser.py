@@ -33,13 +33,13 @@ def parser_dom():
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
-    while count <= 5:
+    while count <= 10:
 
         response = requests.get(url+str(count), headers=headers_)
 
         if response.status_code == 200:
             print(f'Success {count}!')
-            count += 1
+            
         else:
             print('An error has occurred')
 
@@ -50,5 +50,6 @@ def parser_dom():
 (']</script></div>', maxsplit=1)[0]))
 
         list_.extend(loaded['mainEntity']['itemListElement'][0]['offers']['offers'])
+        count += 1
 
     return list_

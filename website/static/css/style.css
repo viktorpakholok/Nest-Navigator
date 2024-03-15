@@ -9,7 +9,7 @@ body {
 }
 
 .long-content {
-    min-height: 1350px; 
+    /* min-height: 1350px;  */
 }
 
 h1 {
@@ -409,4 +409,13 @@ background-color: #FFFCF2;
 .header-text li a:hover{
   border-radius: 0.5vh;
   border: 0.2vh solid rgb(255, 252, 242);
+}
+
+.z-index_2{
+  z-index: 2;
+}
+
+a{
+  text-decoration: none;
+  color: black;
 }

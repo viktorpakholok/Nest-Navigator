@@ -29,26 +29,26 @@
                 <form id="searchForm" action="" method="post" autocomplete="off">
                     <div class="filter-item">
                         <label for="city">Місто:</label>
-                        <input type="text" class="form-control" name="city_tag" autocomplete="off" placeholder="..."/>
+                        <input type="text" class="form-control" name="city_tag" autocomplete="off" placeholder="Введіть місто"/>
                     </div>
                     <div class="filter-item">
                         <label for="price">Ціна:</label>
-                        <input type="number" class="form-control" name="min_price_tag" placeholder="Enter min price"/>
-                        <input type="number" class="form-control" name="max_price_tag" placeholder="Enter max price"/>
+                        <input type="number" class="form-control" name="min_price_tag" placeholder="Мінімальна ціна"/>
+                        <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна"/>
                     </div>
                     <div class="filter-item">
                         <label for="rooms">Кімнати:</label>
-                        <input type="number" class="form-control" name="min_rooms_tag" placeholder="Enter min rooms"/>
-                        <input type="number" class="form-control" name="max_rooms_tag" placeholder="Enter max rooms"/>
+                        <input type="number" class="form-control" name="min_rooms_tag" placeholder="Введіть мін. кількість кімнат"/>
+                        <input type="number" class="form-control" name="max_rooms_tag" placeholder="Введіть мак. кількість кімнат"/>
                     </div>
                     <div class="filter-item">
                         <label for="area">Площа (м²):</label>
-                        <input type="number" class="form-control" name="min_area_tag" placeholder="Enter min area"/>
-                        <input type="number" class="form-control" name="max_area_tag" placeholder="Enter max area"/>
+                        <input type="number" class="form-control" name="min_area_tag" placeholder="Введіть мін. площу"/>
+                        <input type="number" class="form-control" name="max_area_tag" placeholder="Введіть мак. площу"/>
                     </div>
                     <div class="filter-item">
                         <label for="region">Район:</label>
-                        <input type="text" class="form-control" name="district_tag" placeholder="Enter district"/>
+                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район"/>
                     </div>
                     <div class="col-6" align="center">
                         <input type="submit" value="Search" class="form-control btn btn-primary " name="">
@@ -125,14 +125,14 @@
                         </div>
                         
                         <div class='adver-text'>
-                            <h2>{{ apartament.name }}</h2>
+                            <h2><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a></h2>
                             <div class="flex wdth-80 space_round">
                                 <p>{{ apartament.area }} м²</p>
                                 <div class="flex">
                                     <p>{{ apartament.price }}</p>
                                     <p>{{ apartament.currency }}</p>
                                 </div>
-                                <p>{{ apartament.rooms }}</p>
+                                <p>K-сть кімнат: {{ apartament.rooms }}</p>
                                 <p>{{ apartament.district }}</p>
                                 <p>{{ apartament.city }}</p>
                             </div>

@@ -1,5 +1,5 @@
 """HOuses"""
-from flask import Flask, request, render_template, Blueprint, url_for
+from flask import Flask, request, render_template, Blueprint, url_for, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 import json
 import os
@@ -181,29 +181,44 @@ def team():
 def search(page):
 
     pages = 5
-    apartaments = Apartament.query.paginate(page=page, per_page=pages, error_out = False)
-
     if request.method == 'POST':
+        # Save filters into session
+        session['filters'] = {
+            'city': request.form.get('city_tag'),
+            'district': request.form.get('district_tag'),
+            'min_area': request.form.get('min_area_tag'),
+            'max_area': request.form.get('max_area_tag'),
+            'min_price': request.form.get('min_price_tag'),
+            'max_price': request.form.get('max_price_tag'),
+            'min_rooms': request.form.get('min_rooms_tag'),
+            'max_rooms': request.form.get('max_rooms_tag'),
+        }
+        return redirect(url_for('search', page=page))
 
-        query = Apartament.query
-        if "city_tag" in request.form and request.form["city_tag"]:
-            query = query.filter(Apartament.city.like(request.form["city_tag"]))
-        if "district_tag" in request.form and request.form["district_tag"]:
-            query = query.filter(Apartament.district.like(request.form["district_tag"]))
-        if "min_area_tag" in request.form and request.form["min_area_tag"]:
-            query = query.filter(Apartament.area >= float(request.form["min_area_tag"]))
-        if "max_area_tag" in request.form and request.form["max_area_tag"]:
-            query = query.filter(Apartament.area <= float(request.form["max_area_tag"]))
-        if "min_price_tag" in request.form and request.form["min_price_tag"]:
-            query = query.filter(Apartament.area >= float(request.form["min_price_tag"]))
-        if "max_price_tag" in request.form and request.form["max_price_tag"]:
-            query = query.filter(Apartament.area <= float(request.form["max_price_tag"]))
-        if "min_rooms_tag" in request.form and request.form["min_rooms_tag"]:
-            query = query.filter(Apartament.area >= float(request.form["min_rooms_tag"]))
-        if "max_rooms_tag" in request.form and request.form["max_rooms_tag"]:
-            query = query.filter(Apartament.area <= float(request.form["max_rooms_tag"]))
-        apartaments = query.paginate(per_page = pages, error_out = False)
-    # print(apartaments)
+    # Get filters from session
+    filters = session.get('filters', {})
+
+    # Use filters to fetch data
+    query = Apartament.query
+    if filters.get('city'):
+        query = query.filter(Apartament.city.like(filters['city']))
+    if filters.get('district'):
+        query = query.filter(Apartament.district.like(filters['district']))
+    if filters.get('min_area'):
+        query = query.filter(Apartament.area >= float(filters['min_area']))
+    if filters.get('max_area'):
+        query = query.filter(Apartament.area <= float(filters['max_area']))
+    if filters.get('min_price'):
+        query = query.filter(Apartament.price >= float(filters['min_price']))
+    if filters.get('max_price'):
+        query = query.filter(Apartament.price <= float(filters['max_price']))
+    if filters.get('min_rooms'):
+        query = query.filter(Apartament.rooms >= int(filters['min_rooms']))
+    if filters.get('max_rooms'):
+        query = query.filter(Apartament.rooms <= int(filters['max_rooms']))
+
+    apartaments = query.paginate(per_page=pages, error_out = False)
+    # session.clear()
     return render_template('search_page.html', apartaments=apartaments)
 
 if __name__ == "__main__":
