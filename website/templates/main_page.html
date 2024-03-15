@@ -11,7 +11,7 @@
         <img src="{{ url_for('static', filename = 'imgs/logo.png') }}" alt="Nest Navigator" class="logo">
         <nav>
             <ul class="header_text">
-                <li><a href="./main_page.html">Головна сторінка</a></li>
+                <li><a href="{{ url_for('main') }}"><strong>Головна сторінка</strong></a></li>
                 <li><a href="{{ url_for('search') }}">Пошук</a></li>
                 <li><a href="{{ url_for('team') }}">Про нас</a></li>
             </ul>
@@ -22,7 +22,7 @@
         <h1 class="h2">Nest Navigator</h1>
         <p class="find_ap">Знайди житло, про яке так давно мрієш!</p>
         <button class="styled-button">Почати пошук</button>
-        <p class="main-text"><strong>Nest Navigator</strong> — це інноваційний онлайн-ресурс, створений для спрощення пошуку ідеального житла для оренди. Наша місія полягає в тому, щоб зробити процес пошуку житла максимально зручним та ефективним для кожного користувача.
+        <p class="main-main-text"><strong>Nest Navigator</strong> — це інноваційний онлайн-ресурс, створений для спрощення пошуку ідеального житла для оренди. Наша місія полягає в тому, щоб зробити процес пошуку житла максимально зручним та ефективним для кожного користувача.
             <br>
             <strong>Чому варто обрати нас?</strong>
             <br>
@@ -45,9 +45,9 @@
           <IMG SRC="{{ url_for('static', filename = 'imgs/logo.png')}}" ALT="" WIDTH=225 HEIGHT=100>
   
           <p class="footer-links">
-            <a href="main_page.html">Головна сторінка</a> ·
+            <a>Головна сторінка</a> ·
             <a href="{{ url_for('search') }}">Пошук</a> ·
-            <a href="{{ url_for('team') }}">Про нас</a> ·
+            <a href="{{ url_for('team') }}">Про нас</a> 
           </p>
   
           <p class="footer-company-name">N&N &copy; 2024</p>

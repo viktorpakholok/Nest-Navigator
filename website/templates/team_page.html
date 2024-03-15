@@ -13,7 +13,7 @@
             <ul class="header-text">
                 <li><a href="{{ url_for('main') }}">Головна сторінка</a></li>
                 <li><a href="{{ url_for('search') }}">Пошук</a></li>
-                <li><a href="team_page.html">Про нас</a></li>
+                <li><a href="{{ url_for('team') }}"><strong>Про нас</strong></a></li>
             </ul>
         </nav>
     </header>
@@ -39,7 +39,7 @@
           <p class="footer-links">
             <a href="{{ url_for('main') }}">Головна сторінка</a> ·
             <a href="{{ url_for('search') }}">Пошук</a> ·
-            <a>Про нас</a> ·
+            <a>Про нас</a> 
           </p>
   
           <p class="footer-company-name">N&N &copy; 2024</p>
