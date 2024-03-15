@@ -71,10 +71,6 @@ main {
   font-size: 2em;
 }
 
-.adress {
-  font-size: 1.5em;
-}
-
 button {
   padding: 0.5em 1em;
   margin-top: 2em;
@@ -338,6 +334,10 @@ button[type="submit"]:hover {
   font-weight: normal;
   font-size: 8px;
   line-height: 0;
+}
+
+.adress {
+  font-size: 2vh;
 }
 
 .footer-distributed .footer-center p a {
