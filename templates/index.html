@@ -8,38 +8,49 @@
 <body>
   <div class="container">
     <p><h2>COOL TEXT</h2></p>
-  </div>
-  <div class="row">
+</div>
+<div class="row">
     <div class="col-8">
       <strong>Search for : {{ tag }}</strong>
     </div>
     <div class="col-4">
       <form action="" method="post" autocomplete="off">
         <div class="row">
-         </div class=col-6>
-          <input type="text" class="form-control" name="city_tag" placeholder="Enter city"/>
-          </div class=col-6>
-          <input type="text" class="form-control" name="district_tag" placeholder="Enter district"/>
-          </div class=col-6>
-          <input type="text" class="form-control" name="min_area_tag" placeholder="Enter min area"/>
-          </div class=col-6>
-          <input type="text" class="form-control" name="max_area_tag" placeholder="Enter max area"/>
-          </div class=col-6>
-          <input type="text" class="form-control" name="min_price_tag" placeholder="Enter min price"/>
-          </div class=col-6>
-          <input type="text" class="form-control" name="max_price_tag" placeholder="Enter max price"/>
-          </div class=col-6>
-          <input type="text" class="form-control" name="min_rooms_tag" placeholder="Enter min rooms"/>
-          </div class=col-6>
-          <input type="text" class="form-control" name="max_rooms_tag" placeholder="Enter max rooms"/>
-         </div>
-         
-         <div class="col-6" align="left">
+          <div class="col-6">
+            <input type="text" class="form-control" name="city_tag" placeholder="Enter city"/>
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-control" name="district_tag" placeholder="Enter district"/>
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-control" name="min_area_tag" placeholder="Enter min area"/>
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-control" name="max_area_tag" placeholder="Enter max area"/>
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-control" name="min_price_tag" placeholder="Enter min price"/>
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-control" name="max_price_tag" placeholder="Enter max price"/>
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-control" name="min_rooms_tag" placeholder="Enter min rooms"/>
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-control" name="max_rooms_tag" placeholder="Enter max rooms"/>
+          </div>
+        </div>
+        <a href="{{ url_for('index', page=1, sort='price_low') }}" class="btn btn-primary">Sort by Price (Low)</a>
+        <a href="{{ url_for('index', page=1, sort='price_high') }}" class="btn btn-primary">Sort by Price (High)</a>
+        <a href="{{ url_for('index', page=1, sort='price_sqm_low') }}" class="btn btn-primary">Sort by Price per Sqm (Low)</a>
+        <a href="{{ url_for('index', page=1, sort='price_sqm_high') }}" class="btn btn-primary">Sort by Price per Sqm (High)</a>
+        <div class="col-6" align="left">
           <input type="submit" value="Search" class="form-control btn btn-primary " name="">
-         </div>
+        </div>
       </form>
     </div>
-  </div>
+</div>
   <div class="row">
     <div class="col-12">
       <table id="example" class="table-striped table-bordered" style="width:100%">
@@ -55,6 +66,7 @@
             <th>Rooms</th>
             <th>District</th>
             <th>City</th>
+            <th>Price per square meter</th>
         </thead>
         <tbody>
           {% for apartament in apartaments.items %}
@@ -68,6 +80,7 @@
               <td>{{ apartament.rooms }}</td>
               <td>{{ apartament.district }}</td>
               <td>{{ apartament.city }}</td>
+              <td>{{ apartament.price_per_meter }}</td>
           </tr>
           {% endfor %}
           </tr>
@@ -76,7 +89,7 @@
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           {% if apartaments.has_prev %}
-          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.prev_num)  }}">Previous</a></li>
+          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.prev_num, sort='none')  }}">Previous</a></li>
           {% else %}
           <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
           {% endif %}
@@ -85,9 +98,9 @@
           {% if page %}
 
               {% if page == apartaments.page %}
-                  <li class = "page-item active"><a class="page-link" href="{{ url_for('index', page=page)}}">{{ page }}</a></li>
+                  <li class = "page-item active"><a class="page-link" href="{{ url_for('index', page=page, sort='none')}}">{{ page }}</a></li>
               {% else %}
-              <li class = "page-item"><a class="page-link" href="{{ url_for('index', page=page)}}">{{ page }}</a></li>
+              <li class = "page-item"><a class="page-link" href="{{ url_for('index', page=page, sort='none')}}">{{ page }}</a></li>
               {% endif %}
 
 
@@ -97,7 +110,7 @@
           {% endfor %}
 
           {% if apartaments.has_next %}
-          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.next_num)  }}">Next</a></li>
+          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.next_num, sort='none')  }}">Next</a></li>
           {% else %}
           <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
           {% endif %}
@@ -109,18 +122,3 @@
 </body>
 </html>
 
-
-
-
-
-
-<!-- <tr>
-  <th>Images</th>
-  <th>Name</th>
-  <th>Url</th>
-  <th>Area</th>
-  <th>Price</th>
-  <th>Currency</th>
-  <th>Rooms</th>
-  <th>District</th>
-  <th>City</th> -->
