@@ -84,6 +84,8 @@ class DatabaseManipulation:
         
         '''
         for dictinary in dictinary_list:
+            with open('sth.txt', 'w', encoding='UTF-8') as file:
+                file.write(str(dictinary))
             names = dictinary['name'].split(',')[2:]
             if 'р‑н.' in names[2]:
                 area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()),\
@@ -176,13 +178,11 @@ def team():
 
     return render_template('team_page.html')
 
-@app.route('/search', methods = ["POST", "GET"], defaults = {'page': 5})
-@app.route('/search/<int:page>', methods = ["GET", "POST"])
-def search(page):
-
+@app.route('/search/', methods = ["POST", "GET"], defaults = {'page': 1, 'sort': 'none'})
+@app.route('/search/<int:page>/<string:sort>', methods = ["GET", "POST"])
+def search(page, sort):
     pages = 5
     if request.method == 'POST':
-        # Save filters into session
         session['filters'] = {
             'city': request.form.get('city_tag'),
             'district': request.form.get('district_tag'),
@@ -193,12 +193,10 @@ def search(page):
             'min_rooms': request.form.get('min_rooms_tag'),
             'max_rooms': request.form.get('max_rooms_tag'),
         }
-        return redirect(url_for('search', page=page))
+        return redirect(url_for('index', page=page, sort=sort))
 
-    # Get filters from session
     filters = session.get('filters', {})
 
-    # Use filters to fetch data
     query = Apartament.query
     if filters.get('city'):
         query = query.filter(Apartament.city.like(filters['city']))
@@ -217,8 +215,18 @@ def search(page):
     if filters.get('max_rooms'):
         query = query.filter(Apartament.rooms <= int(filters['max_rooms']))
 
-    apartaments = query.paginate(per_page=pages, error_out = False)
-    # session.clear()
+    print(sort)
+
+    if sort == 'price_low':
+        query = query.order_by(Apartament.price)
+    elif sort == 'price_high':
+        query = query.order_by(Apartament.price.desc())
+    elif sort == 'price_sqm_low':
+        query = query.order_by((Apartament.price_per_meter))
+    elif sort == 'price_sqm_high':
+        query = query.order_by(Apartament.price_per_meter.desc())
+
+    apartaments = query.paginate(page, pages, error_out = False)
     return render_template('search_page.html', apartaments=apartaments)
 
 if __name__ == "__main__":
