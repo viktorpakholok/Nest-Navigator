@@ -2,7 +2,10 @@ from bs4 import BeautifulSoup
 import requests
 import random
 import json
-# import time
+import time
+from urllib3 import PoolManager
+
+http = PoolManager()
 
 # headers = {'Accept-Encoding': 'gzip'}
 
@@ -29,14 +32,16 @@ headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
 def parser_dom():
-    dict_gen = {}
+    all_time = time.time()
+    dict_gen = []
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
     while count <= 100:
 
+        t_s = time.time()
         response = requests.get(url+str(count), headers=headers_)
-
+        # print(time.time() - t_s)
         if response.status_code == 200:
             print(f'Success {count}!')
 
@@ -49,9 +54,13 @@ def parser_dom():
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
 (']</script></div>', maxsplit=1)[0]))
 
-        for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
-            dict_gen[offer['url']] = offer
+        dict_gen.extend(loaded['mainEntity']['itemListElement'][0]['offers']['offers'])
+        # for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
+        #     dict_gen[offer['url']] = offer
 
         count += 1
-
+        # print(time.time()-t_s)
+    print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/100}')
     return dict_gen
+
+parser_dom()
