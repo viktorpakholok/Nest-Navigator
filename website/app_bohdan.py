@@ -216,7 +216,7 @@ def search(page):
         query = query.filter(Apartament.rooms <= int(filters['max_rooms']))
 
     apartaments = query.paginate(page=page, per_page=pages, error_out = False)
-    session.clear()
+    # session.clear()
     return render_template('search_page.html', apartaments=apartaments)
 
 if __name__ == "__main__":
