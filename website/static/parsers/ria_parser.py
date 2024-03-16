@@ -37,7 +37,7 @@ def parser_dom():
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
-    while count <= 100:
+    while count <= 10:
 
         t_s = time.time()
         response = requests.get(url+str(count), headers=headers_)
@@ -49,6 +49,12 @@ def parser_dom():
             print('An error has occurred')
 
         soup = BeautifulSoup(response.content, 'html.parser')
+
+        # with open('sth_1.txt', 'a', encoding='UTF-8') as file:
+        #     file.write(f'{response.content}\n')
+
+        # with open('sth_0.txt', 'a', encoding='UTF-8') as file:
+        #     file.write(f'{soup}\n')
 
 
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
@@ -63,4 +69,4 @@ def parser_dom():
     print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/100}')
     return dict_gen
 
-parser_dom()
+# parser_dom()
