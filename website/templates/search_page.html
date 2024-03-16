@@ -6,15 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nest Navigator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
+    <script src="{{ url_for('static', filename = 'jscripts/index.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 </head>
 
 <body>
+    <script>
+        lazyload();
+    </script>
     <header>
         <img src="{{ url_for('static', filename = 'imgs/logo.png') }}" alt="Nest Navigator" class="logo">
         <nav>
             <ul class="header-text">
                 <li><a href="{{ url_for('main') }}">Головна сторінка</a></li>
-                <li><a href="{{ url_for('search') }}"><strong>Пошук</strong></a></li>
+                <li><a class="active" href="{{ url_for('search') }}">Пошук</a></li>
                 <li><a href="{{ url_for('team') }}">Про нас</a></li>
             </ul>
         </nav>
@@ -22,8 +27,38 @@
     <main>
         <!-- <button class="button_search">Search</button> -->
         <div class="flex width-100">
-
             <div class="filters">
+                <form id="searchForm" action="" method="post" autocomplete="off">
+                    <div class="filter-item">
+                        <label for="city">Місто:</label>
+                        <input type="text" class="form-control" name="city_tag" autocomplete="off" placeholder="Введіть місто"/>
+                    </div>
+                    <div class="filter-item">
+                        <label for="price">Ціна:</label>
+                        <input type="number" class="form-control" name="min_price_tag" placeholder="Мінімальна ціна"/>
+                        <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна"/>
+                    </div>
+                    <div class="filter-item">
+                        <label for="rooms">Кімнати:</label>
+                        <input type="number" class="form-control" name="min_rooms_tag" placeholder="Введіть мін. кількість кімнат"/>
+                        <input type="number" class="form-control" name="max_rooms_tag" placeholder="Введіть мак. кількість кімнат"/>
+                    </div>
+                    <div class="filter-item">
+                        <label for="area">Площа (м²):</label>
+                        <input type="number" class="form-control" name="min_area_tag" placeholder="Введіть мін. площу"/>
+                        <input type="number" class="form-control" name="max_area_tag" placeholder="Введіть мак. площу"/>
+                    </div>
+                    <div class="filter-item">
+                        <label for="region">Район:</label>
+                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район"/>
+                    </div>
+                    <div class="col-6" align="center">
+                        <input type="submit" value="Search" class="form-control btn btn-primary " name="">
+                    </div>
+                </form>
+            </div>
+
+            <!-- <div class="filters">
                 <form id="searchForm">
                     <div class="filter-item">
                         <label for="city">Місто:</label>
@@ -60,102 +95,55 @@
                     </div>
                     <button type="submit">Пошук</button>
                 </form>
-            </div>
+            </div> -->
 
             <div class="container width-100">
                 <input class="button-search" placeholder="Search"></input>
 
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="adver-section">
-                    <div class="flex desc">
-                        <img class='img-adver-section' src="{{ url_for('static', filename = 'img/photo1.jpeg') }}"
-                            alt="Фотографія кнопки">
-                        <div class='adver-text'>
-                            <h2>Назва</h2>
-                            <p>Опис пропозиції.</p>
-                        </div>
-                    </div>
+                {% for apartament in apartaments.items %}
 
+                <div class="flex adver-section">
+                    <div class="flex desc space_round">
+                        <div class="flex sld_and_but">
+
+                            <div class="flex center_d">
+
+                                <button class="prev btns-sl" onclick="prev(this)">&#10094</button>
+
+                                <div class="slider-wrap">
+                                    <div class="slider-main">
+                                        {% for el in apartament.images.split(',') %}
+                                            <div class="item">
+                                                <img class="img-adver-section lazyload" src="{{ el }}" alt="">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <button class="next btns-sl" onclick="next(this)">&#10095</button>
+
+                            </div>
+
+                        </div>
+                        
+                        <div class='adver-text'>
+                            <h2><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a></h2>
+                            <div class="flex wdth-80 space_round">
+                                <p>{{ apartament.area }} м²</p>
+                                <div class="flex">
+                                    <p>{{ apartament.price }}</p>
+                                    <p>{{ apartament.currency }}</p>
+                                </div>
+                                <p>K-сть кімнат: {{ apartament.rooms }}</p>
+                                <p>{{ apartament.district }}</p>
+                                <p>{{ apartament.city }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                {% endfor %}
+
                 <!-- <div class="col-12 slaider">
                     <div class="pagination d-flex justify-content-center mt-5">
                         <a href="#" class="rounded">&laquo;</a>
@@ -168,25 +156,39 @@
                         <a href="#" class="rounded">&raquo;</a>
                     </div>
                 </div> -->
-                <!-- <nav aria-label="...">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <span class="page-link">Previous</span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active" aria-current="page">
-                            <span class="page-link">
-                                2
-                                <span class="visually-hidden">(current)</span>
-                            </span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav> -->
 
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                      {% if apartaments.has_prev %}
+                      <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.prev_num)  }}">Previous</a></li>
+                      {% else %}
+                      <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
+                      {% endif %}
+            
+                      {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
+                      {% if page %}
+            
+                          {% if page == apartaments.page %}
+                              <li class = "page-item active"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                          {% else %}
+                          <li class = "page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                          {% endif %}
+            
+            
+                      {% else %}
+                          <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">...</a></li>
+                      {% endif %}
+                      {% endfor %}
+            
+                      {% if apartaments.has_next %}
+                      <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.next_num) }}">Next</a></li>
+                      {% else %}
+                      <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
+                      {% endif %}
+                    </ul>
+            
+                </nav>
+                
             </div>
 
         </div>
