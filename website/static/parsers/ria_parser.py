@@ -37,7 +37,7 @@ def parser_dom():
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
-    while count <= 10:
+    while count <= 5:
 
         t_s = time.time()
         response = requests.get(url+str(count), headers=headers_)

@@ -176,10 +176,9 @@ def team():
 
     return render_template('team_page.html')
 
-@app.route('/search', methods = ["POST", "GET"], defaults = {'page': 5})
+@app.route('/search/', methods = ["POST", "GET"], defaults = {'page': 5})
 @app.route('/search/<int:page>', methods = ["GET", "POST"])
 def search(page):
-
     pages = 5
     if request.method == 'POST':
         # Save filters into session
@@ -197,7 +196,6 @@ def search(page):
 
     # Get filters from session
     filters = session.get('filters', {})
-
     # Use filters to fetch data
     query = Apartament.query
     if filters.get('city'):
@@ -217,7 +215,7 @@ def search(page):
     if filters.get('max_rooms'):
         query = query.filter(Apartament.rooms <= int(filters['max_rooms']))
 
-    apartaments = query.paginate(per_page=pages, error_out = False)
+    apartaments = query.paginate(page=page, per_page=pages, error_out = False)
     # session.clear()
     return render_template('search_page.html', apartaments=apartaments)
 
