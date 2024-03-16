@@ -29,17 +29,17 @@ headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
 def parser_dom():
-    list_ = []
+    dict_gen = {}
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
-    while count <= 10:
+    while count <= 100:
 
         response = requests.get(url+str(count), headers=headers_)
 
         if response.status_code == 200:
             print(f'Success {count}!')
-            
+
         else:
             print('An error has occurred')
 
@@ -49,7 +49,9 @@ def parser_dom():
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
 (']</script></div>', maxsplit=1)[0]))
 
-        list_.extend(loaded['mainEntity']['itemListElement'][0]['offers']['offers'])
+        for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
+            dict_gen[offer['url']] = offer
+
         count += 1
 
-    return list_
+    return dict_gen

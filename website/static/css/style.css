@@ -1,20 +1,21 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    height: 100%;
-    width: 100%;
-    background-color:#E4EBF3  
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background-color: #E4EBF3
 }
 
 .long-content {
+  min-height: 1350px;
     /* min-height: 1350px;  */
 }
 
 h1 {
-    margin-bottom: 0.5em;
-    font-size: 6em;
+  margin-bottom: 0.5em;
+  font-size: 6em;
 }
 
 
@@ -36,26 +37,27 @@ header {
 .header-text{
     font-size: 1.3em;
 }
+
 .logo {
-    max-height: 80%;
-    max-width: 100%; 
+  max-height: 80%;
+  max-width: 100%;
 }
 
 
 nav ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
 }
 
 nav ul li {
-    margin: 0 20px;
+  margin: 0 20px;
 }
 
 nav ul li a {
-    color: #FFFCF2;
-    text-decoration: none;
+  color: #FFFCF2;
+  text-decoration: none;
 }
 
 
@@ -65,38 +67,61 @@ main {
   text-align: center;
   padding: 25vh 0;
   background-color: #E4EBF3
+  text-align: center;
+  padding: 25vh 0;
+  background-color: #E4EBF3
 }
 
-.find_ap{
-    font-size: 2em;
+.find_ap {
+  font-size: 2em;
 }
+
 
 .adress{
     font-size: 1.5em;
 }
 
 button {
+  padding: 0.5em 1em;
+  margin-top: 2em;
+  background-color: #011128;
+  color: #FFFCF2
   
   background-color: #011128;
   color:  #FFFCF2
 }
 
+
 .main-main-text {
-    margin: 5vh;
-    text-align: left;
-    font-size: 24px;
-    padding-left: 10vh;
-    padding-right: 10vh;
-    padding-top: 20vh;
-    line-height: 1.5;
+  margin: 5vh;
+  text-align: left;
+  font-size: 24px;
+  padding-left: 10vh;
+  padding-right: 10vh;
+  padding-top: 20vh;
+  line-height: 1.5;
 }
+
+.photo-desciption {
+  width: 100%;
+  height: 100%;
+
 
 .photo-desciption{
     width: 100%;
     height: 100%;
 }
 
+
 .styled-button {
+  background-color: #011128;
+  color: #FFFCF2;
+  border: none;
+  padding: 25px 50px;
+  border-radius: 10px;
+  font-size: 22px;
+  cursor: pointer;
+  transition: background-color 0.3s;
   padding: 0.5em 1em;
   margin-top: 2em;
   background-color: #011128; 
@@ -108,61 +133,94 @@ button {
   cursor: pointer; 
   transition: background-color 0.3s; 
 }
-  
+
 .styled-button:hover {
-    background-color: #1A2E8C; 
+  background-color: #1A2E8C;
 }
 
-.big-photo{
-    width: 80%;
-    height: 100%;
+.big-photo {
+  width: 80%;
+  height: 100%;
 }
+
 /* search page */
 
-.flex{
-    display: flex;
-  }
-  
-.width-100{
-    width: 100%;
-  }
+.flex {
+  display: flex;
+}
 
-.button-search{
-    background-color: #FFFCF2;
-    color: #011128;
-    border: 2px solid #011128;
-    border-radius: 15px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    align-items: center;
-    justify-content: flex-start; 
-    text-align: left;
-    width: 90%;
-    height: 5vh;
-    margin-bottom: 5vh;
-    margin-top: 5vh;
-    
-  }
+.width-100 {
+  width: 100%;
+}
+
+.button-search {
+  background-color: #FFFCF2;
+  color: #011128;
+  border: 2px solid #011128;
+  border-radius: 15px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  width: 90%;
+  height: 5vh;
+  margin-bottom: 5vh;
+  margin-top: 5vh;
+
+}
 
 .button-search:hover {
-    background-color: #CCD8E4;
-  }
+  background-color: #CCD8E4;
+}
 
 .desc{
     /* width: 50%; */
     justify-content: space-between;
   }
 
-.container{
-    flex-direction: column;
-  }
+.container {
+  flex-direction: column;
+}
 
 .content-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
+  display: flex;
+  flex-wrap: wrap;
+}
 
+.adver-section {
+  background-color: #FFFCF2;
+  color: #011128;
+  border: 2px solid #011128;
+  border-radius: 15px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 90%;
+  height: 30vh;
+  margin-top: 1%;
+}
+
+.adver-text {
+  overflow: hidden;
+  word-wrap: break-word;
+  padding-left: 40vh;
+  position: absolute;
+}
+
+.img-adver-section {
+  width: 25vh;
+  height: 25vh;
+  max-height: 25vh;
+  max-width: 25vh;
+  margin-left: 2.5vh;
+  margin-top: 2.5vh;
+}
+
+.slaider {
+  margin: 5% 40%;
+}
 .adver-section{
     background-color: #FFFCF2;
     color: #011128;
@@ -195,20 +253,20 @@ button {
     margin: 5% 40%;
   }
 
-    /* filters */
-.filters{
-    max-width: 20vh;
-    margin-left: -10vh;
-    padding: 15vh;
+/* filters */
+.filters {
+  max-width: 20vh;
+  margin-left: -10vh;
+  padding: 15vh;
 }
-    
+
 .filter-item {
-    margin-bottom: 1vh;
+  margin-bottom: 1vh;
 }
-    
+
 .filter-item label {
-    display: block;
-    margin-bottom: 0.33vh;
+  display: block;
+  margin-bottom: 0.33vh;
 }
     
     
@@ -227,28 +285,28 @@ input[type="submit"]:hover {
 
 .filter-item input,
 .filter-item select {
-width: 100%;
-padding: 1vh;
-margin-bottom: 1vh;
-border: 1px solid #ccc;
-border-radius: 0.5vh;
-background-color: #FFFCF2;
+  width: 100%;
+  padding: 1vh;
+  margin-bottom: 1vh;
+  border: 1px solid #ccc;
+  border-radius: 0.5vh;
+  background-color: #FFFCF2;
 }
 
 /* team page */
 
-.main-team-text{
-    margin: 5vh;
-    text-align: center;
-    font-size: 24px;
-    padding-left: 10vh;
-    padding-right: 10vh;
-    padding-bottom: 10vh;
-    line-height: 1.5;
+.main-team-text {
+  margin: 5vh;
+  text-align: center;
+  font-size: 24px;
+  padding-left: 10vh;
+  padding-right: 10vh;
+  padding-bottom: 10vh;
+  line-height: 1.5;
 }
 
-.photos{
-    padding-bottom: 10vh;
+.photos {
+  padding-bottom: 10vh;
 }
 
 /* footer */
@@ -274,6 +332,39 @@ background-color: #FFFCF2;
   .bi-arrow-up-circle-fill{
     margin-left: 70vh;
     margin-top: -10vh
+}
+
+.footer-distributed .footer-left {
+  width: 40%;
+}
+
+/* Footer links */
+
+.footer-distributed .footer-links {
+  color: #FFFCF2;
+  margin: 2vh 0 3vh;
+  padding: 0;
+}
+
+.footer-distributed .footer-links a {
+  display: inline-block;
+  line-height: 1.8;
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.5em;
+}
+
+.footer-distributed .footer-company-name {
+  color: #8f9296;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0;
+}
+
+/* Footer Center */
+
+.footer-distributed .footer-center {
+  width: 35%;
 }
   
   .footer-distributed .footer-left {

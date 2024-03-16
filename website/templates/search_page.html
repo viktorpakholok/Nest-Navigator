@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <script src="{{ url_for('static', filename = 'jscripts/index.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 </head>
+
 <body>
     <script>
         lazyload();
@@ -190,24 +192,24 @@
             </div>
 
         </div>
-        
+
     </main>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var citySelect = document.getElementById('city');
             var regionSelect = document.getElementById('region');
-    
+
             var regionsByCity = {
                 'Львів': ['Галицький', 'Шевченківський', 'Сихівський', 'Залізничний', 'Франківський', 'Личаківський'],
                 'Київ': ['Печерський', 'Шевченківський', 'Солом\'янський', 'Подільський', 'Дарницький', 'Голосiївський', 'Деснянський', 'Днiпровський', 'Оболонський', 'Святошинський']
             };
-    
-            citySelect.addEventListener('change', function() {
+
+            citySelect.addEventListener('change', function () {
                 var selectedCity = this.value;
                 var regions = regionsByCity[selectedCity] || [];
-    
+
                 regionSelect.innerHTML = '<option value="">Виберіть район</option>';
-                regions.forEach(function(region) {
+                regions.forEach(function (region) {
                     var option = new Option(region, region);
                     regionSelect.add(option);
                 });
@@ -218,41 +220,43 @@
     <footer class="footer-distributed">
 
         <div class="footer-left">
-  
-          <IMG src="{{ url_for('static', filename = 'imgs/logo.png') }}" ALT="" WIDTH=225 HEIGHT=100>
-  
-          <p class="footer-links">
-            <a href="{{ url_for('main') }}">Головна сторінка</a> ·
-            <a href="search_page.html">Пошук</a> ·
-            <a href="{{ url_for('team') }}">Про нас</a> 
-          </p>
-  
-          <p class="footer-company-name">N&N &copy; 2024</p>
+
+            <IMG src="{{ url_for('static', filename = 'imgs/logo.png') }}" ALT="" WIDTH=225 HEIGHT=100>
+
+            <p class="footer-links">
+                <a href="{{ url_for('main') }}">Головна сторінка</a> ·
+                <a>Пошук</a> ·
+                <a href="{{ url_for('team') }}">Про нас</a>
+            </p>
+
+            <p class="footer-company-name">N&N &copy; 2024</p>
         </div>
-  
+
         <div class="footer-center">
-  
-          <div class='adress'>
-            <i class="fa fa-map-marker"></i>
-            <p>УКУ, Козельницької 2а <br> Львів, Україна</p>
-          </div>
-        
-          <div>
-            <i class="fa fa-phone"></i>
-            <p>+380990900001</p>
-          </div>
-  
-          <div>
-            <i class="fa fa-envelope"></i>
-            <p><a href="mailto:support@company.com">nnavigator@gmail.com</a></p>
-          </div>
-          <a href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="#E4EBF3" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
-            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z"/>
-          </svg>
-        </a>
+
+            <div class='adress'>
+                <i class="fa fa-map-marker"></i>
+                <p>УКУ, Козельницької 2а <br> Львів, Україна</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+380990900001</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:support@company.com">nnavigator@gmail.com</a></p>
+            </div>
+            <a href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="#E4EBF3"
+                    class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
+                </svg>
+            </a>
         </div>
-      </footer>
+    </footer>
 
 
 </body>
