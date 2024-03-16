@@ -84,8 +84,6 @@ class DatabaseManipulation:
         
         '''
         for dictinary in dictinary_list:
-            with open('sth.txt', 'w', encoding='UTF-8') as file:
-                file.write(str(dictinary))
             names = dictinary['name'].split(',')[2:]
             if 'р‑н.' in names[2]:
                 area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()),\
