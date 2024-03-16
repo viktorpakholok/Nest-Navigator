@@ -202,13 +202,6 @@ button {
   margin-top: 1%;
 }
 
-.adver-text {
-  overflow: hidden;
-  word-wrap: break-word;
-  padding-left: 40vh;
-  position: absolute;
-}
-
 .img-adver-section {
   width: 25vh;
   height: 25vh;
