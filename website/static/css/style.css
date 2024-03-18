@@ -21,6 +21,13 @@ h1 {
   font-size: 6em;
 }
 
+.montserrat-medium {
+  font-family: Montserrat, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
 
 /* header */
 
@@ -197,10 +204,10 @@ button {
 
 
 .img-adver-section {
-  max-height: 45vh;
-  max-width: 45vh;
   object-fit: contain;
   object-position: center;
+  height: 250px;
+  width: 280px;
 }
 
 .slaider {
@@ -233,6 +240,9 @@ button {
     margin: 0 10px 10px 0;
   } 
 
+  .adver-title {
+    font-size: 26px;
+}
 
 
 /* filters */
@@ -424,12 +434,12 @@ input[type="submit"]:hover {
 .slider-wrap{
   position: relative;
   overflow: hidden;
-  /* height: 33vh; */
-  /* width: 30%; */
+
 }
 
 .slider-main{
     height: 50vh;
+    overflow: hidden;
     
     /* position: absolute; */
 }
@@ -442,10 +452,7 @@ input[type="submit"]:hover {
 }
 
 .slider-main .item img{
-  width: 90%;
-  /* height: 90%; */
-  /* margin-top: 5%; */
-  margin: 5%;
+  margin: 0 5%;
   display: block;
 }
 
@@ -464,13 +471,14 @@ input[type="submit"]:hover {
 .center-d{
   /* margin: auto; */
   margin-right: 5%;
-  width: 25%;
+  width: 280px;
   position: relative;
+  flex-shrink: 0;
+  height: 250px;
 }
 
 .btns-sl {
   margin-top: 0;
-  /* height: 25vh; */
   cursor: pointer;
   background: none;
   color: #FFFCF2;
@@ -488,11 +496,11 @@ input[type="submit"]:hover {
 
 }
 .prev {
-  left:0;
+  left: 3%;
 }
 
 .next{
-  right: 0;
+  right: -3%;
 }
 
 .page-item a{
@@ -522,4 +530,10 @@ input[type="submit"]:hover {
 a{
   text-decoration: none;
   color: black;
+}
+
+@media only screen and (max-width: 767px) { 
+  body { 
+    background-color: lightblue; 
+  } 
 }

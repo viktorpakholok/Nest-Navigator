@@ -5,9 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nest Navigator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
     <script src="{{ url_for('static', filename = 'jscripts/index.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+    
 </head>
 
 <body>
@@ -30,31 +34,31 @@
             <div class="filters">
                 <form id="searchForm" action="" method="post" autocomplete="off">
                     <div class="filter-item">
-                        <label for="city">Місто:</label>
+                        <label for="city" class="montserrat-medium">Місто:</label>
                         <input type="text" class="form-control" name="city_tag" autocomplete="off"
                             placeholder="Введіть місто" />
                     </div>
                     <div class="filter-item">
-                        <label for="price">Ціна:</label>
+                        <label for="price" class="montserrat-medium">Ціна:</label>
                         <input type="number" class="form-control" name="min_price_tag" placeholder="Мінімальна ціна" />
                         <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна" />
                     </div>
                     <div class="filter-item">
-                        <label for="rooms">Кімнати:</label>
+                        <label for="rooms" class="montserrat-medium">Кімнати:</label>
                         <input type="number" class="form-control" name="min_rooms_tag"
                             placeholder="Введіть мін. кількість кімнат" />
                         <input type="number" class="form-control" name="max_rooms_tag"
                             placeholder="Введіть мак. кількість кімнат" />
                     </div>
                     <div class="filter-item">
-                        <label for="area">Площа (м²):</label>
+                        <label for="area" class="montserrat-medium">Площа (м²):</label>
                         <input type="number" class="form-control" name="min_area_tag"
                             placeholder="Введіть мін. площу" />
                         <input type="number" class="form-control" name="max_area_tag"
                             placeholder="Введіть мак. площу" />
                     </div>
                     <div class="filter-item">
-                        <label for="region">Район:</label>
+                        <label for="region" class="montserrat-medium" >Район:</label>
                         <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" />
                     </div>
                     <div class="col-6" align="center">
@@ -132,13 +136,17 @@
 
 
                         <div class='adver-text'>
-                            <h2><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a>
+                            <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a>
                             </h2>
                             <div class="adver-description">
                                 <p class="adver-description-item">{{ apartament.area }} м²</p>
                                 <div class="adver-description-item">
                                     {{ apartament.price }}
                                     {{ apartament.currency }}
+                                </div>
+                                <div class="adver-description-item">
+                                    ціна
+                                    {{ apartament.currency }}/м²
                                 </div>
                                 <p class="adver-description-item">K-сть кімнат: {{ apartament.rooms }}</p>
                                 <p class="adver-description-item">{{ apartament.district }}</p>
