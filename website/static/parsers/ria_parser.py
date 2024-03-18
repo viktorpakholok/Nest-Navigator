@@ -31,13 +31,13 @@ like Gecko) Version/16.1 Safari/605.1.15'
 headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
-def parser_dom():
+def parser_dom(pages_to_parse):
     all_time = time.time()
-    dict_gen = []
+    dict_gen = {}
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
-    while count <= 5:
+    while count <= pages_to_parse:
 
         t_s = time.time()
         response = requests.get(url+str(count), headers=headers_)
@@ -50,6 +50,9 @@ def parser_dom():
 
         soup = BeautifulSoup(response.content, 'html.parser')
 
+        # with open('sth.txt', 'a', encoding='UTF-8') as file:
+        #     file.write(str(soup))
+
         # with open('sth_1.txt', 'a', encoding='UTF-8') as file:
         #     file.write(f'{response.content}\n')
 
@@ -59,14 +62,18 @@ def parser_dom():
 
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
 (']</script></div>', maxsplit=1)[0]))
+        
+        # with open('res.json', 'a', encoding='UTF-8') as file:
+        #     json.dump(loaded, file, indent=4, ensure_ascii=False)
+        #     file.write('\n')
 
-        dict_gen.extend(loaded['mainEntity']['itemListElement'][0]['offers']['offers'])
-        # for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
-        #     dict_gen[offer['url']] = offer
+        # dict_gen.extend(loaded['mainEntity']['itemListElement'][0]['offers']['offers'])
+        for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
+            dict_gen[offer['url']] = offer
 
         count += 1
         # print(time.time()-t_s)
-    print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/100}')
+    print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/pages_to_parse}')
     return dict_gen
 
 # parser_dom()
