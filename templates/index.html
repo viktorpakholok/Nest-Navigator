@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XD</title>
+  <link rel="shortcut icon" href="#">
 </head>
 <body>
   <div class="container">
     <p><h2>COOL TEXT</h2></p>
-</div>
+  </div>
 <div class="row">
     <div class="col-8">
       <strong>Search for : {{ tag }}</strong>
@@ -16,41 +17,32 @@
     <div class="col-4">
       <form action="" method="post" autocomplete="off">
         <div class="row">
-          <div class="col-6">
-            <input type="text" class="form-control" name="city_tag" placeholder="Enter city"/>
-          </div>
-          <div class="col-6">
-            <input type="text" class="form-control" name="district_tag" placeholder="Enter district"/>
-          </div>
-          <div class="col-6">
-            <input type="text" class="form-control" name="min_area_tag" placeholder="Enter min area"/>
-          </div>
-          <div class="col-6">
-            <input type="text" class="form-control" name="max_area_tag" placeholder="Enter max area"/>
-          </div>
-          <div class="col-6">
-            <input type="text" class="form-control" name="min_price_tag" placeholder="Enter min price"/>
-          </div>
-          <div class="col-6">
-            <input type="text" class="form-control" name="max_price_tag" placeholder="Enter max price"/>
-          </div>
-          <div class="col-6">
-            <input type="text" class="form-control" name="min_rooms_tag" placeholder="Enter min rooms"/>
-          </div>
-          <div class="col-6">
-            <input type="text" class="form-control" name="max_rooms_tag" placeholder="Enter max rooms"/>
-          </div>
-        </div>
-        <a href="{{ url_for('index', page=1, sort='price_low') }}" class="btn btn-primary">Sort by Price (Low)</a>
-        <a href="{{ url_for('index', page=1, sort='price_high') }}" class="btn btn-primary">Sort by Price (High)</a>
-        <a href="{{ url_for('index', page=1, sort='price_sqm_low') }}" class="btn btn-primary">Sort by Price per Sqm (Low)</a>
-        <a href="{{ url_for('index', page=1, sort='price_sqm_high') }}" class="btn btn-primary">Sort by Price per Sqm (High)</a>
-        <div class="col-6" align="left">
+         <div class="col-6">
+          <input type="text" class="form-control" name="city_tag" placeholder="Enter city" value="{{ filters.get('city', '') }}"/>
+          <input type="text" class="form-control" name="district_tag" placeholder="Enter district" value="{{ filters.get('district', '') }}"/>
+          <input type="text" class="form-control" name="min_area_tag" placeholder="Enter min area" value="{{ filters.get('min_area', '') }}"/>
+          <input type="text" class="form-control" name="max_area_tag" placeholder="Enter max area" value="{{ filters.get('max_area', '') }}"/>
+          <input type="text" class="form-control" name="min_price_tag" placeholder="Enter min price" value="{{ filters.get('min_price', '') }}"/>
+          <input type="text" class="form-control" name="max_price_tag" placeholder="Enter max price" value="{{ filters.get('max_price', '') }}"/>
+          <input type="text" class="form-control" name="min_rooms_tag" placeholder="Enter min rooms" value="{{ filters.get('min_rooms', '') }}"/>
+          <input type="text" class="form-control" name="max_rooms_tag" placeholder="Enter max rooms" value="{{ filters.get('max_rooms', '') }}"/>
+          <input type="checkbox" class="form-check-input" name="sort_max_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price
+          <input type="checkbox" class="form-check-input" name="sort_min_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by min price
+          <input type="checkbox" class="form-check-input" name="sort_max_pricearea_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price/area
+          <input type="checkbox" class="form-check-input" name="sort_min_pricearea_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by min price/area
+
           <input type="submit" value="Search" class="form-control btn btn-primary " name="">
-        </div>
+
+         </div>
+          <input type="submit" value="Search" class="form-control btn btn-primary " name="">
+         </div>
       </form>
     </div>
-</div>
+    <form action="{{ url_for('reset') }}" method="post">
+      <input type="submit" value="Reset Filters" class="form-control btn btn-secondary">
+  </form>
+  
+  </div>
   <div class="row">
     <div class="col-12">
       <table id="example" class="table-striped table-bordered" style="width:100%">
@@ -89,7 +81,7 @@
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           {% if apartaments.has_prev %}
-          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.prev_num, sort='none')  }}">Previous</a></li>
+          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.prev_num)  }}">Previous</a></li>
           {% else %}
           <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
           {% endif %}
@@ -98,9 +90,9 @@
           {% if page %}
 
               {% if page == apartaments.page %}
-                  <li class = "page-item active"><a class="page-link" href="{{ url_for('index', page=page, sort='none')}}">{{ page }}</a></li>
+                  <li class = "page-item active"><a class="page-link" href="{{ url_for('index', page=page)}}">{{ page }}</a></li>
               {% else %}
-              <li class = "page-item"><a class="page-link" href="{{ url_for('index', page=page, sort='none')}}">{{ page }}</a></li>
+              <li class = "page-item"><a class="page-link" href="{{ url_for('index', page=page)}}">{{ page }}</a></li>
               {% endif %}
 
 
@@ -110,7 +102,7 @@
           {% endfor %}
 
           {% if apartaments.has_next %}
-          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.next_num, sort='none')  }}">Next</a></li>
+          <li class = "page-item"> <a class="page-link" href = "{{ url_for('index', page = apartaments.next_num)  }}">Next</a></li>
           {% else %}
           <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
           {% endif %}
@@ -119,6 +111,6 @@
       </nav>
     </div>
   </div>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
-
