@@ -182,6 +182,7 @@ button {
 
 .desc{
     /* width: 50%; */
+    height: max-content;
     justify-content: space-between;
   }
 
@@ -198,6 +199,8 @@ button {
 .img-adver-section {
   max-height: 45vh;
   max-width: 45vh;
+  object-fit: contain;
+  object-position: center;
 }
 
 .slaider {
@@ -230,9 +233,7 @@ button {
     margin: 0 10px 10px 0;
   } 
 
-.slaider{
-    margin: 5% 40%;
-  }
+
 
 /* filters */
 .filters {
@@ -460,7 +461,7 @@ input[type="submit"]:hover {
   justify-content: space-around;
 }
 
-.center_d{
+.center-d{
   /* margin: auto; */
   margin-right: 5%;
   width: 25%;
