@@ -1,7 +1,8 @@
 """HOuses"""
-import os
 import random
 import json
+import time
+from sqlalchemy.engine import URL
 from sqlalchemy import create_engine, Column, String, Integer, REAL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -127,26 +128,24 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
         count += 1
     return dct_all
 
-Base = declarative_base()
-class Apartaments(Base):
-    '''
-    How the table will be looking to the perspective 
-    of every element
-    '''
-    ### Create a table
-    __tablename__ = "Apartaments"
-    images = Column("images", String) #
-    url = Column("url", String, primary_key = True) #
-    name = Column("name", String) #
-    area = Column("area", REAL) #
-    price = Column("price", REAL)
-    currency = Column("currency", String)
-    rooms = Column('rooms', Integer)
-    district = Column('district', String)
-    city = Column('city', String)
-    price_per_meter = Column('price_per_meter', REAL)
 
-    def __init__(self, images, url, name, area, price, currency, rooms, district, city, price_per_meter) -> None:
+Base = declarative_base()
+
+class Apartments(Base):
+    __tablename__ = "Apartments"
+    __table_args__ = {'schema': 'public'}
+    images = Column(String(1000))
+    url = Column(String(1000), primary_key=True)
+    name = Column(String(1000))
+    area = Column(REAL)
+    price = Column(REAL)
+    currency = Column(String(1000))
+    rooms = Column(Integer)
+    district = Column(String(1000))
+    city = Column(String(1000))
+    price_per_meter = Column(REAL)
+
+    def __init__(self, images, url, name, area, price, currency, rooms, district, city, price_per_meter):
         self.images = images
         self.url = url
         self.name = name
@@ -158,63 +157,46 @@ class Apartaments(Base):
         self.city = city
         self.price_per_meter = price_per_meter
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f"{self.number} {self.name} {self.price} {self.currency}"
 
-
 class DatabaseManipulation:
-    '''Do smth with a database'''
-    def __init__(self, database_name:str, usd_to_uah:float, eur_to_uah:float) -> None:
-        self.database_name = database_name
+    def __init__(self, database_uri:str, usd_to_uah:float, eur_to_uah:float):
+        self.database_uri = database_uri
         self.usd_to_uah = usd_to_uah
         self.eur_to_uah = eur_to_uah
-        if os.path.exists(database_name):
-            os.remove(database_name)
 
-        engine = create_engine(f"sqlite:///{database_name}", echo = True)
-        Base.metadata.create_all(bind = engine)
+        connection_string = URL.create('postgresql',
+          username='Housesdb_owner',
+          password='MOGU0lh5ByIg',
+          host='ep-aged-pine-a29r8a5c.eu-central-1.aws.neon.tech',
+          database='Housesdb',
+        )
 
-        Session = sessionmaker(bind = engine)
+        engine = create_engine(connection_string, echo = True)
+
+        Base.metadata.drop_all(engine)
+
+        Base.metadata.create_all(bind=engine)
+
+        Session = sessionmaker(bind=engine)
         self.session = Session()
 
 
-    def rename_and_delete(self):
-        """
-        Rename the database to havi an app working anytime
-        """
-        if os.path.exists(self.database_name):
-            os.remove(self.database_name)
-        if os.path.exists(f"new_{self.database_name}"):
-            os.rename(f"new_{self.database_name}", self.database_name)
-
-
-    def read_dictinary_to_objects_dom(self, dictinary_list:dict) -> None:
-        '''
-        Read selected Viktortype dictinary to the database. 
-        Can make a new database or delete the existing one and make another.
-
-        
-        '''
-
+    def read_dictinary_to_objects_dom(self, dictinary_list:dict):
         for key, dictinary in dictinary_list.items():
-            # print(dictinary)
             names = dictinary['name'].split(',')[2:]
             if 'р‑н.' in names[2]:
-                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()),\
-                names[2][5:].strip(), names[3].strip()
+                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()), names[2][5:].strip(), names[3].strip()
             else:
-                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()),\
-                '', names[2].strip()
+                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()), '', names[2].strip()
             price = float("".join(dictinary['price'].split()))
-            test = round(price/area, 1) if dictinary['priceCurrency'] == 'UAH' else round(price * self.usd_to_uah /
-area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_uah / area ,1)
+            test = round(price/area, 1) if dictinary['priceCurrency'] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_uah / area ,1)
             if test < 30:
                 print(dictinary)
-            self.session.add(Apartaments((",".join(dictinary["image"])), key\
-                                , dictinary['name'], area, price, dictinary['priceCurrency'],rooms,\
-district, city, round(price/area, 1) if dictinary['priceCurrency'] == 'UAH' else round(price * self.usd_to_uah /
-area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_uah / area ,1)))
+            self.session.add(Apartments((",".join(dictinary["image"])), key, dictinary['name'], area, price, dictinary['priceCurrency'],rooms, district, city, test))
         self.session.commit()
+
 
     def read_dictinary_to_objects_olx(self, dictinary_list:dict) -> None:
         '''
@@ -229,7 +211,7 @@ area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_ua
             price = float("".join(value['price'][:-5].split(' '))) if currency \
                     == 'UAH' else float("".join(value['price'][:-2].split(' ')))
             area = float(value['square'][:-3])
-            self.session.add(Apartaments(",".join(value['images']), value['url'], \
+            self.session.add(Apartments(",".join(value['images']), value['url'], \
 value['name'], area, price, currency, \
 int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/area, 1) if currency == \
 'UAH' else round(price * self.usd_to_uah / area, 1) if currency== 'USD' else round(price * self.eur_to_uah / area, 1)))
@@ -237,9 +219,12 @@ int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/ar
 
 
 if __name__ == "__main__":
-    data = DatabaseManipulation('houses_test_test_db.db', 38.81, 42.28)
-    # data.rename_and_delete()
-    data.read_dictinary_to_objects_dom(parser_dom(50))
-    # data.read_dictinary_to_objects_olx(parse_olx(1))
-    # data.read_dictinary_to_objects_dom()
-    # data.rename_and_delete()
+    postgresql = {'pguser' : 'HousesPost_gettingwe',
+                  'pgpassword':'12021964',
+                  'pghost':'25t.h.filess.io',
+                  'pgport':'5433',
+                  'pgdb':'HousesPost_gettingwe'}
+    while True:
+        data = DatabaseManipulation(postgresql, 38.81, 42.28)
+        data.read_dictinary_to_objects_dom(parser_dom(10))
+        time.sleep(60)

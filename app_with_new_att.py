@@ -1,64 +1,64 @@
-"""HOuses"""
-import os
-from flask import Flask, request, render_template, url_for, session, redirect, g
+"""
+The main file which runs the web application
+
+"""
+
+
+from flask import Flask, request, session, redirect, url_for, render_template, g
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc, asc
+import os
 
 app = Flask(__name__)
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'houses_test_test_db.db')
 app.config['SECRET_KEY'] = 'BohdanBohdanBohdan'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Housesdb_owner:MOGU0lh5ByIg@ep-aged-pine-a29r8a5c.eu-central-1.aws.neon.tech/Housesdb'
 db = SQLAlchemy(app)
 
-class Apartament(db.Model):
-    '''
-    How the table will be looking to the perspective 
-    of every element
-    '''
-    ### Create a table
-    __tablename__ = 'Apartaments'
+class Apartment(db.Model):
+    """
+    
+    """
+    __tablename__ = 'Apartments'
     images = db.Column(db.String)
-    url = db.Column(db.String, primary_key = True)
+    url = db.Column(db.String, primary_key=True)
     name = db.Column(db.String)
-    area = db.Column(db.REAL)
-    price = db.Column(db.REAL)
+    area = db.Column(db.Float)
+    price = db.Column(db.Float)
     currency = db.Column(db.String)
     rooms = db.Column(db.Integer)
     district = db.Column(db.String)
     city = db.Column(db.String)
-    price_per_meter = db.Column(db.REAL)
+    price_per_meter = db.Column(db.Float)
 
 def filter_query(filters):
-    g.query = Apartament.query
+    query = Apartment.query
     if filters.get('city'):
-        g.query = g.query.filter(Apartament.city.like(filters['city']))
+        query = query.filter(Apartment.city.like('%' + filters['city'] + '%'))
     if filters.get('district'):
-        g.query = g.query.filter(Apartament.district.like(filters['district']))
+        query = query.filter(Apartment.district.like('%' + filters['district'] + '%'))
     if filters.get('min_area'):
-        g.query = g.query.filter(Apartament.area >= float(filters['min_area']))
+        query = query.filter(Apartment.area >= float(filters['min_area']))
     if filters.get('max_area'):
-        g.query = g.query.filter(Apartament.area <= float(filters['max_area']))
+        query = query.filter(Apartment.area <= float(filters['max_area']))
     if filters.get('min_price'):
-        g.query = g.query.filter(Apartament.price >= float(filters['min_price']))
+        query = query.filter(Apartment.price >= float(filters['min_price']))
     if filters.get('max_price'):
-        g.query = g.query.filter(Apartament.price <= float(filters['max_price']))
+        query = query.filter(Apartment.price <= float(filters['max_price']))
     if filters.get('min_rooms'):
-        g.query = g.query.filter(Apartament.rooms >= int(filters['min_rooms']))
+        query = query.filter(Apartment.rooms >= int(filters['min_rooms']))
     if filters.get('max_rooms'):
-        g.query = g.query.filter(Apartament.rooms <= int(filters['max_rooms']))
-    # if filters.get('sort_max_price'):
-    #     g.query = g.query.order_by(Apartament.price.desc())
-    return g.query
+        query = query.filter(Apartment.rooms <= int(filters['max_rooms']))
+    return query
 
 def sort_query(query, filters):
     if filters.get('sort_max_price'):
-        query = query.order_by(Apartament.price.desc())
+        query = query.order_by(desc(Apartment.price))
     if filters.get('sort_min_price'):
-        query = query.order_by(Apartament.price)
+        query = query.order_by(asc(Apartment.price))
     if filters.get('sort_max_price/area'):
-        query = query.order_by(Apartament.price_per_meter.desc())
+        query = query.order_by(desc(Apartment.price_per_meter))
     if filters.get('sort_min_price/area'):
-        query = query.order_by(Apartament.price_per_meter)
+        query = query.order_by(asc(Apartment.price_per_meter))
     return query
 
 @app.route('/reset', methods=['POST'])
@@ -89,11 +89,12 @@ def index(page):
         session_filters = {k: v for k, v in session_filters.items() if v is not None}
         session['filters'] = session_filters
         return redirect(url_for('index', page=page))
-    
     filters = session.get('filters', {})
-    g.query = filter_query(filters)
-    query = sort_query(g.query, filters)
-    apartaments = query.paginate(page, pages, error_out = False)
+    query = filter_query(filters)
+    query = sort_query(query, filters)
+    apartaments = query.paginate(page, pages, error_out=False)
+    # print(apartaments)
     return render_template('index.html', apartaments=apartaments, filters=filters)
+
 if __name__ == "__main__":
     app.run(debug=True, use_reloader = False)
