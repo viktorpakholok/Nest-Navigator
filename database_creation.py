@@ -224,11 +224,3 @@ if __name__ == "__main__":
     start = time.time()
     data.read_dictinary_to_objects_dom(dict1)
     print(time.time() - start)
-    # while True:
-    #     data = DatabaseManipulation(postgresql, 38.81, 42.28)
-    #     data.read_dictinary_to_objects_dom(parser_dom(10))
-    #     time.sleep(60)
-
-
-    # 1.7027771472930908
-
