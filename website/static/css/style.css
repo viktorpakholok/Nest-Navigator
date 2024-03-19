@@ -277,12 +277,14 @@ input[type="submit"]:hover {
 
 .filter-item input,
 .filter-item select {
+  background-color: #FFFCF2; 
   width: 100%;
-  padding: 1vh;
-  margin-bottom: 1vh;
-  border: 1px solid #ccc;
-  border-radius: 0.5vh;
-  background-color: #FFFCF2;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #333333;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px 0;
 }
 
 /* team page */
