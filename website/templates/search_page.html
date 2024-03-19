@@ -143,15 +143,13 @@
                         <div class='adver-text'>
                             <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a></h2>
                             <div class="adver-description">
-                                <p class="adver-description-item">{{ apartament.area }} м²</p>
-                                <div class="adver-description-item">
-                                    <p>{{ apartament.price }}</p>
-                                    <p>{{ apartament.currency }}</p>
-                                </div>
-                                <p class="adver-description-item">K-сть кімнат: {{ apartament.rooms }}</p>
-                                <p class="adver-description-item">{{ apartament.district }}</p>
-                                <p class="adver-description-item">{{ apartament.city }}</p>
-                                <p class="adver-description-item">{{ apartament.price_per_meter }} UAH/м²</p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.area }} м²</a></p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price_per_meter }} UAH/м²</a></p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">K-сть кімнат: {{ apartament.rooms }}</a></p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.city }}</a></p>
+                            
                             </div>
                         </div>
                     </div>
