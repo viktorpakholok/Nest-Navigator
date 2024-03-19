@@ -5,13 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nest Navigator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
     <script src="{{ url_for('static', filename = 'jscripts/index.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
-    
 </head>
 
 <body>
@@ -23,47 +19,56 @@
         <nav>
             <ul class="header-text">
                 <li><a href="{{ url_for('main') }}">Головна сторінка</a></li>
-                <li><a class="active" href="{{ url_for('search') }}"><strong>Пошук</strong></a></li>
+                <li><a class="active" href="{{ url_for('search') }}">Пошук</a></li>
                 <li><a href="{{ url_for('team') }}">Про нас</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <!-- <button class="button_search">Search</button> -->
-        <div class="flex width-100 main-block">
+        <div class="flex width-100">
             <div class="filters">
                 <form id="searchForm" action="" method="post" autocomplete="off">
                     <div class="filter-item">
-                        <label for="city" class="montserrat-medium">Місто:</label>
-                        <input type="text" class="form-control" name="city_tag" autocomplete="off"
-                            placeholder="Введіть місто" />
+                        <label for="city">Місто:</label>
+                        <input type="text" class="form-control" name="city_tag" autocomplete="off" placeholder="Введіть місто"  value="{{ filters.get('city', '') }}"/>
                     </div>
                     <div class="filter-item">
-                        <label for="price" class="montserrat-medium">Ціна:</label>
-                        <input type="number" class="form-control" name="min_price_tag" placeholder="Мінімальна ціна" />
-                        <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна" />
+                        <label for="price">Ціна:</label>
+                        <input type="number" class="form-control" name="min_price_tag" min="0" placeholder="Мінімальна ціна" value="{{ filters.get('district', '') }}"/>
+                        <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна" value="{{ filters.get('min_area', '') }}"/>
                     </div>
                     <div class="filter-item">
-                        <label for="rooms" class="montserrat-medium">Кімнати:</label>
-                        <input type="number" class="form-control" name="min_rooms_tag"
-                            placeholder="Введіть мін. кількість кімнат" />
-                        <input type="number" class="form-control" name="max_rooms_tag"
-                            placeholder="Введіть мак. кількість кімнат" />
+                        <label for="rooms">Кімнати:</label>
+                        <input type="number" class="form-control" name="min_rooms_tag" min="0" placeholder="Введіть мін. кількість кімнат" value="{{ filters.get('max_area', '') }}"/>
+                        <input type="number" class="form-control" name="max_rooms_tag" placeholder="Введіть мак. кількість кімнат" value="{{ filters.get('min_price', '') }}"/>
                     </div>
                     <div class="filter-item">
-                        <label for="area" class="montserrat-medium">Площа (м²):</label>
-                        <input type="number" class="form-control" name="min_area_tag"
-                            placeholder="Введіть мін. площу" />
-                        <input type="number" class="form-control" name="max_area_tag"
-                            placeholder="Введіть мак. площу" />
+                        <label for="area">Площа (м²):</label>
+                        <input type="number" class="form-control" name="min_area_tag" min="0" placeholder="Введіть мін. площу" value="{{ filters.get('max_price', '') }}"/>
+                        <input type="number" class="form-control" name="max_area_tag" placeholder="Введіть мак. площу" value="{{ filters.get('min_rooms', '') }}"/>
                     </div>
                     <div class="filter-item">
-                        <label for="region" class="montserrat-medium" >Район:</label>
-                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" />
+                        <label for="region">Район:</label>
+                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('max_rooms', '') }}"/>
                     </div>
                     <div class="col-6" align="center">
                         <input type="submit" value="Search" class="form-control btn btn-primary " name="">
                     </div>
+                    <!-- <select name="" id="">
+                        <option value="" name="sort_max_price_tag">Do not sort</option>
+                        <option value="" name="sort_max_price_tag">Sort by max price</option>
+                        <option value="" name="sort_min_price_tag">Sort by min price</option>
+                        <option value="" name="sort_max_pricearea_tag">Sort by max price/area</option>
+                        <option value="" name="sort_min_pricearea_tag">Sort by min price/area</option>
+                    </select> -->
+                    <input type="checkbox" class="form-check-input" name="sort_max_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price
+                    <input type="checkbox" class="form-check-input" name="sort_min_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by min price
+                    <input type="checkbox" class="form-check-input" name="sort_max_pricearea_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price/area
+                    <input type="checkbox" class="form-check-input" name="sort_min_pricearea_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by min price/area
+                </form>
+                <form action="{{ url_for('reset') }}" method="post">
+                    <input type="submit" value="Reset Filters" class="form-control btn btn-secondary">
                 </form>
             </div>
 
@@ -106,51 +111,47 @@
                 </form>
             </div> -->
 
-            <div class="container wdth-80">
-                <!-- <input class="button-search" placeholder="Search"></input> -->
+            <div class="container width-100">
+                <input class="button-search" placeholder="Search"></input>
 
                 {% for apartament in apartaments.items %}
 
                 <div class="flex adver-section">
-                    <div class="flex desc">
+                    <div class="flex desc space_round">
+                        <div class="flex sld_and_but">
 
+                            <div class="flex center_d">
 
-                        <div class="flex center-d">
+                                <button class="prev btns-sl" onclick="prev(this)">&#10094</button>
 
-                            <button class="prev btns-sl" onclick="prev(this)">&#10094</button>
-
-                            <div class="slider-wrap">
-                                <div class="slider-main">
-                                    {% for el in apartament.images.split(',') %}
-                                    <div class="item">
-                                        <img class="img-adver-section lazyload" src="{{ el }}" alt="">
+                                <div class="slider-wrap">
+                                    <div class="slider-main">
+                                        {% for el in apartament.images.split(',') %}
+                                            <div class="item">
+                                                <img class="img-adver-section lazyload" src="{{ el }}" alt="">
+                                            </div>
+                                        {% endfor %}
                                     </div>
-                                    {% endfor %}
                                 </div>
+
+                                <button class="next btns-sl" onclick="next(this)">&#10095</button>
+
                             </div>
 
-                            <button class="next btns-sl" onclick="next(this)">&#10095</button>
-
                         </div>
-
-
-
+                        
                         <div class='adver-text'>
-                            <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a>
-                            </h2>
-                            <div class="adver-description">
-                                <p class="adver-description-item">{{ apartament.area }} м²</p>
-                                <div class="adver-description-item">
-                                    {{ apartament.price }}
-                                    {{ apartament.currency }}
+                            <h2><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a></h2>
+                            <div class="flex space_round">
+                                <p>{{ apartament.area }} м²</p>
+                                <div class="flex">
+                                    <p>{{ apartament.price }}</p>
+                                    <p>{{ apartament.currency }}</p>
                                 </div>
-                                <div class="adver-description-item">
-                                    ціна
-                                    {{ apartament.currency }}/м²
-                                </div>
-                                <p class="adver-description-item">K-сть кімнат: {{ apartament.rooms }}</p>
-                                <p class="adver-description-item">{{ apartament.district }}</p>
-                                <p class="adver-description-item">{{ apartament.city }}</p>
+                                <p>K-сть кімнат: {{ apartament.rooms }}</p>
+                                <p>{{ apartament.district }}</p>
+                                <p>{{ apartament.city }}</p>
+                                <p>{{ apartament.price_per_meter }} UAH</p>
                             </div>
                         </div>
                     </div>
@@ -158,44 +159,51 @@
 
                 {% endfor %}
 
-
+                <!-- <div class="col-12 slaider">
+                    <div class="pagination d-flex justify-content-center mt-5">
+                        <a href="#" class="rounded">&laquo;</a>
+                        <a href="#" class="active rounded">1</a>
+                        <a href="#" class="rounded">2</a>
+                        <a href="#" class="rounded">3</a>
+                        <a href="#" class="rounded">4</a>
+                        <a href="#" class="rounded">5</a>
+                        <a href="#" class="rounded">6</a>
+                        <a href="#" class="rounded">&raquo;</a>
+                    </div>
+                </div> -->
 
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
-                        {% if apartaments.has_prev %}
-                        <li class="page-item"> <a class="page-link"
-                                href="{{ url_for('search', page = apartaments.prev_num)  }}">Previous</a></li>
-                        {% else %}
-                        <li class="page-item"> <a class="page-link btn disabled" href="#">Previous</a></li>
-                        {% endif %}
-
-                        {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
-                        {% if page %}
-
-                        {% if page == apartaments.page %}
-                        <li class="page-item active"><a class="page-link" href="{{ url_for('search', page=page)}}">{{
-                                page }}</a></li>
-                        {% else %}
-                        <li class="page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page
-                                }}</a></li>
-                        {% endif %}
-
-
-                        {% else %}
-                        <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">...</a></li>
-                        {% endif %}
-                        {% endfor %}
-
-                        {% if apartaments.has_next %}
-                        <li class="page-item"> <a class="page-link"
-                                href="{{ url_for('search', page = apartaments.next_num) }}">Next</a></li>
-                        {% else %}
-                        <li class="page-item"> <a class="page-link btn disabled" href="#">Next</a></li>
-                        {% endif %}
+                      {% if apartaments.has_prev %}
+                      <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.prev_num)  }}">Previous</a></li>
+                      {% else %}
+                      <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
+                      {% endif %}
+            
+                      {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
+                      {% if page %}
+            
+                          {% if page == apartaments.page %}
+                              <li class = "page-item active"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                          {% else %}
+                          <li class = "page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                          {% endif %}
+            
+            
+                      {% else %}
+                          <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">...</a></li>
+                      {% endif %}
+                      {% endfor %}
+            
+                      {% if apartaments.has_next %}
+                      <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.next_num) }}">Next</a></li>
+                      {% else %}
+                      <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
+                      {% endif %}
                     </ul>
-
+            
                 </nav>
-
+                
             </div>
 
         </div>
