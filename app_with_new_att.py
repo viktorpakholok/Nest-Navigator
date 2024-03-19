@@ -92,7 +92,7 @@ def index(page):
     filters = session.get('filters', {})
     query = filter_query(filters)
     query = sort_query(query, filters)
-    apartaments = query.paginate(page, pages, error_out=False)
+    apartaments = query.paginate(page=page, per_page=pages, error_out=False)
     # print(apartaments)
     return render_template('index.html', apartaments=apartaments, filters=filters)
 
