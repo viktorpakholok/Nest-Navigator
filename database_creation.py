@@ -224,7 +224,5 @@ if __name__ == "__main__":
                   'pghost':'25t.h.filess.io',
                   'pgport':'5433',
                   'pgdb':'HousesPost_gettingwe'}
-    while True:
-        data = DatabaseManipulation(postgresql, 38.81, 42.28)
-        data.read_dictinary_to_objects_dom(parser_dom(10))
-        time.sleep(60)
+    data = DatabaseManipulation(postgresql, 38.81, 42.28)
+    data.read_dictinary_to_objects_dom(parser_dom(5))
