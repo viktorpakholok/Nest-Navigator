@@ -55,16 +55,19 @@
                         <label for="region" class="montserrat-medium">Район:</label>
                         <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('max_rooms', '') }}"/>
                     </div>
+                    <div class="filter-item">
+                        <label for="sort" class="montserrat-medium">Сортування:</label>
+                        <select name="sort" id="sort" class="sort-select">
+                            <option value="" name="sort_max_price_tag">Не сортувати</option>
+                            <option value="" name="sort_max_price_tag">Сортувати за спаданням ціни</option>
+                            <option value="" name="sort_min_price_tag">Сортувати за зростанням ціни</option>
+                            <option value="" name="sort_max_pricearea_tag">Сортувати за спаданням площі</option>
+                            <option value="" name="sort_min_pricearea_tag">Сортувати за зростанням площі</option>
+                        </select>
+                    </div>
                     <div class="col-6" align="center">
                         <input type="submit" value="Search" class="form-control btn btn-primary " name="">
                     </div>
-                    <select name="" id="">
-                        <option value="" name="sort_max_price_tag">Do not sort</option>
-                        <option value="" name="sort_max_price_tag">Sort by max price</option>
-                        <option value="" name="sort_min_price_tag">Sort by min price</option>
-                        <option value="" name="sort_max_pricearea_tag">Sort by max price/area</option>
-                        <option value="" name="sort_min_pricearea_tag">Sort by min price/area</option>
-                    </select>
                     <!-- <input type="checkbox" class="form-check-input" name="sort_max_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price
                     <input type="checkbox" class="form-check-input" name="sort_min_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by min price
                     <input type="checkbox" class="form-check-input" name="sort_max_pricearea_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price/area
