@@ -134,7 +134,7 @@ Base = declarative_base()
 class Apartments(Base):
     __tablename__ = "Apartments"
     __table_args__ = {'schema': 'public'}
-    images = Column(String(1000))
+    images = Column(String(50000))
     url = Column(String(1000), primary_key=True)
     name = Column(String(1000))
     area = Column(REAL)
@@ -161,8 +161,7 @@ class Apartments(Base):
         return f"{self.number} {self.name} {self.price} {self.currency}"
 
 class DatabaseManipulation:
-    def __init__(self, database_uri:str, usd_to_uah:float, eur_to_uah:float):
-        self.database_uri = database_uri
+    def __init__(self, usd_to_uah:float, eur_to_uah:float):
         self.usd_to_uah = usd_to_uah
         self.eur_to_uah = eur_to_uah
 
@@ -185,16 +184,17 @@ class DatabaseManipulation:
 
     def read_dictinary_to_objects_dom(self, dictinary_list:dict):
         for key, dictinary in dictinary_list.items():
-            names = dictinary['name'].split(',')[2:]
-            if 'р‑н.' in names[2]:
-                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()), names[2][5:].strip(), names[3].strip()
-            else:
-                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()), '', names[2].strip()
-            price = float("".join(dictinary['price'].split()))
-            test = round(price/area, 1) if dictinary['priceCurrency'] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_uah / area ,1)
-            if test < 30:
-                print(dictinary)
-            self.session.add(Apartments((",".join(dictinary["image"])), key, dictinary['name'], area, price, dictinary['priceCurrency'],rooms, district, city, test))
+            if isinstance(dictinary['price'], str):
+                names = dictinary['name'].split(',')[2:]
+                if 'р‑н.' in names[2]:
+                    area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), names[2][5:].strip(), names[3].strip()
+                else:
+                    area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), '', names[2].strip()
+                price = float("".join(dictinary['price'].split()))
+                test = round(price/area, 1) if dictinary['priceCurrency'] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_uah / area ,1)
+                if test < 29:
+                    continue
+                self.session.add(Apartments((",".join(dictinary["image"])), key, dictinary['name'], area, price, dictinary['priceCurrency'],rooms, district, city, test))
         self.session.commit()
 
 
@@ -219,12 +219,16 @@ int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/ar
 
 
 if __name__ == "__main__":
-    postgresql = {'pguser' : 'HousesPost_gettingwe',
-                  'pgpassword':'12021964',
-                  'pghost':'25t.h.filess.io',
-                  'pgport':'5433',
-                  'pgdb':'HousesPost_gettingwe'}
-    while True:
-        data = DatabaseManipulation(postgresql, 38.81, 42.28)
-        data.read_dictinary_to_objects_dom(parser_dom(10))
-        time.sleep(60)
+    dict1 = parser_dom(500)
+    data = DatabaseManipulation(38.81, 42.28)
+    start = time.time()
+    data.read_dictinary_to_objects_dom(dict1)
+    print(time.time() - start)
+    # while True:
+    #     data = DatabaseManipulation(postgresql, 38.81, 42.28)
+    #     data.read_dictinary_to_objects_dom(parser_dom(10))
+    #     time.sleep(60)
+
+
+    # 1.7027771472930908
+
