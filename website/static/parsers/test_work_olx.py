@@ -59,13 +59,16 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
                 response_1 = requests.get(url_off, headers=headers_)
                 soup_1 = BeautifulSoup(response_1.content, 'html.parser')
 
-                dict_off['url'] = url_off
-
                 fir_name = soup_1.find('h4', class_ = 'css-1juynto')
-                while not fir_name:
-                    print('inwhile')
+                if fir_name:
+                    dict_off['name'] = fir_name.get_text()
+                else:
                     fir_name = soup_1.find('h4', class_ = 'css-1juynto')
-                dict_off['name'] = fir_name.get_text()
+                    if fir_name:
+                        dict_off['name'] = fir_name.get_text()
+                    else:
+                        continue
+
 
                 dict_off['price'] = soup_1.find('h3', class_ = 'css-12vqlj3').get_text()
 
@@ -90,7 +93,7 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
                 dict_off['images'] = [el['src'] for el in soup_1.find_all\
 ('img', class_ = 'css-1bmvjcs')]
                 # print(dict_off)
-                dct_all[len(dct_all)] = dict_off
+                dct_all[url_off] = dict_off
 
                 # with open('result.json', 'w', encoding='UTF-8') as json_file:
                 #     json.dump(dct_all, json_file, indent=4, ensure_ascii=False)

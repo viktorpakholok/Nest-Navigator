@@ -119,14 +119,14 @@ class DatabaseManipulation:
         Can make a new database or delete the existing one and make another.
 
         '''
-        for value in dictinary_list.values():
+        for key, value in dictinary_list.items():
             print(value)
             currency =  'UAH' if value['price'][-4:-1] == 'грн' else 'USD' if \
                 value['price'][-1] == '$' else 'EUR'
             price = float("".join(value['price'][:-5].split(' '))) if currency \
                     == 'UAH' else float("".join(value['price'][:-2].split(' ')))
             area = float(value['square'][:-3])
-            self.session.add(Apartments(",".join(value['images']), value['url'], \
+            self.session.add(Apartments(",".join(value['images']), key, \
 value['name'], area, price, currency, \
 int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/area, 1) if currency == \
 'UAH' else round(price * self.usd_to_uah / area, 1) if currency== 'USD' else round(price * self.eur_to_uah / area, 1)))
