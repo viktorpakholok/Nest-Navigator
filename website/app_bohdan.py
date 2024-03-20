@@ -5,7 +5,7 @@ The main file which runs the web application
 from flask import Flask, request, session, redirect, url_for, render_template, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, asc
-
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Housesdb_owner:\
@@ -114,4 +114,4 @@ def search(page):
     return render_template('search_page.html', apartaments=apartaments, filters=filters)
 
 if __name__ == "__main__":
-    app.run(debug=False, use_reloader = False, threaded=True, host='0.0.0.0')
+    app.run(debug=False, use_reloader = False, threaded=True, host='0.0.0.0', port = os.environ.get("PORT", 8000))
