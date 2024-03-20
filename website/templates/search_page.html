@@ -55,6 +55,16 @@
                         <label for="region" class="montserrat-medium">Район:</label>
                         <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('district', '') }}"/>
                     </div>
+                    <div class="filter-item">
+                        <label for="sort" class="montserrat-medium">Сортування:</label>
+                        <select name="sort" id="sort" class="sort-select">
+                            <option value="" name="sort_max_price_tag">Не сортувати</option>
+                            <option value="" name="sort_max_price_tag">Сортувати за спаданням ціни</option>
+                            <option value="" name="sort_min_price_tag">Сортувати за зростанням ціни</option>
+                            <option value="" name="sort_max_pricearea_tag">Сортувати за спаданням площі</option>
+                            <option value="" name="sort_min_pricearea_tag">Сортувати за зростанням площі</option>
+                        </select>
+                    </div>
                     <div class="col-6" align="center">
                         <input type="submit" value="Search" class="form-control btn btn-primary " name="">
                     </div>
