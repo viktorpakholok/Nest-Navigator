@@ -38,22 +38,22 @@
                     </div>
                     <div class="filter-item">
                         <label for="price" class="montserrat-medium">Ціна:</label>
-                        <input type="number" class="form-control" name="min_price_tag" min="0" placeholder="Мінімальна ціна" value="{{ filters.get('district', '') }}"/>
-                        <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна" value="{{ filters.get('min_area', '') }}"/>
+                        <input type="number" class="form-control" name="min_price_tag" min="0" placeholder="Мінімальна ціна" value="{{ filters.get('min_price', '') }}"/>
+                        <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна" value="{{ filters.get('max_price', '') }}"/>
                     </div>
                     <div class="filter-item">
                         <label for="rooms" class="montserrat-medium">Кімнати:</label>
-                        <input type="number" class="form-control" name="min_rooms_tag" min="0" placeholder="Введіть мін. кількість кімнат" value="{{ filters.get('max_area', '') }}"/>
-                        <input type="number" class="form-control" name="max_rooms_tag" placeholder="Введіть мак. кількість кімнат" value="{{ filters.get('min_price', '') }}"/>
+                        <input type="number" class="form-control" name="min_rooms_tag" min="0" placeholder="Введіть мін. кількість кімнат" value="{{ filters.get('min_rooms', '') }}"/>
+                        <input type="number" class="form-control" name="max_rooms_tag" placeholder="Введіть мак. кількість кімнат" value="{{ filters.get('max_rooms', '') }}"/>
                     </div>
                     <div class="filter-item">
                         <label for="area" class="montserrat-medium">Площа (м²):</label>
-                        <input type="number" class="form-control" name="min_area_tag" min="0" placeholder="Введіть мін. площу" value="{{ filters.get('max_price', '') }}"/>
-                        <input type="number" class="form-control" name="max_area_tag" placeholder="Введіть мак. площу" value="{{ filters.get('min_rooms', '') }}"/>
+                        <input type="number" class="form-control" name="min_area_tag" min="0" placeholder="Введіть мін. площу" value="{{ filters.get('min_area', '') }}"/>
+                        <input type="number" class="form-control" name="max_area_tag" placeholder="Введіть мак. площу" value="{{ filters.get('max_area', '') }}"/>
                     </div>
                     <div class="filter-item">
                         <label for="region" class="montserrat-medium">Район:</label>
-                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('max_rooms', '') }}"/>
+                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('district', '') }}"/>
                     </div>
                     <div class="filter-item">
                         <label for="sort" class="montserrat-medium">Сортування:</label>
