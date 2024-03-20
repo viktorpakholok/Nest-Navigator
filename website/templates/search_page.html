@@ -59,18 +59,18 @@
                         <label for="sort" class="montserrat-medium">Сортування:</label>
                         <select title="dropdown" name="dropdown" id="dropdown" class="sort-select">
                             <option value="nothing" {% if filters.get('dropdown', '') == 'nothing' %} selected {% endif %}>Не сортувати</option>
-                            <option value="sort_max_price_tag" {% if filters.get('dropdown', '') == 'sort_max_price_tag' %} selected {% endif %}>Сортувати за спаданням ціни</option>
-                            <option value="sort_min_price_tag" {% if filters.get('dropdown', '') == 'sort_min_price_tag' %} selected {% endif %}>Сортувати за зростанням ціни</option>
-                            <option value="sort_max_pricearea_tag" {% if filters.get('dropdown', '') == 'sort_max_pricearea_tag' %} selected {% endif %}>Сортувати за спаданням площі/м²</option>
-                            <option value="sort_min_pricearea_tag" {% if filters.get('dropdown', '') == 'sort_min_pricearea_tag' %} selected {% endif %}>Сортувати за зростанням площі/м²</option>
+                            <option value="sort_max_price_tag" {% if filters.get('dropdown', '') == 'sort_max_price_tag' %} selected {% endif %}>За спаданням ціни</option>
+                            <option value="sort_min_price_tag" {% if filters.get('dropdown', '') == 'sort_min_price_tag' %} selected {% endif %}>За зростанням ціни</option>
+                            <option value="sort_max_pricearea_tag" {% if filters.get('dropdown', '') == 'sort_max_pricearea_tag' %} selected {% endif %}>За спаданням площі/м²</option>
+                            <option value="sort_min_pricearea_tag" {% if filters.get('dropdown', '') == 'sort_min_pricearea_tag' %} selected {% endif %}>За зростанням площі/м²</option>
                         </select>
                     </div>
                     <div class="col-6" align="center">
-                        <input type="submit" value="Search" class="form-control btn btn-primary " name="">
+                        <input type="submit" value="Пошук" class="form-control btn btn-primary " name="">
                     </div>
                 </form>
                 <form action="{{ url_for('reset') }}" method="post">
-                    <input type="submit" value="Reset Filters" class="form-control btn btn-secondary">
+                    <input type="submit" value="Скинути фільтри" class="form-control btn btn-secondary">
                 </form>
             </div>
 
