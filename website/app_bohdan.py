@@ -56,13 +56,13 @@ def filter_query(filters):
     return g.query
 
 def sort_query(query, filters):
-    if filters.get('sort_max_price'):
+    if filters.get('dropdown') == 'sort_max_price_tag':
         query = query.order_by(desc(Apartment.price))
-    if filters.get('sort_min_price'):
+    if filters.get('dropdown') == 'sort_min_price_tag':
         query = query.order_by(asc(Apartment.price))
-    if filters.get('sort_max_price/area'):
+    if filters.get('dropdown') == 'sort_max_pricearea_tag':
         query = query.order_by(desc(Apartment.price_per_meter))
-    if filters.get('sort_min_price/area'):
+    if filters.get('dropdown') == 'sort_min_pricearea_tag':
         query = query.order_by(asc(Apartment.price_per_meter))
     return query
 
@@ -96,10 +96,11 @@ def search(page):
             'max_price': request.form.get('max_price_tag'),
             'min_rooms': request.form.get('min_rooms_tag'),
             'max_rooms': request.form.get('max_rooms_tag'),
-            'sort_max_price':request.form.get('sort_max_price_tag'),
-            'sort_min_price':request.form.get('sort_min_price_tag'),
-            'sort_max_price/area':request.form.get('sort_max_pricearea_tag'),
-            'sort_min_price/area':request.form.get('sort_min_pricearea_tag')
+            # 'sort_max_price':request.form.get('sort_max_price_tag'),
+            # 'sort_min_price':request.form.get('sort_min_price_tag'),
+            # 'sort_max_price/area':request.form.get('sort_max_pricearea_tag'),
+            # 'sort_min_price/area':request.form.get('sort_min_pricearea_tag')
+            'dropdown': request.form.get('dropdown')
         })
         session_filters = {k: v for k, v in session_filters.items() if v is not None}
         session['filters'] = session_filters

@@ -29,12 +29,12 @@ headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
 
-def parse_olx():
+def parse_olx(pages_to_read):
     dct_all = {}
     count = 1
     url = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/\
 dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
-    while count <= 1:
+    while count <= pages_to_read:
 
         response = requests.get(url+str(count), headers=headers_)
 
@@ -55,13 +55,17 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
                 url_add = 'https://www.olx.ua/d' if '/uk/' in text else 'https://www.olx.ua/d/uk'
                 # print(f'url_add: {url_add}')
                 url_off = url_add + text[2:]
-                # print(url_off)
+                print(url_off)
                 response_1 = requests.get(url_off, headers=headers_)
                 soup_1 = BeautifulSoup(response_1.content, 'html.parser')
 
                 dict_off['url'] = url_off
 
-                dict_off['name'] = soup_1.find('h4', class_ = 'css-1juynto').get_text()
+                fir_name = soup_1.find('h4', class_ = 'css-1juynto')
+                while not fir_name:
+                    print('inwhile')
+                    fir_name = soup_1.find('h4', class_ = 'css-1juynto')
+                dict_off['name'] = fir_name.get_text()
 
                 dict_off['price'] = soup_1.find('h3', class_ = 'css-12vqlj3').get_text()
 
