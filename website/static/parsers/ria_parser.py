@@ -47,6 +47,7 @@ def parser_dom(pages_to_parse):
 
         else:
             print('An error has occurred')
+            continue
 
         soup = BeautifulSoup(response.content, 'html.parser')
 

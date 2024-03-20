@@ -58,12 +58,12 @@
                     <div class="col-6" align="center">
                         <input type="submit" value="Search" class="form-control btn btn-primary " name="">
                     </div>
-                    <select name="" id="">
-                        <option value="" name="sort_max_price_tag">Do not sort</option>
-                        <option value="" name="sort_max_price_tag">Sort by max price</option>
-                        <option value="" name="sort_min_price_tag">Sort by min price</option>
-                        <option value="" name="sort_max_pricearea_tag">Sort by max price/area</option>
-                        <option value="" name="sort_min_pricearea_tag">Sort by min price/area</option>
+                    <select title="dropdown" name="dropdown" id="dropdown">
+                        <option value="nothing" name="nothing" {% if filters.get('dropdown', '') == 'nothing' %} selected {% endif %}>Do not sort</option>
+                        <option value="sort_max_price_tag" name="sort_max_price_tag" {% if filters.get('dropdown', '') == 'sort_max_price_tag' %} selected {% endif %}>Sort by max price</option>
+                        <option value="sort_min_price_tag" name="sort_min_price_tag" {% if filters.get('dropdown', '') == 'sort_min_price_tag' %} selected {% endif %}>Sort by min price</option>
+                        <option value="sort_max_pricearea_tag" name="sort_max_pricearea_tag" {% if filters.get('dropdown', '') == 'sort_max_pricearea_tag' %} selected {% endif %}>Sort by max price/area</option>
+                        <option value="sort_min_pricearea_tag" name="sort_min_pricearea_tag" {% if filters.get('dropdown', '') == 'sort_min_pricearea_tag' %} selected {% endif %}>Sort by min price/area</option>
                     </select>
                     <!-- <input type="checkbox" class="form-check-input" name="sort_max_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price
                     <input type="checkbox" class="form-check-input" name="sort_min_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by min price
