@@ -134,8 +134,8 @@ int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/ar
 
 
 if __name__ == "__main__":
-    # dict_to_read = parser_dom(10)
-    dict_to_read = parse_olx(50)
+    dict_to_read = parser_dom(50)
+    # dict_to_read = parse_olx(50)
     data = DatabaseManipulation(38.81, 42.28)
-    data.read_dictinary_to_objects_olx(dict_to_read)
-    # data.read_dictinary_to_objects_dom(dict_to_read)
+    # data.read_dictinary_to_objects_olx(dict_to_read)
+    data.read_dictinary_to_objects_dom(dict_to_read)

@@ -84,7 +84,7 @@ def team():
 @app.route('/search/', methods = ["POST", "GET"], defaults = {'page': 1})
 @app.route('/search/<int:page>', methods = ["GET", "POST"])
 def search(page):
-    pages = 5
+    pages = 15
     if request.method == 'POST':
         session_filters = session.get('filters', {})
         session_filters.update({

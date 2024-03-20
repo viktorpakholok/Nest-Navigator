@@ -146,7 +146,9 @@
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price_per_meter }} UAH/м²</a></p>
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">K-сть кімнат: {{ apartament.rooms }}</a></p>
-                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
+                                {% if apartament.district != '' %}
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
+                                {% endif %}
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.city }}</a></p>
                             
                             </div>
