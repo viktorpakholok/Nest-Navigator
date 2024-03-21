@@ -564,3 +564,53 @@ a{
     background-color: lightblue; 
   } 
 }
+
+.page-current{
+  /* border-radius: 20%; */
+  border-bottom: 0.3vh solid #011128;
+}
+
+.page-item{
+  padding: 0.2vh;
+}
+
+.loader{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #011128; */
+  transition: opacity 0.75s, visibility 0.75s;
+}
+
+.loader-hidden{
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader::after{
+  content: "";
+  width: 10vh;
+  height: 10vh;
+  border: 2vh solid red;
+  border-top-color: #011128;
+  border-radius: 50%;
+  animation: loading 0.75s ease infinite;
+}
+
+@keyframes loading{
+  from{
+    transform: rotate(0turn);
+  }
+  to{
+    transform: rotate(1turn);
+  }
+}
+
+.no-scroll {
+  overflow: hidden;
+}

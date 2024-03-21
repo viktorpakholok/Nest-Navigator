@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <div class="loader"></div>
     <script>
         lazyload();
     </script>
@@ -183,7 +184,7 @@
                       {% if page %}
             
                           {% if page == apartaments.page %}
-                              <li class = "page-item active"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                              <li class = "page-item page-current"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
                           {% else %}
                           <li class = "page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
                           {% endif %}
