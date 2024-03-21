@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <div class="loader"></div>
     <script>
         lazyload();
     </script>
@@ -21,9 +22,9 @@
         <img src="{{ url_for('static', filename = 'imgs/logo.png') }}" alt="Nest Navigator" class="logo">
         <nav>
             <ul class="header-text">
-                <li><a href="{{ url_for('main') }}">Головна сторінка</a></li>
-                <li><a class="active_but" href="{{ url_for('search') }}">Пошук</a></li>
-                <li><a href="{{ url_for('team') }}">Про нас</a></li>
+                <li><a class ="nav-text" href="{{ url_for('main') }}">Головна сторінка</a></li>
+                <li><a class="active_but nav-text" href="{{ url_for('search') }}">Пошук</a></li>
+                <li><a class ="nav-text" href="{{ url_for('team') }}">Про нас</a></li>
             </ul>
         </nav>
     </header>
@@ -146,7 +147,9 @@
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price_per_meter }} UAH/м²</a></p>
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">K-сть кімнат: {{ apartament.rooms }}</a></p>
-                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
+                                {% if apartament.district != '' %}
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
+                                {% endif %}
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.city }}</a></p>
                             
                             </div>
@@ -181,7 +184,7 @@
                       {% if page %}
             
                           {% if page == apartaments.page %}
-                              <li class = "page-item active"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                              <li class = "page-item page-current"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
                           {% else %}
                           <li class = "page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
                           {% endif %}
