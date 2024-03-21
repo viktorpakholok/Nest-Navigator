@@ -526,10 +526,20 @@ input[type="submit"]:hover {
 }
 
 /* .active_but{
+
+} */
+
+.nav-text{
+  border-radius: 0.5vh;
+  border: 0.2vh solid #011128;
+  z-index: 7;
+}
+
+.nav-text:hover{
   border-radius: 0.5vh;
   border: 0.2vh solid rgb(255, 252, 242);
   z-index: 7;
-} */
+}
 
 .header-text li a{
   border-color: #011128;

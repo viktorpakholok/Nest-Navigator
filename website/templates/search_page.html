@@ -21,9 +21,9 @@
         <img src="{{ url_for('static', filename = 'imgs/logo.png') }}" alt="Nest Navigator" class="logo">
         <nav>
             <ul class="header-text">
-                <li><a href="{{ url_for('main') }}">Головна сторінка</a></li>
-                <li><a class="active_but" href="{{ url_for('search') }}">Пошук</a></li>
-                <li><a href="{{ url_for('team') }}">Про нас</a></li>
+                <li><a class ="nav-text" href="{{ url_for('main') }}">Головна сторінка</a></li>
+                <li><a class="active_but nav-text" href="{{ url_for('search') }}">Пошук</a></li>
+                <li><a class ="nav-text" href="{{ url_for('team') }}">Про нас</a></li>
             </ul>
         </nav>
     </header>
