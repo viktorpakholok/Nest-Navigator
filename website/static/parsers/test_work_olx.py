@@ -29,8 +29,8 @@ headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
 
-def parse_olx(pages_to_read):
-    dct_all = {}
+def parser_olx(pages_to_read: int, adv_set: set):
+    # dct_all = {}
     count = 1
     url = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/\
 dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
@@ -43,6 +43,7 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
             # pass
         else:
             print('An error has occurred')
+            continue
 
         soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -69,7 +70,6 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
                     else:
                         continue
 
-
                 dict_off['price'] = soup_1.find('h3', class_ = 'css-12vqlj3').get_text()
 
                 for el in soup_1.find_all('p', class_ = 'css-b5m1rv er34gjf0'):
@@ -93,14 +93,17 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
                 dict_off['images'] = [el['src'] for el in soup_1.find_all\
 ('img', class_ = 'css-1bmvjcs')]
                 # print(dict_off)
-                dct_all[url_off] = dict_off
+                # dct_all[url_off] = dict_off
+                adv_set.add((tuple(dict_off['images']), url_off, dict_off['name'], \
+dict_off['square'], dict_off['price'], dict_off['num_of_rooms'], \
+dict_off['district'], dict_off['city'], ))
 
                 # with open('result.json', 'w', encoding='UTF-8') as json_file:
                 #     json.dump(dct_all, json_file, indent=4, ensure_ascii=False)
 
                 # break
         count += 1
-    return dct_all
+    return adv_set
 
 
 # if __name__ == '__main__':

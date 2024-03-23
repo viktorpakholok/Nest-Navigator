@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import requests
 
 from static.parsers.ria_parser import parser_dom
-from static.parsers.test_work_olx import parse_olx
+from static.parsers.test_work_olx import parser_olx
 
 session = requests.Session()
 
@@ -91,51 +91,62 @@ class DatabaseManipulation:
         self.session = Session()
 
 
-    def read_dictinary_to_objects_dom(self, dictinary_list:dict) -> None:
+    def read_set_to_objects_dom(self, adv_set:set):
         '''
         Read selected Viktortype dictinary to the database. 
         Can make a new database or delete the existing one and make another.
 
         
         '''
-        for key, dictinary in dictinary_list.items():
-            names = dictinary['name'].split(',')[2:]
-            if 'р‑н.' in names[2]:
-                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), names[2][5:].strip(), names[3].strip()
-            else:
-                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), '', names[2].strip()
-            price = float("".join(dictinary['price'].split()))
-            test = round(price/area, 1) if dictinary['priceCurrency'] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_uah / area ,1)
-            if test < 29:
-                continue
-            # print(dictinary['image'])
-            self.session.add(Apartments((",".join(dictinary["image"])), key, dictinary['name'], area, price, dictinary['priceCurrency'],rooms, district, city, test))
+        for dictinary in adv_set:
+            if isinstance(dictinary[3], str):
+                names = dictinary[2].split(',')[2:]
+                if 'р‑н.' in names[2]:
+                    area, rooms, district, city = float(names[0][:-5].strip()), \
+        int(names[1][:-5].strip()[0]), names[2][5:].strip(), names[3].strip()
+                else:
+                    area, rooms, district, city = float(names[0][:-5].strip()), \
+        int(names[1][:-5].strip()[0]), '', names[2].strip()
+                price = float("".join(dictinary[3].split()))
+                test = round(price/area, 1) if dictinary[4] == 'UAH' else round(price * \
+        self.usd_to_uah / area, 1) if dictinary[4]== 'USD' else \
+        round(price * self.eur_to_uah / area ,1)
+                if test < 29:
+                    continue
+                self.session.add(Apartments((",".join(dictinary[0])), dictinary[1], dictinary[2], area, price, dictinary[4],rooms, district, city, test))
         self.session.commit()
 
 
-    def read_dictinary_to_objects_olx(self, dictinary_list:dict) -> None:
+    def read_set_to_objects_olx(self, adv_set:set) -> None:
         '''
         Read selected Viktortype dictinary to the database. 
         Can make a new database or delete the existing one and make another.
 
         '''
-        for key, value in dictinary_list.items():
-            print(value)
-            currency =  'UAH' if value['price'][-4:-1] == 'грн' else 'USD' if \
-                value['price'][-1] == '$' else 'EUR'
-            price = float("".join(value['price'][:-5].split(' '))) if currency \
-                    == 'UAH' else float("".join(value['price'][:-2].split(' ')))
-            area = float(value['square'][:-3])
-            self.session.add(Apartments(",".join(value['images']), key, \
-value['name'], area, price, currency, \
-int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/area, 1) if currency == \
-'UAH' else round(price * self.usd_to_uah / area, 1) if currency== 'USD' else round(price * self.eur_to_uah / area, 1)))
+        for value in adv_set:
+            # print(value)
+            currency =  'UAH' if value[4][-4:-1] == 'грн' else 'USD' if \
+                value[4][-1] == '$' else 'EUR'
+            price = float("".join(value[4][:-5].split(' '))) if currency \
+                    == 'UAH' else float("".join(value[4][:-2].split(' ')))
+            area = float(value[3][:-3])
+            self.session.add(Apartments(",".join(value[0]), value[1], \
+value[2], area, price, currency, \
+int(value[5][:-8]), value[6],value[7], round(price/area, 1) if currency == \
+'UAH' else round(price * self.usd_to_uah / area, 1) if currency== 'USD' else \
+round(price * self.eur_to_uah / area, 1)))
         self.session.commit()
 
 
 if __name__ == "__main__":
-    dict_to_read = parser_dom(50)
-    # dict_to_read = parse_olx(50)
+    my_check_set = set()
+    dict1 = parser_dom(5, my_check_set)
+    # print(dict1)
+    # set2 = parser_olx(1, my_check_set)
+    # print(set2)
     data = DatabaseManipulation(38.81, 42.28)
-    # data.read_dictinary_to_objects_olx(dict_to_read)
-    data.read_dictinary_to_objects_dom(dict_to_read)
+    # data.read_set_to_objects_olx(set2)
+    # start = time.time()
+    data.read_set_to_objects_dom(dict1)
+    # print(time.time() - start)
+    print(dict1)

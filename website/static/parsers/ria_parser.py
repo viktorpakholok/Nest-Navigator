@@ -31,15 +31,15 @@ like Gecko) Version/16.1 Safari/605.1.15'
 headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
-def parser_dom(pages_to_parse):
-    all_time = time.time()
-    dict_gen = {}
+def parser_dom(pages_to_parse: int, adv_set: set):
+    # all_time = time.time()
+    # dict_gen = {}
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
     while count <= pages_to_parse:
 
-        t_s = time.time()
+        # t_s = time.time()
         response = requests.get(url+str(count), headers=headers_)
         # print(time.time() - t_s)
         if response.status_code == 200:
@@ -63,18 +63,20 @@ def parser_dom(pages_to_parse):
 
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
 (']</script></div>', maxsplit=1)[0]))
-        
+
         # with open('res.json', 'a', encoding='UTF-8') as file:
         #     json.dump(loaded, file, indent=4, ensure_ascii=False)
         #     file.write('\n')
 
         # dict_gen.extend(loaded['mainEntity']['itemListElement'][0]['offers']['offers'])
         for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
-            dict_gen[offer['url']] = offer
+            adv_set.add((tuple(offer['image']), offer['url'], offer['name'], \
+offer['price'], offer['priceCurrency']))
+            # dict_gen[offer['url']] = offer
 
         count += 1
         # print(time.time()-t_s)
-    print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/pages_to_parse}')
-    return dict_gen
+    # print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/pages_to_parse}')
+    return adv_set
 
 # parser_dom()

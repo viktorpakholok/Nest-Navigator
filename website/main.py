@@ -6,19 +6,27 @@ from flask import Flask, request, session, redirect, url_for, render_template, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, asc
 
+from apscheduler.schedulers.background import BackgroundScheduler
+import time
+
+from database_creation import parser_olx, parser_dom, DatabaseManipulation
+
 from flask_cors import CORS
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
-load_dotenv()
+# load_dotenv()
 
 
 app = Flask(__name__)
 
 CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+# app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Housesdb_owner:MOGU0lh5ByIg@ep-aged-pine-a29r8a5c.eu-central-1.aws.neon.tech/Housesdb'
+app.config['SECRET_KEY'] = 'BohdanBohdanBohdan'
 
 db = SQLAlchemy(app)
 
@@ -120,6 +128,23 @@ def search(page):
     apartaments = query.paginate(page=page, per_page=pages, error_out = False)
 
     return render_template('search_page.html', apartaments=apartaments, filters=filters)
+
+def job_function():
+    print('started')
+    my_check_set = set()
+    dict1 = parser_dom(5, my_check_set)
+    # print(dict1)
+    # set2 = parser_olx(1, my_check_set)
+    # print(set2)
+    data = DatabaseManipulation(38.81, 42.28)
+    # data.read_set_to_objects_olx(set2)
+    # start = time.time()
+    data.read_set_to_objects_dom(dict1)
+    print('ended')
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(job_function, 'interval', seconds = 30)
+scheduler.start()
 
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
