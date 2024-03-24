@@ -678,4 +678,33 @@ a{
     margin-right: auto;
     margin-top: 2vh;
   }
+  .filter-item {
+    display: none;
+  }
+
+  #toggle:checked ~ #searchForm .filter-item {
+    display: block;
+  }
+
+  .dropbtn {
+    display: block;
+    cursor: pointer;
+    background-color: #FFFCF2; 
+    border-style: solid;
+    border-width: 2px;
+    border-color: #333333;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .filter-item {
+    display: block;
+  }
+
+  .dropbtn, #toggle {
+    display: none;
+  }
 }
