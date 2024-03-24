@@ -143,7 +143,7 @@ def job_function():
     print('ended')
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(job_function, 'interval', seconds = 30)
+scheduler.add_job(job_function, 'interval', minutes = 2)
 scheduler.start()
 
 if __name__ == "__main__":
