@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <!-- <div class="loader"></div> -->
     <script>
         lazyload();
     </script>
@@ -21,9 +22,9 @@
         <img src="{{ url_for('static', filename = 'imgs/logo.png') }}" alt="Nest Navigator" class="logo">
         <nav>
             <ul class="header-text">
-                <li><a href="{{ url_for('main') }}">Головна сторінка</a></li>
-                <li><a class="active" href="{{ url_for('search') }}"><strong>Пошук</strong></a></li>
-                <li><a href="{{ url_for('team') }}">Про нас</a></li>
+                <li><a class ="nav-text" href="{{ url_for('main') }}">Головна сторінка</a></li>
+                <li><a class="active_but nav-text" href="{{ url_for('search') }}">Пошук</a></li>
+                <li><a class ="nav-text" href="{{ url_for('team') }}">Про нас</a></li>
             </ul>
         </nav>
     </header>
@@ -31,6 +32,8 @@
         <!-- <button class="button_search">Search</button> -->
         <div class="flex width-100 main-block">
             <div class="filters">
+                <label for="toggle" class="dropbtn">Фільтри</label>
+                <input type="checkbox" id="toggle" style="display:none"/>
                 <form id="searchForm" action="" method="post" autocomplete="off">
                     <div class="filter-item">
                         <label for="city" class="montserrat-medium">Місто:</label>
@@ -38,40 +41,39 @@
                     </div>
                     <div class="filter-item">
                         <label for="price" class="montserrat-medium">Ціна:</label>
-                        <input type="number" class="form-control" name="min_price_tag" min="0" placeholder="Мінімальна ціна" value="{{ filters.get('district', '') }}"/>
-                        <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна" value="{{ filters.get('min_area', '') }}"/>
+                        <input type="number" class="form-control" name="min_price_tag" min="0" placeholder="Мінімальна ціна" value="{{ filters.get('min_price', '') }}"/>
+                        <input type="number" class="form-control" name="max_price_tag" placeholder="Максимальна ціна" value="{{ filters.get('max_price', '') }}"/>
                     </div>
                     <div class="filter-item">
                         <label for="rooms" class="montserrat-medium">Кімнати:</label>
-                        <input type="number" class="form-control" name="min_rooms_tag" min="0" placeholder="Введіть мін. кількість кімнат" value="{{ filters.get('max_area', '') }}"/>
-                        <input type="number" class="form-control" name="max_rooms_tag" placeholder="Введіть мак. кількість кімнат" value="{{ filters.get('min_price', '') }}"/>
+                        <input type="number" class="form-control" name="min_rooms_tag" min="0" placeholder="Введіть мін. кількість кімнат" value="{{ filters.get('min_rooms', '') }}"/>
+                        <input type="number" class="form-control" name="max_rooms_tag" placeholder="Введіть мак. кількість кімнат" value="{{ filters.get('max_rooms', '') }}"/>
                     </div>
                     <div class="filter-item">
                         <label for="area" class="montserrat-medium">Площа (м²):</label>
-                        <input type="number" class="form-control" name="min_area_tag" min="0" placeholder="Введіть мін. площу" value="{{ filters.get('max_price', '') }}"/>
-                        <input type="number" class="form-control" name="max_area_tag" placeholder="Введіть мак. площу" value="{{ filters.get('min_rooms', '') }}"/>
+                        <input type="number" class="form-control" name="min_area_tag" min="0" placeholder="Введіть мін. площу" value="{{ filters.get('min_area', '') }}"/>
+                        <input type="number" class="form-control" name="max_area_tag" placeholder="Введіть мак. площу" value="{{ filters.get('max_area', '') }}"/>
                     </div>
                     <div class="filter-item">
                         <label for="region" class="montserrat-medium">Район:</label>
-                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('max_rooms', '') }}"/>
+                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('district', '') }}"/>
+                    </div>
+                    <div class="filter-item">
+                        <label for="sort" class="montserrat-medium">Сортування:</label>
+                        <select title="dropdown" name="dropdown" id="dropdown" class="sort-select">
+                            <option value="nothing" {% if filters.get('dropdown', '') == 'nothing' %} selected {% endif %}>Не сортувати</option>
+                            <option value="sort_max_price_tag" {% if filters.get('dropdown', '') == 'sort_max_price_tag' %} selected {% endif %}>За спаданням ціни</option>
+                            <option value="sort_min_price_tag" {% if filters.get('dropdown', '') == 'sort_min_price_tag' %} selected {% endif %}>За зростанням ціни</option>
+                            <option value="sort_max_pricearea_tag" {% if filters.get('dropdown', '') == 'sort_max_pricearea_tag' %} selected {% endif %}>За спаданням площі/м²</option>
+                            <option value="sort_min_pricearea_tag" {% if filters.get('dropdown', '') == 'sort_min_pricearea_tag' %} selected {% endif %}>За зростанням площі/м²</option>
+                        </select>
                     </div>
                     <div class="col-6" align="center">
-                        <input type="submit" value="Search" class="form-control btn btn-primary " name="">
+                        <input type="submit" value="Пошук" class="form-control btn btn-primary " name="">
                     </div>
-                    <!-- <select name="" id="">
-                        <option value="" name="sort_max_price_tag">Do not sort</option>
-                        <option value="" name="sort_max_price_tag">Sort by max price</option>
-                        <option value="" name="sort_min_price_tag">Sort by min price</option>
-                        <option value="" name="sort_max_pricearea_tag">Sort by max price/area</option>
-                        <option value="" name="sort_min_pricearea_tag">Sort by min price/area</option>
-                    </select> -->
-                    <input type="checkbox" class="form-check-input" name="sort_max_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price
-                    <input type="checkbox" class="form-check-input" name="sort_min_price_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by min price
-                    <input type="checkbox" class="form-check-input" name="sort_max_pricearea_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by max price/area
-                    <input type="checkbox" class="form-check-input" name="sort_min_pricearea_tag" value="1" {% if filters.get('sort_max_price') %}checked{% endif %}>Sort by min price/area
                 </form>
                 <form action="{{ url_for('reset') }}" method="post">
-                    <input type="submit" value="Reset Filters" class="form-control btn btn-secondary">
+                    <input type="submit" value="Скинути фільтри" class="form-control btn btn-secondary">
                 </form>
             </div>
 
@@ -143,15 +145,15 @@
                         <div class='adver-text'>
                             <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a></h2>
                             <div class="adver-description">
-                                <p class="adver-description-item">{{ apartament.area }} м²</p>
-                                <div class="adver-description-item">
-                                    <p>{{ apartament.price }}</p>
-                                    <p>{{ apartament.currency }}</p>
-                                </div>
-                                <p class="adver-description-item">K-сть кімнат: {{ apartament.rooms }}</p>
-                                <p class="adver-description-item">{{ apartament.district }}</p>
-                                <p class="adver-description-item">{{ apartament.city }}</p>
-                                <p class="adver-description-item">{{ apartament.price_per_meter }} UAH/м²</p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.area }} м²</a></p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price_per_meter }} UAH/м²</a></p>
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">K-сть кімнат: {{ apartament.rooms }}</a></p>
+                                {% if apartament.district != '' %}
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
+                                {% endif %}
+                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.city }}</a></p>
+                            
                             </div>
                         </div>
                     </div>
@@ -184,7 +186,7 @@
                       {% if page %}
             
                           {% if page == apartaments.page %}
-                              <li class = "page-item active"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                              <li class = "page-item page-current"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
                           {% else %}
                           <li class = "page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
                           {% endif %}

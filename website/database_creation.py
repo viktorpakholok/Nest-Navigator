@@ -44,7 +44,7 @@ class Apartments(Base):
     '''
     __tablename__ = "Apartments"
     __table_args__ = {'schema': 'public'}
-    images = Column(String(1000))
+    images = Column(String(10000))
     url = Column(String(1000), primary_key=True)
     name = Column(String(1000))
     area = Column(REAL)
@@ -101,13 +101,14 @@ class DatabaseManipulation:
         for key, dictinary in dictinary_list.items():
             names = dictinary['name'].split(',')[2:]
             if 'р‑н.' in names[2]:
-                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()), names[2][5:].strip(), names[3].strip()
+                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), names[2][5:].strip(), names[3].strip()
             else:
-                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()), '', names[2].strip()
+                area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), '', names[2].strip()
             price = float("".join(dictinary['price'].split()))
             test = round(price/area, 1) if dictinary['priceCurrency'] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_uah / area ,1)
-            if test < 30:
-                print(dictinary)
+            if test < 29:
+                continue
+            # print(dictinary['image'])
             self.session.add(Apartments((",".join(dictinary["image"])), key, dictinary['name'], area, price, dictinary['priceCurrency'],rooms, district, city, test))
         self.session.commit()
 
@@ -118,14 +119,14 @@ class DatabaseManipulation:
         Can make a new database or delete the existing one and make another.
 
         '''
-        for value in dictinary_list.values():
+        for key, value in dictinary_list.items():
             print(value)
             currency =  'UAH' if value['price'][-4:-1] == 'грн' else 'USD' if \
                 value['price'][-1] == '$' else 'EUR'
             price = float("".join(value['price'][:-5].split(' '))) if currency \
                     == 'UAH' else float("".join(value['price'][:-2].split(' ')))
             area = float(value['square'][:-3])
-            self.session.add(Apartments(",".join(value['images']), value['url'], \
+            self.session.add(Apartments(",".join(value['images']), key, \
 value['name'], area, price, currency, \
 int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/area, 1) if currency == \
 'UAH' else round(price * self.usd_to_uah / area, 1) if currency== 'USD' else round(price * self.eur_to_uah / area, 1)))
@@ -133,5 +134,8 @@ int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/ar
 
 
 if __name__ == "__main__":
+    dict_to_read = parser_dom(50)
+    # dict_to_read = parse_olx(50)
     data = DatabaseManipulation(38.81, 42.28)
-    data.read_dictinary_to_objects_dom(parser_dom(5))
+    # data.read_dictinary_to_objects_olx(dict_to_read)
+    data.read_dictinary_to_objects_dom(dict_to_read)
