@@ -644,11 +644,15 @@ a{
   nav ul li {
     margin: 0 0;
   }
-
-  .main-main-text, .adress, .find_ap {
+  h1 {
+    margin-bottom: 0.5em;
+    font-size: 4em;
+  }
+  .main-main-text, .adress, .find_ap, .main-team-text {
     font-size: 16px;
     padding-left: 5%;
     padding-right: 5%;
+    text-align: center;
   }
 
   .big-photo, .photo-desciption {
