@@ -9,6 +9,15 @@ from sqlalchemy.orm import sessionmaker
 from bs4 import BeautifulSoup
 import requests
 
+from bs4 import BeautifulSoup
+import requests
+import random
+import json
+import time
+from urllib3 import PoolManager
+
+http = PoolManager()
+
 session = requests.Session()
 
 user_agents = [
@@ -31,52 +40,43 @@ like Gecko) Version/16.1 Safari/605.1.15'
 headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
-def parser_dom(num_of_pages:int):
-    """
-    Parse info from DIM.RIA
-    """
-    dict_gen = {}
+def parser_dom(pages_to_parse:int, adv_set:set):
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
-    while count <= num_of_pages:
+    while count <= pages_to_parse:
 
         response = requests.get(url+str(count), headers=headers_)
-
         if response.status_code == 200:
             print(f'Success {count}!')
 
         else:
             print('An error has occurred')
+            continue
 
         soup = BeautifulSoup(response.content, 'html.parser')
 
-
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
 (']</script></div>', maxsplit=1)[0]))
-
+        
         for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
-            dict_gen[offer['url']] = offer
+            adv_set.add((tuple(offer['image']), offer['url'], offer['name'], offer['price'], offer['priceCurrency']))
+            # dict_gen[offer['url']] = offer
 
         count += 1
+    return adv_set
 
-    return dict_gen
-
-
-def parse_olx(num_of_pages:int):
-    """
-    Parse info from OLX
-    """
-    dct_all = {}
+def parser_olx(pages_to_read:int, adv_set:set):
     count = 1
     url = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/\
 dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
-    while count <= num_of_pages:
+    while count <= pages_to_read:
 
         response = requests.get(url+str(count), headers=headers_)
 
         if response.status_code == 200:
             print(f'Success {count}!')
+            # pass
         else:
             print('An error has occurred')
 
@@ -91,13 +91,20 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
                 url_add = 'https://www.olx.ua/d' if '/uk/' in text else 'https://www.olx.ua/d/uk'
                 # print(f'url_add: {url_add}')
                 url_off = url_add + text[2:]
-                # print(url_off)
+                print(url_off)
                 response_1 = requests.get(url_off, headers=headers_)
                 soup_1 = BeautifulSoup(response_1.content, 'html.parser')
 
-                dict_off['url'] = url_off
+                fir_name = soup_1.find('h4', class_ = 'css-1juynto')
+                if fir_name:
+                    dict_off['name'] = fir_name.get_text()
+                else:
+                    fir_name = soup_1.find('h4', class_ = 'css-1juynto')
+                    if fir_name:
+                        dict_off['name'] = fir_name.get_text()
+                    else:
+                        continue
 
-                dict_off['name'] = soup_1.find('h4', class_ = 'css-1juynto').get_text()
 
                 dict_off['price'] = soup_1.find('h3', class_ = 'css-12vqlj3').get_text()
 
@@ -119,22 +126,24 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
                     elif ind == 6:
                         dict_off['district'] =  get_t.split(' - ')[1]
 
-                dict_off['images'] = [el['src'] for el in soup_1.find_all('img', class_ = 'css-1bmvjcs')]
+                dict_off['images'] = [el['src'] for el in soup_1.find_all\
+('img', class_ = 'css-1bmvjcs')]
                 # print(dict_off)
-                dct_all[len(dct_all)] = dict_off
-                with open('result.json', 'w', encoding='UTF-8') as json_file:
-                    json.dump(dct_all, json_file, indent=4, ensure_ascii=False)
-                # break
+                # dct_all[url_off] = dict_off
+                adv_set.add((tuple(dict_off['images']), url_off, dict_off['name'], dict_off['square'], dict_off['price'], dict_off['num_of_rooms'], dict_off['district'], dict_off['city'], ))
         count += 1
-    return dct_all
+    return adv_set
 
+
+# if __name__ == '__main__':
+#     parse_olx()
 
 Base = declarative_base()
 
 class Apartments(Base):
     __tablename__ = "Apartments"
     __table_args__ = {'schema': 'public'}
-    images = Column(String(50000))
+    images = Column(String(10000))
     url = Column(String(1000), primary_key=True)
     name = Column(String(1000))
     area = Column(REAL)
@@ -158,7 +167,7 @@ class Apartments(Base):
         self.price_per_meter = price_per_meter
 
     def __repr__(self):
-        return f"{self.number} {self.name} {self.price} {self.currency}"
+        return f"{self.name} {self.price} {self.currency}"
 
 class DatabaseManipulation:
     def __init__(self, usd_to_uah:float, eur_to_uah:float):
@@ -182,45 +191,65 @@ class DatabaseManipulation:
         self.session = Session()
 
 
-    def read_dictinary_to_objects_dom(self, dictinary_list:dict):
-        for key, dictinary in dictinary_list.items():
-            if isinstance(dictinary['price'], str):
-                names = dictinary['name'].split(',')[2:]
+    def read_set_to_objects_dom(self, adv_set:set):
+        for dictinary in adv_set:
+            if isinstance(dictinary[3], str):
+                names = dictinary[2].split(',')[2:]
                 if 'р‑н.' in names[2]:
                     area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), names[2][5:].strip(), names[3].strip()
                 else:
                     area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), '', names[2].strip()
-                price = float("".join(dictinary['price'].split()))
-                test = round(price/area, 1) if dictinary['priceCurrency'] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary['priceCurrency']== 'USD' else round(price * self.eur_to_uah / area ,1)
+                price = float("".join(dictinary[3].split()))
+                test = round(price/area, 1) if dictinary[4] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary[4]== 'USD' else round(price * self.eur_to_uah / area ,1)
                 if test < 29:
                     continue
-                self.session.add(Apartments((",".join(dictinary["image"])), key, dictinary['name'], area, price, dictinary['priceCurrency'],rooms, district, city, test))
+                self.session.add(Apartments((",".join(dictinary[0])), dictinary[1], dictinary[2], area, price, dictinary[4],rooms, district, city, test))
         self.session.commit()
 
 
-    def read_dictinary_to_objects_olx(self, dictinary_list:dict) -> None:
+    def read_set_to_objects_olx(self, adv_set:set) -> None:
         '''
         Read selected Viktortype dictinary to the database. 
         Can make a new database or delete the existing one and make another.
 
         '''
-        for value in dictinary_list.values():
+        for value in adv_set:
             print(value)
-            currency =  'UAH' if value['price'][-4:-1] == 'грн' else 'USD' if \
-                value['price'][-1] == '$' else 'EUR'
-            price = float("".join(value['price'][:-5].split(' '))) if currency \
-                    == 'UAH' else float("".join(value['price'][:-2].split(' ')))
-            area = float(value['square'][:-3])
-            self.session.add(Apartments(",".join(value['images']), value['url'], \
-value['name'], area, price, currency, \
-int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/area, 1) if currency == \
+            currency =  'UAH' if value[4][-4:-1] == 'грн' else 'USD' if \
+                value[4][-1] == '$' else 'EUR'
+            price = float("".join(value[4][:-5].split(' '))) if currency \
+                    == 'UAH' else float("".join(value[4][:-2].split(' ')))
+            area = float(value[3][:-3])
+            self.session.add(Apartments(",".join(value[0]), value[1], \
+value[2], area, price, currency, \
+int(value[5][:-8]), value[6],value[7], round(price/area, 1) if currency == \
 'UAH' else round(price * self.usd_to_uah / area, 1) if currency== 'USD' else round(price * self.eur_to_uah / area, 1)))
         self.session.commit()
 
+    def get_all_districts_and_cities(self) -> dict:
+        """
+        Return all districts in a form of a dictinary
 
+        {city : set of all districts}
+        
+        """
+        query = self.session.query(Apartments).filter(Apartments.district!='')
+        output_dictinary = {}
+        for row in query:
+            output_dictinary.setdefault(row.city, set()).add(row.district)
+        return output_dictinary
+            # output_dictinary.setdefault()
 if __name__ == "__main__":
-    dict1 = parser_dom(500)
+    my_check_set = set()
+    dict1 = parser_dom(1, my_check_set)
+    # print(dict1)
+    # set2 = parser_olx(1, my_check_set)
+    # print(set2)
     data = DatabaseManipulation(38.81, 42.28)
-    start = time.time()
-    data.read_dictinary_to_objects_dom(dict1)
-    print(time.time() - start)
+    # data.read_set_to_objects_olx(set2)
+    # start = time.time()
+    data.read_set_to_objects_dom(dict1)
+    dick = data.get_all_districts_and_cities()
+    print(dick)
+    # print(time.time() - start)
+    # print(dict1)
