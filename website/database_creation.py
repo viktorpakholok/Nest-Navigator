@@ -133,9 +133,31 @@ int(value['num_of_rooms'][:-8]), value['district'],value['city'], round(price/ar
         self.session.commit()
 
 
+def get_all_districts_and_cities(self) -> dict:
+    """
+    Return all districts in a form of a dictinary
+
+    {city : set of all districts}
+    
+    """
+    query = self.session.query(Apartments).filter(Apartments.district!='')
+    output_dictinary = {}
+    for row in query:
+        output_dictinary.setdefault(row.city, set()).add(row.district)
+    return output_dictinary
+        # output_dictinary.setdefault()
+
 if __name__ == "__main__":
-    dict_to_read = parser_dom(50)
-    # dict_to_read = parse_olx(50)
+    my_check_set = set()
+    dict1 = parser_dom(1, my_check_set)
+    # print(dict1)
+    # set2 = parser_olx(1, my_check_set)
+    # print(set2)
     data = DatabaseManipulation(38.81, 42.28)
-    # data.read_dictinary_to_objects_olx(dict_to_read)
-    data.read_dictinary_to_objects_dom(dict_to_read)
+    # data.read_set_to_objects_olx(set2)
+    # start = time.time()
+    data.read_set_to_objects_dom(dict1)
+    dick = data.get_all_districts_and_cities()
+    print(dick)
+    # print(time.time() - start)
+    # print(dict1)
