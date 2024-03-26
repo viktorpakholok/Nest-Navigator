@@ -140,7 +140,7 @@ round(price * self.eur_to_uah / area, 1)))
 
 if __name__ == "__main__":
     my_check_set = set()
-    dict1 = parser_dom(5, my_check_set)
+    dict1 = parser_dom(10, my_check_set)
     # print(dict1)
     # set2 = parser_olx(1, my_check_set)
     # print(set2)

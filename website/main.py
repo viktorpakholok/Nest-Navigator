@@ -142,9 +142,9 @@ def job_function():
     data.read_set_to_objects_dom(dict1)
     print('ended')
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(job_function, 'interval', minutes = 2)
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(job_function, 'interval', minutes = 2)
+# scheduler.start()
 
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
