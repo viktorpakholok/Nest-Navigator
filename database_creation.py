@@ -89,8 +89,8 @@ offer['price'], offer['priceCurrency']))
         # print(time.time()-t_s)
     # print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/pages_to_parse}')
     return adv_set
-def parser_olx(pages_to_read:int, adv_set:set):
-    for i in range(15, 101, 5):
+def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
+    for i in range(lower_price_bound, upper_price_bound - 5, 5):
         count = 1
         url = f"https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=2&search%5Bfilter_float_total_area%3Afrom%5D={i}&search%5Bfilter_float_total_area%3Ato%5D={i + 5}"
         response = requests.get(url, headers=headers_)
@@ -177,7 +177,7 @@ class Apartments(Base):
         return f"{self.name} {self.price} {self.currency}"
 
 class DatabaseManipulation:
-    def __init__(self, usd_to_uah:float, eur_to_uah:float):
+    def __init__(self, usd_to_uah:float, eur_to_uah:float, Viktor_special = True):
         self.usd_to_uah = usd_to_uah
         self.eur_to_uah = eur_to_uah
 
@@ -189,8 +189,8 @@ class DatabaseManipulation:
         )
 
         engine = create_engine(connection_string, echo = True)
-
-        Base.metadata.drop_all(engine)
+        if Viktor_special:
+            Base.metadata.drop_all(engine)
 
         Base.metadata.create_all(bind=engine)
 
@@ -248,10 +248,30 @@ int(value[6][:-8]), value[7],value[8], round(price/area, 1) if value[5] == \
         self.session.commit()
 
 
+def one_timer():
+
+    #  Dom Ria
+
+    dom_set = parser_dom(500, set())
+    database = DatabaseManipulation(38.81, 42)
+    database.read_set_to_objects_dom(dom_set)
+
+    #   OLX
+
+    database.read_set_to_objects_olx(parser_olx(set(), 10, 150))
+
+    print('One timer done!')
+
+def during_the_day():
+    for i in range(150, 500, 50):
+        database = DatabaseManipulation(38.81, 42, False)
+        database.read_set_to_objects_olx(parser_olx(set(), i, i + 49))
+    print('During the day done!')
+
 if __name__ == "__main__":
     my_check_set = set()
     start = time.time()
-    dict1 = parser_dom(10, my_check_set)
+    dict1 = parser_dom(1, my_check_set)
     # print(dict1)
     # print(dict1)
     # set2 = parser_olx1(1, my_check_set)
@@ -261,13 +281,12 @@ if __name__ == "__main__":
     # print(set2)
     # print(t)
     # print(set2)
-    data = DatabaseManipulation(38.81, 42.28)
+    data = DatabaseManipulation(38.81, 42.28, False)
     # data.read_set_to_objects_olx(set2)
     # print(set2)
     print(t)
     data.read_set_to_objects_dom(dict1)
     data.get_all_districts_and_cities()
-    data.fix_the_database()
     print(t)
     # data.get_all_districts_and_cities()
     # data.fix_the_database()
