@@ -37,7 +37,13 @@
                 <form id="searchForm" action="" method="post" autocomplete="off">
                     <div class="filter-item">
                         <label for="city" class="montserrat-medium">Місто:</label>
-                        <input type="text" class="form-control" name="city_tag" autocomplete="off" placeholder="Введіть місто"  value="{{ filters.get('city', '') }}"/>
+                        <!-- <input type="text" class="form-control" name="city_tag" autocomplete="off" placeholder="Введіть місто"  value="{{ filters.get('city', '') }}"/> -->
+                        <select name="city_tag" id="city_tag" class="sort-select">
+                            <option value="" {% if filters.get('city', '') ==  "all"  %} selected {% endif %}>Усі</option>
+                            {% for city in city_dis_dict.keys() %}
+                            <option value="{{ city }}" {% if filters.get('city', '') ==  city  %} selected {% endif %}>{{ city }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="filter-item">
                         <label for="price" class="montserrat-medium">Ціна:</label>
@@ -56,7 +62,10 @@
                     </div>
                     <div class="filter-item">
                         <label for="region" class="montserrat-medium">Район:</label>
-                        <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('district', '') }}"/>
+                        <!-- <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('district', '') }}"/> -->
+                        <div id="region">
+                            
+                        </div>
                     </div>
                     <div class="filter-item">
                         <label for="sort" class="montserrat-medium">Сортування:</label>
@@ -211,18 +220,19 @@
         </div>
 
     </main>
-    <!-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var citySelect = document.getElementById('city');
+            var citySelect = document.getElementById('city_tag');
             var regionSelect = document.getElementById('region');
 
-            var regionsByCity = {
-                'Львів': ['Галицький', 'Шевченківський', 'Сихівський', 'Залізничний', 'Франківський', 'Личаківський'],
-                'Київ': ['Печерський', 'Шевченківський', 'Солом\'янський', 'Подільський', 'Дарницький', 'Голосiївський', 'Деснянський', 'Днiпровський', 'Оболонський', 'Святошинський']
-            };
+            var regionsByCity = {{ city_dis_dict | tojson }};
+
+            console.log(regionsByCity);
+            console.log(regionsByCity['Київ'])
 
             citySelect.addEventListener('change', function () {
                 var selectedCity = this.value;
+                console.log(selectedCity);
                 var regions = regionsByCity[selectedCity] || [];
 
                 regionSelect.innerHTML = '<option value="">Виберіть район</option>';
@@ -233,7 +243,7 @@
             });
         });
 
-    </script> -->
+    </script>
     <footer class="footer-distributed">
 
         <div class="footer-left">

@@ -60,6 +60,9 @@ def parser_dom(pages_to_parse: int, adv_set: set):
         # with open('sth_0.txt', 'a', encoding='UTF-8') as file:
         #     file.write(f'{soup}\n')
 
+        with open('oth.txt', 'w', encoding='UTF-8') as file_:
+            file_.write('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
+(']</script></div>', maxsplit=1)[0]))
 
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
 (']</script></div>', maxsplit=1)[0]))
@@ -79,4 +82,4 @@ offer['price'], offer['priceCurrency']))
     # print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/pages_to_parse}')
     return adv_set
 
-# parser_dom()
+parser_dom(1, set())

@@ -6,6 +6,7 @@ from flask import Flask, request, session, redirect, url_for, render_template, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, asc
 import os
+import time
 
 
 app = Flask(__name__)
@@ -32,6 +33,21 @@ class Apartment(db.Model):
     district = db.Column(db.String)
     city = db.Column(db.String)
     price_per_meter = db.Column(db.Float)
+
+def get_all_districts_and_cities(data_base) -> dict:
+    """
+    Return all districts in a form of a dictinary
+
+    {city : set of all districts}
+    
+    """
+    alp = 'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ'
+    query2 = Apartment.query.filter(Apartment.district!='')
+    output_dictinary = {}
+    for row in query2:
+        output_dictinary.setdefault(row.city, set()).add(row.district)
+    return {key: sorted(list(val)) for key, val in sorted(output_dictinary.items(), key=lambda x: alp.index(x[0][0].upper()))}
+        # output_dictinary.setdefault()
 
 def filter_query(filters):
     g.query = Apartment.query
@@ -111,8 +127,13 @@ def search(page):
     query = sort_query(g.query, filters)
 
     apartaments = query.paginate(page=page, per_page=pages, error_out = False)
+    t_s = time.time()
+    city_dis_dict = get_all_districts_and_cities(db)
+    print(time.time() - t_s)
 
-    return render_template('search_page.html', apartaments=apartaments, filters=filters)
+    return render_template('search_page.html', apartaments=apartaments, filters=filters, city_dis_dict = get_all_districts_and_cities(db))
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader = False, threaded=True)
+    # deded = get_all_districts_and_cities(db)
+    # print(deded)
