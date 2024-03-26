@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from bs4 import BeautifulSoup
 import requests
-
+from sqlalchemy import func, update
 from bs4 import BeautifulSoup
 import requests
 import random
@@ -17,6 +17,8 @@ import time
 from urllib3 import PoolManager
 
 http = PoolManager()
+
+# headers = {'Accept-Encoding': 'gzip'}
 
 session = requests.Session()
 
@@ -40,13 +42,17 @@ like Gecko) Version/16.1 Safari/605.1.15'
 headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
-def parser_dom(pages_to_parse:int, adv_set:set):
+def parser_dom(pages_to_parse: int, adv_set: set):
+    # all_time = time.time()
+    # dict_gen = {}
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
     while count <= pages_to_parse:
 
+        # t_s = time.time()
         response = requests.get(url+str(count), headers=headers_)
+        # print(time.time() - t_s)
         if response.status_code == 200:
             print(f'Success {count}!')
 
@@ -56,89 +62,90 @@ def parser_dom(pages_to_parse:int, adv_set:set):
 
         soup = BeautifulSoup(response.content, 'html.parser')
 
+        # with open('sth.txt', 'a', encoding='UTF-8') as file:
+        #     file.write(str(soup))
+
+        # with open('sth_1.txt', 'a', encoding='UTF-8') as file:
+        #     file.write(f'{response.content}\n')
+
+        # with open('sth_0.txt', 'a', encoding='UTF-8') as file:
+        #     file.write(f'{soup}\n')
+
+
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
 (']</script></div>', maxsplit=1)[0]))
-        
+
+        # with open('res.json', 'a', encoding='UTF-8') as file:
+        #     json.dump(loaded, file, indent=4, ensure_ascii=False)
+        #     file.write('\n')
+
+        # dict_gen.extend(loaded['mainEntity']['itemListElement'][0]['offers']['offers'])
         for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
-            adv_set.add((tuple(offer['image']), offer['url'], offer['name'], offer['price'], offer['priceCurrency']))
+            adv_set.add((tuple(offer['image']), offer['url'], offer['name'], \
+offer['price'], offer['priceCurrency']))
             # dict_gen[offer['url']] = offer
 
         count += 1
+        # print(time.time()-t_s)
+    # print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/pages_to_parse}')
     return adv_set
-
 def parser_olx(pages_to_read:int, adv_set:set):
-    count = 1
-    url = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/\
-dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
-    while count <= pages_to_read:
-
-        response = requests.get(url+str(count), headers=headers_)
-
-        if response.status_code == 200:
-            print(f'Success {count}!')
-            # pass
-        else:
-            print('An error has occurred')
-
+    for i in range(15, 101, 5):
+        count = 1
+        url = f"https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=2&search%5Bfilter_float_total_area%3Afrom%5D={i}&search%5Bfilter_float_total_area%3Ato%5D={i + 5}"
+        response = requests.get(url, headers=headers_)
         soup = BeautifulSoup(response.content, 'html.parser')
+        # print(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
+        pages_to_read = int(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
 
-        links = []
-        for link in soup.find_all('a'):
-            text = link.get('href')
-            if 'obyavlenie' in text:
-                dict_off = {}
-                links.append(text)
-                url_add = 'https://www.olx.ua/d' if '/uk/' in text else 'https://www.olx.ua/d/uk'
-                # print(f'url_add: {url_add}')
-                url_off = url_add + text[2:]
-                print(url_off)
-                response_1 = requests.get(url_off, headers=headers_)
-                soup_1 = BeautifulSoup(response_1.content, 'html.parser')
+        while count <= pages_to_read:
+            url = url.replace('page=2', f"page={count}")
+            response = requests.get(url, headers=headers_)
 
-                fir_name = soup_1.find('h4', class_ = 'css-1juynto')
-                if fir_name:
-                    dict_off['name'] = fir_name.get_text()
-                else:
-                    fir_name = soup_1.find('h4', class_ = 'css-1juynto')
-                    if fir_name:
-                        dict_off['name'] = fir_name.get_text()
-                    else:
-                        continue
+            if response.status_code == 200:
+                print(f'Success {count}!')
+                # pass
+            else:
+                print('An error has occurred')
 
+            soup = BeautifulSoup(response.content, 'html.parser')
+            el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ')\
 
-                dict_off['price'] = soup_1.find('h3', class_ = 'css-12vqlj3').get_text()
+            el = el.replace('"', "'").replace('":\'"', '":""').replace("\":' '",'":" "').replace('":\'."', '":" "').replace(' \',"', ' ","').replace("'},", '"},').replace("{'", '{"').replace("':{", '":{').replace("':", '":').replace(",'",',"').replace("\":'", '":"').replace('\',"', '","').replace('":[\'', '":["').replace('\'],"', '"],"').replace('\']},{"', '"]},{"').replace('\'}],"', '"}],"').replace('\']}', '"]}').replace('\'}}', '"}}').replace('": ', "': ")+'}}}'
 
-                for el in soup_1.find_all('p', class_ = 'css-b5m1rv er34gjf0'):
+            with open('1111122222333333.txt', 'w', encoding='utf-8') as file:
+                file.write(el)
 
-                    get_t = el.get_text()
-                    if 'Поверх: ' in get_t:
-                        dict_off['floor'] = get_t.split('Поверх: ')[1]
-                    elif 'Загальна площа: ' in get_t:
-                        dict_off['square'] = get_t.split('Загальна площа: ')[1]
-                    elif 'Кількість кімнат: ' in get_t:
-                        dict_off['num_of_rooms'] = get_t.split('Кількість кімнат: ')[1]
-                for ind, el in enumerate(soup_1.find_all('a', class_ = 'css-tyi2d1')):
-                    get_t = el.get_text()
-                    dict_off['district'] = ''
-                    # print(ind, get_t)
-                    if ind == 5:
-                        dict_off['city'] =  get_t.split(' - ')[1]
-                    elif ind == 6:
-                        dict_off['district'] =  get_t.split(' - ')[1]
+            loaded = json.loads(el)['listing']['listing']['ads']
 
-                dict_off['images'] = [el['src'] for el in soup_1.find_all\
-('img', class_ = 'css-1bmvjcs')]
-                # print(dict_off)
-                # dct_all[url_off] = dict_off
-                adv_set.add((tuple(dict_off['images']), url_off, dict_off['name'], dict_off['square'], dict_off['price'], dict_off['num_of_rooms'], dict_off['district'], dict_off['city'], ))
-        count += 1
+            for offer in loaded:
+                area, rooms = 0, ''
+                for val in offer['params']:
+                    if val['key'] == 'number_of_rooms_string':
+                        rooms = val["value"]
+                    elif val['key'] == 'total_area':
+                        area = val["normalizedValue"]
+                # params = sorted(offer["params"], key=lambda x: x['key'])
+                # print(params)
+                adv_set.add((tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
+
+            count += 1
     return adv_set
-
-
-# if __name__ == '__main__':
-#     parse_olx()
 
 Base = declarative_base()
+
+class Districts(Base):
+    __tablename__ = "Districts"
+    __table_args__ = {'schema': 'public'}
+    city = Column(String(300), primary_key = True)
+    districts = Column(String(1500))
+
+    def __init__(self, city:str, districts:str) -> None:
+        self.city = city
+        self.districts = districts
+
+    def __repr__(self) -> str:
+        return f"{self.sity} {self.districts}"
 
 class Apartments(Base):
     __tablename__ = "Apartments"
@@ -203,7 +210,8 @@ class DatabaseManipulation:
                 test = round(price/area, 1) if dictinary[4] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary[4]== 'USD' else round(price * self.eur_to_uah / area ,1)
                 if test < 29:
                     continue
-                self.session.add(Apartments((",".join(dictinary[0])), dictinary[1], dictinary[2], area, price, dictinary[4],rooms, district, city, test))
+                name = dictinary[2].split(',', maxsplit = 1)[1]
+                self.session.add(Apartments((",".join(dictinary[0])), dictinary[1], name, area, price, dictinary[4],rooms, district, city, test))
         self.session.commit()
 
 
@@ -215,18 +223,16 @@ class DatabaseManipulation:
         '''
         for value in adv_set:
             print(value)
-            currency =  'UAH' if value[4][-4:-1] == 'грн' else 'USD' if \
-                value[4][-1] == '$' else 'EUR'
-            price = float("".join(value[4][:-5].split(' '))) if currency \
-                    == 'UAH' else float("".join(value[4][:-2].split(' ')))
-            area = float(value[3][:-3])
-            self.session.add(Apartments(",".join(value[0]), value[1], \
-value[2], area, price, currency, \
-int(value[5][:-8]), value[6],value[7], round(price/area, 1) if currency == \
-'UAH' else round(price * self.usd_to_uah / area, 1) if currency== 'USD' else round(price * self.eur_to_uah / area, 1)))
+            # currency =  'UAH' if value[4][-4:-1] == 'грн' else 'USD' if \
+            #     value[4][-1] == '$' else 'EUR'
+            price = value[4]
+            area = float(value[3])
+            self.session.add(Apartments(",".join(value[0]), value[1], value[2], area, price, value[5], \
+int(value[6][:-8]), value[7],value[8], round(price/area, 1) if value[5] == \
+'UAH' else round(price * self.usd_to_uah / area, 1) if value[5]== 'USD' else round(price * self.eur_to_uah / area, 1)))
         self.session.commit()
 
-    def get_all_districts_and_cities(self) -> dict:
+    def get_all_districts_and_cities(self) -> None:
         """
         Return all districts in a form of a dictinary
 
@@ -237,19 +243,43 @@ int(value[5][:-8]), value[6],value[7], round(price/area, 1) if currency == \
         output_dictinary = {}
         for row in query:
             output_dictinary.setdefault(row.city, set()).add(row.district)
-        return output_dictinary
-            # output_dictinary.setdefault()
+        for key, value in output_dictinary.items():
+            self.session.add(Districts(key, ",".join(value)))
+        self.session.commit()
+
+
 if __name__ == "__main__":
     my_check_set = set()
-    dict1 = parser_dom(1, my_check_set)
+    start = time.time()
+    dict1 = parser_dom(10, my_check_set)
     # print(dict1)
-    # set2 = parser_olx(1, my_check_set)
+    # print(dict1)
+    # set2 = parser_olx1(1, my_check_set)
+    # start = time.time()
+    # set2 = parser_olx(10, my_check_set)
+    t = time.time() - start
+    # print(set2)
+    # print(t)
     # print(set2)
     data = DatabaseManipulation(38.81, 42.28)
     # data.read_set_to_objects_olx(set2)
-    # start = time.time()
+    # print(set2)
+    print(t)
     data.read_set_to_objects_dom(dict1)
-    dick = data.get_all_districts_and_cities()
-    print(dick)
-    # print(time.time() - start)
+    data.get_all_districts_and_cities()
+    data.fix_the_database()
+    print(t)
+    # data.get_all_districts_and_cities()
+    # data.fix_the_database()
+    # start = time.time()
+    # set2 = parser_olx1(1, my_check_set)
+
+    # fehbfr = data.get_1()
+    # dick = data.get_all_districts_and_cities()
+    # print(dick)
+    # print(set2)
+    # print(t)
     # print(dict1)
+    # https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&search%5Bfilter_float_total_area%3Afrom%5D=20&search%5Bfilter_float_total_area%3Ato%5D=21
+    # https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=3&search%5Bfilter_float_total_area%3Afrom%5D=20&search%5Bfilter_float_total_area%3Ato%5D=21
+    # https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=2&search%5Bfilter_float_total_area%3Afrom%5D=20&search%5Bfilter_float_total_area%3Ato%5D=21

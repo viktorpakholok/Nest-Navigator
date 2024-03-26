@@ -14,6 +14,11 @@ app.config['SECRET_KEY'] = 'BohdanBohdanBohdan'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Housesdb_owner:MOGU0lh5ByIg@ep-aged-pine-a29r8a5c.eu-central-1.aws.neon.tech/Housesdb'
 db = SQLAlchemy(app)
 
+class Districts(db.Model):
+    __tablename__ = "Districts"
+    city = db.Column(String, primary_key = True)
+    districts = db.Column(String)
+
 class Apartment(db.Model):
     """
     
@@ -63,8 +68,8 @@ def sort_query(query, filters):
 
 @app.route('/reset', methods=['POST'])
 def reset():
-    session.pop('filters', None)  # Remove the filters from the session
-    return redirect(url_for('index'))  # Redirect the user to the index page
+    session.pop('filters', None)
+    return redirect(url_for('index'))
 
 @app.route('/', methods = ["POST", "GET"], defaults = {'page': 1})
 @app.route('/<int:page>', methods = ["GET", "POST"])
