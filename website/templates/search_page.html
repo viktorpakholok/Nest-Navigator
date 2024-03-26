@@ -32,7 +32,10 @@
         <!-- <button class="button_search">Search</button> -->
         <div class="flex width-100 main-block">
             <div class="filters">
-                <label for="toggle" class="dropbtn">Фільтри</label>
+                <label for="toggle" class="dropbtn">Фільтри <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-arrow-down" viewBox="0 0 16 16">
+                    <path d="M8 5a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5A.5.5 0 0 1 8 5"/>
+                    <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                  </svg></label>
                 <input type="checkbox" id="toggle" style="display:none"/>
                 <form id="searchForm" action="" method="post" autocomplete="off">
                     <div class="filter-item">
@@ -119,47 +122,84 @@
             <div class="container wdth-80">
                 <!-- <input class="button-search" placeholder="Search"></input> -->
 
-                {% for apartament in apartaments.items %}
+                {% if apartaments.items|length %}
+                    {% for apartament in apartaments.items %}
 
-                <div class="flex adver-section">
-                    <div class="flex desc">
+                    <div class="flex adver-section">
+                        <div class="flex desc">
 
-                        <div class="flex center-d">
+                            <div class="flex center-d">
 
-                            <button class="prev btns-sl" onclick="prev(this)">&#10094</button>
+                                <button class="prev btns-sl" onclick="prev(this)">&#10094</button>
 
-                            <div class="slider-wrap">
-                                <div class="slider-main">
-                                    {% for el in apartament.images.split(',') %}
-                                    <div class="item">
-                                        <img class="img-adver-section lazyload" src="{{ el }}" alt="">
+                                <div class="slider-wrap">
+                                    <div class="slider-main">
+                                        {% for el in apartament.images.split(',') %}
+                                        <div class="item">
+                                            <img class="img-adver-section lazyload" src="{{ el }}" alt="">
+                                        </div>
+                                        {% endfor %}
                                     </div>
-                                    {% endfor %}
                                 </div>
+
+                                <button class="next btns-sl" onclick="next(this)">&#10095</button>
+
                             </div>
-
-                            <button class="next btns-sl" onclick="next(this)">&#10095</button>
-
-                        </div>
-                        
-                        <div class='adver-text'>
-                            <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name }}</a></h2>
-                            <div class="adver-description">
-                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.area }} м²</a></p>
-                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
-                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price_per_meter }} UAH/м²</a></p>
-                                <p class="adver-description-item"><a href="{{ apartament.url }}">K-сть кімнат: {{ apartament.rooms }}</a></p>
-                                {% if apartament.district != '' %}
-                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
-                                {% endif %}
-                                <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.city }}</a></p>
                             
+                            <div class='adver-text'>
+                                <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name }}</a></h2>
+                                <div class="adver-description">
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.area }} м²</a></p>
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price_per_meter }} UAH/м²</a></p>
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">K-сть кімнат: {{ apartament.rooms }}</a></p>
+                                    {% if apartament.district != '' %}
+                                        <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
+                                    {% endif %}
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.city }}</a></p>
+                                
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    {% endfor %}
 
-                {% endfor %}
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                          {% if apartaments.has_prev %}
+                          <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.prev_num)  }}">Previous</a></li>
+                          {% else %}
+                          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
+                          {% endif %}
+                
+                          {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
+                          {% if page %}
+                
+                              {% if page == apartaments.page %}
+                                  <li class = "page-item page-current"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                              {% else %}
+                              <li class = "page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                              {% endif %}
+                
+                
+                          {% else %}
+                              <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">...</a></li>
+                          {% endif %}
+                          {% endfor %}
+                
+                          {% if apartaments.has_next %}
+                          <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.next_num) }}">Next</a></li>
+                          {% else %}
+                          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
+                          {% endif %}
+                        </ul>
+                    </nav>
+
+                {% else %}
+
+                    <p>We have nothing</p>
+                    
+                {% endif %}
 
                 <!-- <div class="col-12 slaider">
                     <div class="pagination d-flex justify-content-center mt-5">
@@ -174,37 +214,7 @@
                     </div>
                 </div> -->
 
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                      {% if apartaments.has_prev %}
-                      <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.prev_num)  }}">Previous</a></li>
-                      {% else %}
-                      <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
-                      {% endif %}
-            
-                      {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
-                      {% if page %}
-            
-                          {% if page == apartaments.page %}
-                              <li class = "page-item page-current"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
-                          {% else %}
-                          <li class = "page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
-                          {% endif %}
-            
-            
-                      {% else %}
-                          <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">...</a></li>
-                      {% endif %}
-                      {% endfor %}
-            
-                      {% if apartaments.has_next %}
-                      <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.next_num) }}">Next</a></li>
-                      {% else %}
-                      <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
-                      {% endif %}
-                    </ul>
-            
-                </nav>
+                
                 
             </div>
 
