@@ -56,7 +56,12 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
         with open('sth_4.txt', 'w', encoding='UTF-8') as file_:
             file_.write(repr(el))
 
-        el = re.sub('([^"])( |:)"([^"]*)"( |,)', r"\1\2'\3'\4", el)
+        with open('sth_7.txt', 'w', encoding='UTF-8') as file_:
+            file_.write(str(re.findall('([^"])( |:)"([^"]*)"( |,|"|.)', el)))
+
+        el = re.sub('([^"])( |:)"([^"]*)"( |,|"|.)', r"\1\2'\3'\4", el)
+
+        
 
         t__s = time.time()
         # el = re.sub(r'([А-Яа-я]+)"([А-Яа-я]+)', r"\1'\2'", el)
