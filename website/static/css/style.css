@@ -614,7 +614,8 @@ a {
 
   main {
     padding: 16vh 2vh 2vh;
-    background-color: #E4EBF3
+    background-color: #E4EBF3;
+    flex-direction: column;
   }
 
   .main-block {
@@ -715,8 +716,8 @@ a {
   .img-adver-section {
     object-fit: contain;
     object-position: center;
-    height: 125px;
-    width: 140px;
+    height: 100px;
+    width: 112px;
   }
 
   .slaider {
@@ -742,13 +743,13 @@ a {
   .adver-description-item {
     display: inline-block;
     border: 1px solid #011128;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 0 5px 5px 0;
+    border-radius: 3px;
+    padding: 3px;
+    margin: 0 3px 3px 0;
   }
 
   .adver-title {
-    font-size: 13px;
+    font-size: 10px;
   }
 
   .center-d {
@@ -783,7 +784,7 @@ a {
   }
   
   .next {
-    right: -5.5%;
+    right: 10%;
   }
 /* .filters {
     width: 100%;
