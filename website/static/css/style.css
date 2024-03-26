@@ -614,3 +614,105 @@ a{
 .no-scroll {
   overflow: hidden;
 }
+
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #E4EBF3;
+    width: 100%;
+  }
+  .header-text {
+    font-size: 0.8em;
+  }
+
+  .logo {
+    width: 30%;
+  }
+
+  header {
+    z-index: 6;
+    height: 10vh;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    background-color: #011128;
+    color: #E4EBF3;
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+  }
+  nav ul li {
+    margin: 0 0;
+  }
+  h1 {
+    margin-bottom: 0.5em;
+    font-size: 4em;
+  }
+  .main-main-text, .adress, .find_ap, .main-team-text {
+    font-size: 16px;
+    padding-left: 5%;
+    padding-right: 5%;
+    text-align: center;
+  }
+
+  .big-photo, .photo-desciption {
+    width: 100%;
+    height: auto;
+  }
+
+  .footer-distributed .footer-left,
+  .footer-distributed .footer-center,
+  .footer-distributed .footer-right {
+    display: block;
+    width: 100% !important;
+    text-align: center;
+    margin: 0 auto;
+    padding: 1vh 0;
+  }
+
+  .footer-distributed .footer-links,
+  .footer-distributed .footer-company-name,
+  .footer-distributed .footer-center p,
+  .footer-distributed .footer-links a {
+    font-size: 14px;
+  }
+
+  .bi-arrow-up-circle-fill {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2vh;
+  }
+  .filter-item {
+    display: none;
+  }
+
+  #toggle:checked ~ #searchForm .filter-item {
+    display: block;
+  }
+
+  .dropbtn {
+    display: block;
+    cursor: pointer;
+    background-color: #FFFCF2; 
+    border-style: solid;
+    border-width: 2px;
+    border-color: #333333;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .filter-item {
+    display: block;
+  }
+
+  .dropbtn, #toggle {
+    display: none;
+  }
+}
