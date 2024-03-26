@@ -288,7 +288,7 @@ input[type="submit"]:hover {
   font-size: 24px;
   padding-left: 10vh;
   padding-right: 10vh;
-  padding-bottom: 10vh;
+  padding-bottom: 1vh;
   line-height: 1.5;
 }
 
@@ -298,6 +298,10 @@ input[type="submit"]:hover {
 
 .photos {
   padding-bottom: 10vh;
+}
+.photos-img{
+  height: 100%;
+  width: 100%;
 }
 
 /* footer */
@@ -608,7 +612,13 @@ a {
     background-color: #E4EBF3;
     width: 100%;
   }
-
+  .photos-img{
+    height: 70%;
+    width: 40%;
+  }
+  .photos {
+    padding-bottom: 10vh;
+  }
   main {
     padding: 16vh 2vh 2vh;
     background-color: #E4EBF3;
@@ -711,7 +721,11 @@ a {
     border-radius: 5px;
     padding: 10px;
     margin: 5px 0;
+    /* transition: 0.3ms; */
   }
+  /* .dropbtn:hover{
+    background-color: #072f75;
+  } */
 
 
   .img-adver-section {
@@ -755,12 +769,12 @@ a {
 
   .center-d {
     margin-right: 5%;
-    width: 140px;
+    width: 112px;
     position: relative;
     flex-shrink: 0;
-    height: 125px;
-    margin-top: 10%;
-    margin-bottom: 10%;
+    height: 100px;
+    margin-top: 1%;
+    margin-bottom: 1%;
   }
 
   .btns-sl {
@@ -783,17 +797,13 @@ a {
   } 
 
   .prev {
-    left: 0.5%;
+    left: -2%;
   }
   
   .next {
-    right: 10%;
+    right: -7%;
   }
-/* .filters {
-    width: 100%;
-    height: 100%;
-    background-color: black;
-  } */
+
 }
 
 @media screen and (min-width: 769px) {
