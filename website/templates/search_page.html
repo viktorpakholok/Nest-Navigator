@@ -197,7 +197,12 @@
 
                 {% else %}
 
-                    <p>We have nothing</p>
+                    <div>
+                        <img src="{{ url_for('static', filename = 'imgs/pngegg.png') }}" class='photo-not-found' alt="empty house">
+                        <div class="text-not-found">
+                            <a class="montserrat-medium">На жаль, за вашиим запитом нічого не знайдено</a>
+                        </div>
+                    </div>
                     
                 {% endif %}
 
