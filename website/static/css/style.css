@@ -535,7 +535,9 @@ input[type="submit"]:hover {
   border: 0.2vh solid rgb(255, 252, 242);
 } */
 
-
+.bi-file-arrow-down{
+  opacity: 0;
+}
 a {
   text-decoration: none;
   color: black;
@@ -795,7 +797,13 @@ a {
     background-color: black;
   } */
 }
-
+  .bi-file-arrow-down{
+    background-color: #FFFCF2;
+    opacity: 100%;
+    margin-left: 70%;
+    width: 7%;
+    height: 7%;
+  }
 @media screen and (min-width: 769px) {
   .filter-item {
     display: block;
