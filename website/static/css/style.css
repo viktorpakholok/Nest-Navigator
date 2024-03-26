@@ -228,8 +228,6 @@ button {
 /* filters */
 .filters {
   width: 15%;
-  /* margin-left: -10vh; */
-  /* padding: 15vh; */
 }
 
 .filter-item {
@@ -615,11 +613,11 @@ a {
   main {
     padding: 16vh 2vh 2vh;
     background-color: #E4EBF3;
-    flex-direction: column;
   }
 
   .main-block {
     justify-content: space-between;
+    flex-direction: column;
   }
   
 
@@ -692,6 +690,9 @@ a {
     margin-top: 2vh;
   }
 
+  .filters {
+    width: 80%;
+  }
   .filter-item {
     display: none;
   }
@@ -807,7 +808,6 @@ a {
 
 @media screen and (max-width: 768px){
   .wdth-80{
-    width: 100%;
-    margin-left: 22px;
+    width: 80%;
   }
 }
