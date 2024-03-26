@@ -54,12 +54,12 @@ dolgosrochnaya-arenda-kvartir/?currency=UAH&page='
         el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ').replace('\\\\u003Cbr /\\> \\\\u003Cbr /\\> ', ' ')
 
         with open('sth_4.txt', 'w', encoding='UTF-8') as file_:
-            file_.write(repr(el))
+            file_.write(el)
 
-        with open('sth_7.txt', 'w', encoding='UTF-8') as file_:
-            file_.write(str(re.findall('([^"])( |:)"([^"]*)"( |,|"|.)', el)))
+        # with open('sth_7.txt', 'w', encoding='UTF-8') as file_:
+        #     file_.write(str(re.findall('([^"])( |:)"([^"]*)"( |,|"|.)', el)))
 
-        el = re.sub('([^"])( |:)"([^"]*)"( |,|"|.)', r"\1\2'\3'\4", el)
+        el = re.sub(r'"([^"]+)"([^:])', r"'\1'\2", el) + '}}}'
 
         
 
