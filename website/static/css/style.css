@@ -169,7 +169,6 @@ button {
 
 
 .desc {
-  /* width: 50%; */
   height: max-content;
   justify-content: space-between;
 }
@@ -455,9 +454,9 @@ input[type="submit"]:hover {
   display: block;
 }
 
-/* .wdth-80 {
+.wdth-80 {
   width: 80%;
-} */
+}
 
 /* .sld_and_but{
   width: 100%;
@@ -691,7 +690,7 @@ a {
   }
 
   .filters {
-    width: 80%;
+    width: 100%;
   }
   .filter-item {
     display: none;
@@ -807,7 +806,7 @@ a {
 }
 
 @media screen and (max-width: 768px){
-  /* .wdth-80{
-    width: 80%;
-  } */
+  .wdth-80{
+    width: 100%;
+  }
 }
