@@ -8,11 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
     <script src="{{ url_for('static', filename = 'jscripts/index.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
 </head>
 
 <body>
@@ -62,13 +65,20 @@
                         <input type="number" class="form-control" name="min_area_tag" min="0" placeholder="Введіть мін. площу" value="{{ filters.get('min_area', '') }}"/>
                         <input type="number" class="form-control" name="max_area_tag" placeholder="Введіть мак. площу" value="{{ filters.get('max_area', '') }}"/>
                     </div>
-                    <div class="filter-item">
+                    <div class="filter-item" id="div_with_dis">
+                        
                         <label for="region" class="montserrat-medium">Район:</label>
+                        <select name="region" id="region" class="js-example-basic-multiple" multiple>
+                            <option value=""></option>
+                            <option value="Львів">Львів</option>
+                            <option value="Київ">Київ</option>
+                        </select>
                         <!-- <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('district', '') }}"/> -->
                         {{ filters.get('city', ''), filters.get('regions', '') }}
-                        <select name="region" id="region" multiple class="chosen-select">
-                            
-                        </select>
+                        <!-- <select name="region" id="region" multiple class="chosen-select"> -->
+                            <!-- <option value="">Усі</option> -->
+
+                        <!-- </select> -->
                     </div>
                     <div class="filter-item">
                         <label for="sort" class="montserrat-medium">Сортування:</label>
@@ -230,11 +240,11 @@
         </div>
 
     </main>
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             
             var citySelect = document.getElementById('city_tag');
-            var regionSelect = document.getElementById('region');
+            var regionSelect = document.getElementById('div_with_dis');
 
             var p_tag_c = document.createElement('p')
             p_tag_c.innerHTML = 'Спочатку виберіть місто'
@@ -245,16 +255,16 @@
             console.log(regionsByCity);
             // console.log(regionsByCity['Київ'])
 
-            var checked_l = {{ filters.get('regions', '') | tojson }}
-            var city_sel = {{ filters.get('city', '') | tojson }}
+            var checked_was = {{ filters.get('regions', '') | tojson }}
+            var city_was = {{ filters.get('city', '') | tojson }}
 
-            console.log('checked', checked_l, city_sel)
+            console.log('checked', checked_was, city_was)
 
-            if (city_sel == ''){
+            if (city_was == ''){
                 regionSelect.appendChild(p_tag_c)
             }
             else{
-                var regions = regionsByCity[city_sel] || [];
+                var regions = regionsByCity[city_was] || [];
                 console.log('else, regions: ', regions)
                 regions.forEach(function (region) {
                     div = document.createElement('div')
@@ -268,8 +278,8 @@
                     el.value=region;
                     el.type="checkbox";
                     el.id = region
-                    console.log(checked_l, region)
-                    if (checked_l.includes(region)){
+                    console.log(checked_was, region)
+                    if (checked_was.includes(region)){
                         el.checked = true
                     }
                     el.name = "checkbox-region"
@@ -288,7 +298,8 @@
             }
 
             citySelect.addEventListener('change', function () {
-                regionSelect.innerHTML = ''
+                regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label><select name="region" id="region" class="js-example-basic-multiple" multiple="multiple"><select/>'
+                select_s = regionSelect.firstChild
 
                 p_tag = document.getElementById('city-first')
                 if (p_tag){
@@ -310,29 +321,11 @@
 
                 // regionSelect.innerHTML = '<option value="">Виберіть район</option>';
                 regions.forEach(function (region) {
-                    div = document.createElement('div')
-                    div.classList.add("label-region")
-
-                    label = document.createElement('label');
-                    label.innerHTML = region
-                    label.htmlFor = region
-
-                    el = document.createElement("input");
-                    el.value=region;
-                    el.type="checkbox";
-                    el.id = region
-                    console.log(checked_l, region)
-                    if (checked_l.includes(region)){
-                        el.checked = true
-                    }
-                    el.name = "checkbox-region"
-
-                    div.appendChild(label)
-                    div.appendChild(el)
-
-                    regionSelect.appendChild(div)
-
-                    
+                    opt = document.createElement("option");
+                    opt.value = region;
+                    opt.innerHTML = region
+                
+                    select_s.appendChild(opt)
 
                     console.log(region)
                     // var option = new Option(region, region);
@@ -341,7 +334,7 @@
             });
         });
 
-    </script>
+    </script> -->
     <footer class="footer-distributed">
 
         <div class="footer-left">

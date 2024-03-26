@@ -1,3 +1,10 @@
+$(document).ready(function() {
+    $('#region').select2({
+        placeholder: "виберіть район",
+        allowClear: true
+    });
+});
+
 // window.addEventListener("load", () => {
 
 //     const loader = document.querySelector(".loader");
@@ -23,7 +30,3 @@ function prev(t){
     var item = elm.getElementsByClassName('item');
     elm.prepend(item[item.length - 1]);
 }
-
-$(".chosen-select").chosen({
-    no_results_text: "Oops, nothing found!"
-  })
