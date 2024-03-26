@@ -694,6 +694,7 @@ a {
   }
   .filter-item {
     display: none;
+    width: 92%;
   }
 
   #toggle:checked~#searchForm .filter-item {
