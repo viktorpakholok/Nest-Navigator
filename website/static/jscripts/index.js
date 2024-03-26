@@ -23,3 +23,7 @@ function prev(t){
     var item = elm.getElementsByClassName('item');
     elm.prepend(item[item.length - 1]);
 }
+
+$(".chosen-select").chosen({
+    no_results_text: "Oops, nothing found!"
+  })

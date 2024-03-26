@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
     <script src="{{ url_for('static', filename = 'jscripts/index.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
 </head>
 
 <body>
@@ -64,7 +66,7 @@
                         <label for="region" class="montserrat-medium">Район:</label>
                         <!-- <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('district', '') }}"/> -->
                         <div id="region">
-                            
+                            <!-- <p id="city-first">Спочатку виберіть місто</p> -->
                         </div>
                     </div>
                     <div class="filter-item">
@@ -152,7 +154,7 @@
                         </div>
                         
                         <div class='adver-text'>
-                            <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name.split(', ', maxsplit = 1)[1] }}</a></h2>
+                            <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name }}</a></h2>
                             <div class="adver-description">
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.area }} м²</a></p>
                                 <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
@@ -222,23 +224,111 @@
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            
             var citySelect = document.getElementById('city_tag');
             var regionSelect = document.getElementById('region');
+
+            var p_tag_c = document.createElement('p')
+            p_tag_c.innerHTML = 'Спочатку виберіть місто'
+            p_tag_c.id = 'city_first'
 
             var regionsByCity = {{ city_dis_dict | tojson }};
 
             console.log(regionsByCity);
-            console.log(regionsByCity['Київ'])
+            // console.log(regionsByCity['Київ'])
+
+            var checked_l = {{ filters.get('regions', '') | tojson }}
+            var city_sel = {{ filters.get('city', '') | tojson }}
+
+            console.log('checked', checked_l, city_sel)
+
+            if (city_sel == ''){
+                regionSelect.appendChild(p_tag_c)
+            }
+            else{
+                var regions = regionsByCity[city_sel] || [];
+                console.log('else, regions: ', regions)
+                regions.forEach(function (region) {
+                    div = document.createElement('div')
+                    div.classList.add("label-region")
+
+                    label = document.createElement('label');
+                    label.innerHTML = region
+                    label.htmlFor = region
+
+                    el = document.createElement("input");
+                    el.value=region;
+                    el.type="checkbox";
+                    el.id = region
+                    console.log(checked_l, region)
+                    if (checked_l.includes(region)){
+                        el.checked = true
+                    }
+                    el.name = "checkbox-region"
+
+                    div.appendChild(label)
+                    div.appendChild(el)
+
+                    regionSelect.appendChild(div)
+
+                    
+
+                    console.log(region)
+                    // var option = new Option(region, region);
+                    // regionSelect.add(option);
+                });
+            }
 
             citySelect.addEventListener('change', function () {
-                var selectedCity = this.value;
-                console.log(selectedCity);
-                var regions = regionsByCity[selectedCity] || [];
+                regionSelect.innerHTML = ''
 
-                regionSelect.innerHTML = '<option value="">Виберіть район</option>';
+                p_tag = document.getElementById('city-first')
+                if (p_tag){
+                    p_tag.remove()
+                }
+
+                var selectedCity = this.value;
+                console.log('sel',selectedCity);
+                if (selectedCity == ''){
+                    regionSelect.appendChild(p_tag_c)
+                    return
+                }
+                else{
+                    var regions = regionsByCity[selectedCity] || [];
+                }
+                
+
+                console.log(regions)
+
+                // regionSelect.innerHTML = '<option value="">Виберіть район</option>';
                 regions.forEach(function (region) {
-                    var option = new Option(region, region);
-                    regionSelect.add(option);
+                    div = document.createElement('div')
+                    div.classList.add("label-region")
+
+                    label = document.createElement('label');
+                    label.innerHTML = region
+                    label.htmlFor = region
+
+                    el = document.createElement("input");
+                    el.value=region;
+                    el.type="checkbox";
+                    el.id = region
+                    console.log(checked_l, region)
+                    if (checked_l.includes(region)){
+                        el.checked = true
+                    }
+                    el.name = "checkbox-region"
+
+                    div.appendChild(label)
+                    div.appendChild(el)
+
+                    regionSelect.appendChild(div)
+
+                    
+
+                    console.log(region)
+                    // var option = new Option(region, region);
+                    // regionSelect.add(option);
                 });
             });
         });

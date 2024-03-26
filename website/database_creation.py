@@ -37,6 +37,18 @@ headers_['User-Agent'] = random.choice(user_agents)
 
 
 Base = declarative_base()
+
+class Districts(Base):
+    __tablename__ = "Districts"
+    __table_args__ = {'schema': 'public'}
+    city = Column(String(300), primary_key = True)
+    districts = Column(String(1500))
+    def __init__(self, city:str, districts:str) -> None:
+        self.city = city
+        self.districts = districts
+    def __repr__(self) -> str:
+        return f"{self.sity} {self.districts}"
+
 class Apartments(Base):
     '''
     How the table will be looking to the perspective 
@@ -113,7 +125,8 @@ class DatabaseManipulation:
         round(price * self.eur_to_uah / area ,1)
                 if test < 29:
                     continue
-                self.session.add(Apartments((",".join(dictinary[0])), dictinary[1], dictinary[2], area, price, dictinary[4],rooms, district, city, test))
+                name = dictinary[2].split(',', maxsplit = 1)[1]
+                self.session.add(Apartments((",".join(dictinary[0])), dictinary[1], name, area, price, dictinary[4],rooms, district, city, test))
         self.session.commit()
 
 
@@ -127,14 +140,12 @@ class DatabaseManipulation:
             # print(value)
             currency =  'UAH' if value[4][-4:-1] == 'грн' else 'USD' if \
                 value[4][-1] == '$' else 'EUR'
-            price = float("".join(value[4][:-5].split(' '))) if currency \
-                    == 'UAH' else float("".join(value[4][:-2].split(' ')))
-            area = float(value[3][:-3])
-            self.session.add(Apartments(",".join(value[0]), value[1], \
-value[2], area, price, currency, \
-int(value[5][:-8]), value[6],value[7], round(price/area, 1) if currency == \
-'UAH' else round(price * self.usd_to_uah / area, 1) if currency== 'USD' else \
-round(price * self.eur_to_uah / area, 1)))
+            price = value[4]
+            area = float(value[3])
+
+            self.session.add(Apartments(",".join(value[0]), value[1], value[2], area, price, value[5], \
+int(value[6][:-8]), value[7],value[8], round(price/area, 1) if value[5] == \
+'UAH' else round(price * self.usd_to_uah / area, 1) if value[5]== 'USD' else round(price * self.eur_to_uah / area, 1)))
         self.session.commit()
 
 
@@ -149,20 +160,16 @@ round(price * self.eur_to_uah / area, 1)))
         output_dictinary = {}
         for row in query:
             output_dictinary.setdefault(row.city, set()).add(row.district)
-        return output_dictinary
-            # output_dictinary.setdefault()
+        for key, value in output_dictinary.items():
+            self.session.add(Districts(key, ",".join(value)))
+        self.session.commit()
 
 if __name__ == "__main__":
     my_check_set = set()
-    dict1 = parser_dom(5, my_check_set)
-    # print(dict1)
-    # set2 = parser_olx(1, my_check_set)
-    # print(set2)
+
+    dict1 = parser_dom(10, my_check_set)
+
     data = DatabaseManipulation(38.81, 42.28)
-    # data.read_set_to_objects_olx(set2)
-    # start = time.time()
+
     data.read_set_to_objects_dom(dict1)
-    dick = data.get_all_districts_and_cities()
-    print(dick)
-    # print(time.time() - start)
-    # print(dict1)
+    data.get_all_districts_and_cities()

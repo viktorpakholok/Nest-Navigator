@@ -16,6 +16,11 @@ app.config['SECRET_KEY'] = 'BohdanBohdanBohdan'
 
 db = SQLAlchemy(app)
 
+class Districts(db.Model):
+    __tablename__ = "Districts"
+    city = db.Column(db.String, primary_key = True)
+    districts = db.Column(db.String)
+
 class Apartment(db.Model):
     '''
     How the table will be looking to the perspective 
@@ -34,27 +39,20 @@ class Apartment(db.Model):
     city = db.Column(db.String)
     price_per_meter = db.Column(db.Float)
 
-def get_all_districts_and_cities(data_base) -> dict:
-    """
-    Return all districts in a form of a dictinary
-
-    {city : set of all districts}
-    
-    """
+def get_all_districts_and_cities():
     alp = 'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ'
-    query2 = Apartment.query.filter(Apartment.district!='')
-    output_dictinary = {}
-    for row in query2:
-        output_dictinary.setdefault(row.city, set()).add(row.district)
-    return {key: sorted(list(val)) for key, val in sorted(output_dictinary.items(), key=lambda x: alp.index(x[0][0].upper()))}
-        # output_dictinary.setdefault()
+    query = Districts.query
+    output_dict = {}
+    for i in query:
+        output_dict[i.city] = sorted(i.districts.split(','))
+    return dict(sorted(list(output_dict.items()), key=lambda x: alp.index(x[0][0].upper())))
 
 def filter_query(filters):
     g.query = Apartment.query
     if filters.get('city'):
         g.query = g.query.filter(Apartment.city.like('%' + filters['city'] + '%'))
-    if filters.get('district'):
-        g.query = g.query.filter(Apartment.district.like('%' + filters['district'] + '%'))
+    if filters.get('regions'):
+        g.query = g.query.filter(Apartment.district.in_(filters['regions']))
     if filters.get('min_area'):
         g.query = g.query.filter(Apartment.area >= float(filters['min_area']))
     if filters.get('max_area'):
@@ -103,9 +101,9 @@ def search(page):
     pages = 15
     if request.method == 'POST':
         session_filters = session.get('filters', {})
+        # print(request.form)
         session_filters.update({
             'city': request.form.get('city_tag'),
-            'district': request.form.get('district_tag'),
             'min_area': request.form.get('min_area_tag'),
             'max_area': request.form.get('max_area_tag'),
             'min_price': request.form.get('min_price_tag'),
@@ -116,6 +114,7 @@ def search(page):
             # 'sort_min_price':request.form.get('sort_min_price_tag'),
             # 'sort_max_price/area':request.form.get('sort_max_pricearea_tag'),
             # 'sort_min_price/area':request.form.get('sort_min_pricearea_tag')
+            'regions': request.form.getlist('checkbox-region'),
             'dropdown': request.form.get('dropdown')
         })
         session_filters = {k: v for k, v in session_filters.items() if v is not None}
@@ -125,15 +124,16 @@ def search(page):
     filters = session.get('filters', {})
     g.query = filter_query(filters)
     query = sort_query(g.query, filters)
-
+    print(filters)
     apartaments = query.paginate(page=page, per_page=pages, error_out = False)
     t_s = time.time()
-    city_dis_dict = get_all_districts_and_cities(db)
+    city_dis_dict = get_all_districts_and_cities()
     print(time.time() - t_s)
 
-    return render_template('search_page.html', apartaments=apartaments, filters=filters, city_dis_dict = get_all_districts_and_cities(db))
+    return render_template('search_page.html', apartaments=apartaments, filters=filters, city_dis_dict = city_dis_dict)
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader = False, threaded=True)
+    
     # deded = get_all_districts_and_cities(db)
     # print(deded)

@@ -602,6 +602,10 @@ a{
   animation: loading 0.75s ease infinite;
 }
 
+.label-region{
+  display: flex;
+}
+
 @keyframes loading{
   from{
     transform: rotate(0turn);
