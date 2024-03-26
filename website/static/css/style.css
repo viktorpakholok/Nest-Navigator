@@ -288,7 +288,7 @@ input[type="submit"]:hover {
   font-size: 24px;
   padding-left: 10vh;
   padding-right: 10vh;
-  padding-bottom: 1vh;
+  padding-bottom: 3vh;
   line-height: 1.5;
 }
 
@@ -297,7 +297,7 @@ input[type="submit"]:hover {
 }
 
 .photos {
-  padding-bottom: 10vh;
+  padding-bottom: 8vh;
 }
 .photos-img{
   height: 100%;
@@ -619,7 +619,7 @@ a {
     width: 40%;
   }
   .photos {
-    padding-bottom: 10vh;
+    padding-bottom: 3vh;
   }
   main {
     padding: 16vh 2vh 2vh;
@@ -666,10 +666,12 @@ a {
   .adress,
   .find_ap,
   .main-team-text {
-    font-size: 16px;
+    font-size: 12px;
     padding-left: 5%;
     padding-right: 5%;
     text-align: center;
+    margin: 2%;
+    line-height: 1.3;
   }
 
   .big-photo,
