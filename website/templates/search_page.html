@@ -67,18 +67,6 @@
                     </div>
                     <div class="filter-item" id="div_with_dis">
                         
-                        <label for="region" class="montserrat-medium">Район:</label>
-                        <select name="region" id="region" class="js-example-basic-multiple" multiple>
-                            <option value=""></option>
-                            <option value="Львів">Львів</option>
-                            <option value="Київ">Київ</option>
-                        </select>
-                        <!-- <input type="text" class="form-control" name="district_tag" placeholder="Введіть район" value="{{ filters.get('district', '') }}"/> -->
-                        {{ filters.get('city', ''), filters.get('regions', '') }}
-                        <!-- <select name="region" id="region" multiple class="chosen-select"> -->
-                            <!-- <option value="">Усі</option> -->
-
-                        <!-- </select> -->
                     </div>
                     <div class="filter-item">
                         <label for="sort" class="montserrat-medium">Сортування:</label>
@@ -240,7 +228,7 @@
         </div>
 
     </main>
-    <!-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             
             var citySelect = document.getElementById('city_tag');
@@ -264,30 +252,23 @@
                 regionSelect.appendChild(p_tag_c)
             }
             else{
+                regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label><select name="region" id="region" multiple><select/>'
                 var regions = regionsByCity[city_was] || [];
+                select_s = regionSelect.children[1]
+
                 console.log('else, regions: ', regions)
                 regions.forEach(function (region) {
-                    div = document.createElement('div')
-                    div.classList.add("label-region")
 
-                    label = document.createElement('label');
-                    label.innerHTML = region
-                    label.htmlFor = region
 
-                    el = document.createElement("input");
-                    el.value=region;
-                    el.type="checkbox";
-                    el.id = region
-                    console.log(checked_was, region)
+                    opt = document.createElement("option");
+                    opt.value = region;
+                    opt.innerHTML = region
                     if (checked_was.includes(region)){
-                        el.checked = true
+                        console.log('was', region)
+                        opt.selected = true
                     }
-                    el.name = "checkbox-region"
-
-                    div.appendChild(label)
-                    div.appendChild(el)
-
-                    regionSelect.appendChild(div)
+                
+                    select_s.appendChild(opt)
 
                     
 
@@ -298,8 +279,8 @@
             }
 
             citySelect.addEventListener('change', function () {
-                regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label><select name="region" id="region" class="js-example-basic-multiple" multiple="multiple"><select/>'
-                select_s = regionSelect.firstChild
+                regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label><select name="region" id="region" multiple><select/>'
+                select_s = regionSelect.children[1]
 
                 p_tag = document.getElementById('city-first')
                 if (p_tag){
@@ -331,10 +312,14 @@
                     // var option = new Option(region, region);
                     // regionSelect.add(option);
                 });
+                $('#region').select2({
+                    placeholder: "Виберіть район",
+                    allowClear: true
+                });
             });
         });
 
-    </script> -->
+    </script>
     <footer class="footer-distributed">
 
         <div class="footer-left">

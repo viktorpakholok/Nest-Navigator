@@ -606,6 +606,12 @@ a{
   display: flex;
 }
 
+.select2-selection__clear, .select2-selection__choice__remove{
+  margin-top: 0 !important;
+  padding: 0 !important;
+  color: gray;
+}
+
 @keyframes loading{
   from{
     transform: rotate(0turn);

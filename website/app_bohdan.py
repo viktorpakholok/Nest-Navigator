@@ -114,7 +114,7 @@ def search(page):
             # 'sort_min_price':request.form.get('sort_min_price_tag'),
             # 'sort_max_price/area':request.form.get('sort_max_pricearea_tag'),
             # 'sort_min_price/area':request.form.get('sort_min_pricearea_tag')
-            'regions': request.form.getlist('checkbox-region'),
+            'regions': request.form.getlist('region'),
             'dropdown': request.form.get('dropdown')
         })
         session_filters = {k: v for k, v in session_filters.items() if v is not None}

@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('#region').select2({
-        placeholder: "виберіть район",
+        placeholder: "Виберіть район",
         allowClear: true
     });
 });
