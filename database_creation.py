@@ -95,7 +95,6 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
         url = f"https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=2&search%5Bfilter_float_total_area%3Afrom%5D={i}&search%5Bfilter_float_total_area%3Ato%5D={i + 5}"
         response = requests.get(url, headers=headers_)
         soup = BeautifulSoup(response.content, 'html.parser')
-        # print(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
         pages_to_read = int(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
 
         while count <= pages_to_read:
@@ -104,7 +103,6 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
 
             if response.status_code == 200:
                 print(f'Success {count}!')
-                # pass
             else:
                 print('An error has occurred')
 
@@ -115,9 +113,11 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
 
             with open('1111122222333333.txt', 'w', encoding='utf-8') as file:
                 file.write(el)
-
-            loaded = json.loads(el)['listing']['listing']['ads']
-
+            try:
+                loaded = json.loads(el)['listing']['listing']['ads']
+            except Exception:
+                count += 1
+                continue
             for offer in loaded:
                 area, rooms = 0, ''
                 for val in offer['params']:
@@ -125,8 +125,6 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
                         rooms = val["value"]
                     elif val['key'] == 'total_area':
                         area = val["normalizedValue"]
-                # params = sorted(offer["params"], key=lambda x: x['key'])
-                # print(params)
                 adv_set.add((tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
 
             count += 1
@@ -200,8 +198,9 @@ class DatabaseManipulation:
 
     def read_set_to_objects_dom(self, adv_set:set):
         for dictinary in adv_set:
-            if isinstance(dictinary[3], str):
-                names = dictinary[2].split(',')[2:]
+            print(dictinary)
+            names = dictinary[2].split(',')[2:]
+            if isinstance(dictinary[3], str) and names[1][1].isnumeric():
                 if 'р‑н.' in names[2]:
                     area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), names[2][5:].strip(), names[3].strip()
                 else:
@@ -271,7 +270,7 @@ def during_the_day():
 if __name__ == "__main__":
     my_check_set = set()
     start = time.time()
-    dict1 = parser_dom(1, my_check_set)
+    dict1 = parser_dom(500, my_check_set)
     # print(dict1)
     # print(dict1)
     # set2 = parser_olx1(1, my_check_set)
@@ -281,7 +280,7 @@ if __name__ == "__main__":
     # print(set2)
     # print(t)
     # print(set2)
-    data = DatabaseManipulation(38.81, 42.28, False)
+    data = DatabaseManipulation(38.81, 42.28)
     # data.read_set_to_objects_olx(set2)
     # print(set2)
     print(t)
