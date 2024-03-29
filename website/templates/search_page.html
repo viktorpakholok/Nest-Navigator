@@ -46,7 +46,7 @@
                         <select name="city_tag" id="city_tag" class="sort-select">
                             <!-- <option value="" {% if filters.get('city', '') ==  "all"  %} selected {% endif %}>Усі</option> -->
                             {% for city in city_dis_dict.keys() %}
-                                <option value="{{ city }}" {% if filters.get('city', '') ==  city  %} selected {% endif %}>{{ city }}</option>
+                                <option value="{{ city }}">{{ city }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -331,6 +331,12 @@
                 $('#region').select2({
                     placeholder: "Виберіть район",
                     allowClear: true
+                });
+                $('#city_tag').select2({
+                    placeholder: "Виберіть місто",
+                    allowClear: true,
+                    initSelection: function(element, callback) {                   
+                    }
                 });
             });
 
