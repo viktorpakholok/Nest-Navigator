@@ -104,9 +104,11 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
         url = f"https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=2&search%5Bfilter_float_total_area%3Afrom%5D={i}&search%5Bfilter_float_total_area%3Ato%5D={i + 5}"
         response = requests.get(url, headers=headers_)
         soup = BeautifulSoup(response.content, 'html.parser')
-        pages_to_read = int(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
         if soup.find_all('p', class_='css-1oc165u'):
             continue
+        pages_to_read = soup.find_all('a', class_='css-1mi714g')
+        pages_to_read = 1 if not pages_to_read else int(pages_to_read[-1].get_text())
+        # pages_to_read = int(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
 
         while count <= pages_to_read:
             url = url.replace('page=2', f"page={count}")
@@ -296,7 +298,8 @@ def add_during_the_day():
 if __name__ == "__main__":
     my_check_set = set()
     start = time.time()
-    parser_olx(set(), 15, 21)
+    my_check_set = parser_olx(set(), 10, 500)
+    # print(my_check_set)
     # dict1 = parser_dom(500, my_check_set)
     # print(dict1)
     # print(dict1)
@@ -307,12 +310,12 @@ if __name__ == "__main__":
     # # print(set2)
     # # print(t)
     # # print(set2)
-    # data = DatabaseManipulation(38.81, 42.28)
-    # # data.read_set_to_objects_olx(set2)
+    data = DatabaseManipulation(38.81, 42.28)
+    data.read_set_to_objects_olx(my_check_set)
     # # print(set2)
     # print(t)
     # data.read_set_to_objects_dom(dict1)
-    # data.get_all_districts_and_cities()
+    data.get_all_districts_and_cities()
     # print(t)
     # data.get_all_districts_and_cities()
     # data.fix_the_database()
