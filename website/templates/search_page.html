@@ -291,7 +291,7 @@
                 }
 
                 var selectedCity = this.value;
-                console.log('sel',selectedCity);
+                // console.log('sel',selectedCity);
                 if (selectedCity == ''){
                     select_s.remove()
                     regionSelect.appendChild(p_tag_c)
@@ -302,7 +302,7 @@
                 }
                 
 
-                console.log(regions)
+                // console.log(regions)
 
                 // regionSelect.innerHTML = '<option value="">Виберіть район</option>';
                 regions.forEach(function (region) {
@@ -313,9 +313,13 @@
                 
                     select_s.appendChild(opt)
 
-                    console.log(region)
+                    // console.log(region)
                     // var option = new Option(region, region);
                     // regionSelect.add(option);
+                });
+                $('#region').select2({
+                    placeholder: "Виберіть район",
+                    allowClear: true,
                 });
             });
         });

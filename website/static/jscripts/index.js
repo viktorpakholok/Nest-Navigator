@@ -2,7 +2,6 @@ $(document).ready(function() {
     $('#region').select2({
         placeholder: "Виберіть район",
         allowClear: true,
-        dropdownAutoWidth: true
     });
 });
 // window.addEventListener("load", () => {

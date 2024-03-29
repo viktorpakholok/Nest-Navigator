@@ -229,6 +229,7 @@ button {
 }
 
 .filter-item {
+  margin: auto;
   margin-bottom: 1vh;
 }
 
@@ -764,6 +765,8 @@ a {
   }
 
   .dropbtn {
+    width: 92%;
+    box-sizing: border-box;
     display: block;
     cursor: pointer;
     background-color: #FFFCF2;
@@ -772,7 +775,7 @@ a {
     border-color: #333333;
     border-radius: 5px;
     padding: 10px;
-    margin: 5px 0;
+    margin: 5px auto;
     /* transition: 0.3ms; */
   }
   /* .dropbtn:hover{
@@ -915,5 +918,14 @@ a {
 }
 
 .select2-container--default .select2-results>.select2-results__options{
-  width: 240px;
+  width: 100%;
+}
+
+#dropdown{
+  width: 100%;
+}
+
+.pagination{
+  /* width: 50%; */
+  /* transform: translate(25%, 50%); */
 }
