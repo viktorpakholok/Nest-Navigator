@@ -276,7 +276,7 @@ input[type="submit"]:hover {
 }
 
 .sort-select {
-  width: 110% !important;
+  /* width: 110% !important; */
 
 }
 
