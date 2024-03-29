@@ -1,3 +1,14 @@
+$(document).ready(function() {
+    $('#region').select2({
+        placeholder: "Виберіть район",
+        allowClear: true
+    });
+    $('#city_tag').select2({
+        placeholder: "Виберіть місто",
+        allowClear: true
+    });
+});
+
 // window.addEventListener("load", () => {
 
 //     const loader = document.querySelector(".loader");
