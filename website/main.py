@@ -114,7 +114,7 @@ def search(page):
             # 'sort_min_price':request.form.get('sort_min_price_tag'),
             # 'sort_max_price/area':request.form.get('sort_max_pricearea_tag'),
             # 'sort_min_price/area':request.form.get('sort_min_pricearea_tag')
-            'regions': request.form.getlist('checkbox-region'),
+            'regions': request.form.getlist('region'),
             'dropdown': request.form.get('dropdown')
         })
         session_filters = {k: v for k, v in session_filters.items() if v is not None}
@@ -129,8 +129,11 @@ def search(page):
     t_s = time.time()
     city_dis_dict = get_all_districts_and_cities()
     print(time.time() - t_s)
+
     return render_template('search_page.html', apartaments=apartaments, filters=filters, city_dis_dict = city_dis_dict)
 
-
 if __name__ == "__main__":
-    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    app.run(debug=True, use_reloader = False, threaded=True)
+    
+    # deded = get_all_districts_and_cities(db)
+    # print(deded)

@@ -13,7 +13,6 @@ body {
   min-height: 1350px;
   text-align: center;
   padding-top: 250px;
-  /* min-height: 1350px;  */
 }
 
 h1 {
@@ -276,7 +275,7 @@ input[type="submit"]:hover {
 }
 
 .sort-select {
-  width: 110% !important;
+  /* width: 110% !important; */
 
 }
 
@@ -564,6 +563,12 @@ a {
   }
 }
 
+.long-content {
+  min-height: 1350px;
+  text-align: center;
+  padding-top: 200px;
+}
+
 .page-current {
   /* border-radius: 20%; */
   border-bottom: 0.3vh solid #011128;
@@ -601,8 +606,18 @@ a {
   animation: loading 0.75s ease infinite;
 }
 
-@keyframes loading {
-  from {
+.label-region{
+  display: flex;
+}
+
+.select2-selection__clear, .select2-selection__choice__remove{
+  margin-top: 0 !important;
+  padding: 0 !important;
+  color: gray;
+}
+
+@keyframes loading{
+  from{
     transform: rotate(0turn);
   }
 
