@@ -13,7 +13,6 @@ body {
   min-height: 1350px;
   text-align: center;
   padding-top: 250px;
-  /* min-height: 1350px;  */
 }
 
 h1 {
@@ -562,6 +561,12 @@ a {
   body {
     background-color: lightblue;
   }
+}
+
+.long-content {
+  min-height: 1350px;
+  text-align: center;
+  padding-top: 200px;
 }
 
 .page-current {
