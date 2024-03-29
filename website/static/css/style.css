@@ -225,7 +225,7 @@ button {
 
 /* filters */
 .filters {
-  width: 15%;
+  width: 18%;
 }
 
 .filter-item {
@@ -253,6 +253,7 @@ input[type="submit"]:hover {
 
 .filter-item input,
 .filter-item select {
+  box-sizing: border-box;
   background-color: #FFFCF2;
   width: 100%;
   border-style: solid;
@@ -272,6 +273,10 @@ input[type="submit"]:hover {
   border-radius: 5px;
   padding: 10px;
   margin: 5px 0;
+}
+
+.form-control::placeholder{
+  font-family: Arial, sans-serif;
 }
 
 .sort-select {
@@ -616,8 +621,21 @@ a {
 
 .select2-selection__clear, .select2-selection__choice__remove{
   margin-top: 0 !important;
-  padding: 0 !important;
   color: gray;
+}
+/* 
+.select2-selection__clear span{
+  margin-top: 3px;
+} */
+
+#city_first{
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-top: 8px;
+}
+
+.select2-selection__arrow{
+  padding-top: 3px;
 }
 
 @keyframes loading{
@@ -874,4 +892,28 @@ a {
   .wdth-80{
     width: 100%;
   }
+}
+
+.select2-container--default .select2-selection--multiple{
+  box-sizing: border-box;
+  background-color: #FFFCF2;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #333333;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+  margin-top: 0;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple{
+  border-width: 2px;
+  border-color: #333333;
+  border-radius: 5px;
+}
+
+.select2-container--default .select2-results>.select2-results__options{
+  width: 240px;
 }

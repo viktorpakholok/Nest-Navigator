@@ -65,18 +65,23 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
         response = requests.get(url, headers=headers_)
         soup = BeautifulSoup(response.content, 'html.parser')
         pages_to_read = int(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
+        if soup.find_all('p', class_='css-1oc165u'):
+            continue
+
         while count <= pages_to_read:
             url = url.replace('page=2', f"page={count}")
             response = requests.get(url, headers=headers_)
+
             if response.status_code == 200:
                 print(f'Success {count}!')
             else:
                 print('An error has occurred')
+
             soup = BeautifulSoup(response.content, 'html.parser')
-            el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ')
+            el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ')\
+
             el = el.replace('"', "'").replace('":\'"', '":""').replace("\":' '",'":" "').replace('":\'."', '":" "').replace(' \',"', ' ","').replace("'},", '"},').replace("{'", '{"').replace("':{", '":{').replace("':", '":').replace(",'",',"').replace("\":'", '":"').replace('\',"', '","').replace('":[\'', '":["').replace('\'],"', '"],"').replace('\']},{"', '"]},{"').replace('\'}],"', '"}],"').replace('\']}', '"]}').replace('\'}}', '"}}').replace('": ', "': ")+'}}}'
-            with open('1111122222333333.txt', 'w', encoding='utf-8') as file:
-                file.write(el)
+
             try:
                 loaded = json.loads(el)['listing']['listing']['ads']
             except Exception:
@@ -90,6 +95,40 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
                     elif val['key'] == 'total_area':
                         area = val["normalizedValue"]
                 adv_set.add((tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
+
+            count += 1
+    return adv_set
+
+def parser_olx_new(adv_set:set, num_of_pages:int):
+    url = "https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=2&search%5Border%5D=created_at%3Adesc"
+    count = 1
+    while count <= num_of_pages:
+        url = url.replace('page=2', f"page={count}")
+        response = requests.get(url, headers=headers_)
+        if response.status_code == 200:
+            print(f'Success {count}!')
+        else:
+            print('An error has occurred')
+        soup = BeautifulSoup(response.content, 'html.parser')
+        el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ')\
+
+        el = el.replace('"', "'").replace('":\'"', '":""').replace("\":' '",'":" "').replace('":\'."', '":" "').replace(' \',"', ' ","').replace("'},", '"},').replace("{'", '{"').replace("':{", '":{').replace("':", '":').replace(",'",',"').replace("\":'", '":"').replace('\',"', '","').replace('":[\'', '":["').replace('\'],"', '"],"').replace('\']},{"', '"]},{"').replace('\'}],"', '"}],"').replace('\']}', '"]}').replace('\'}}', '"}}').replace('": ', "': ")+'}}}'
+
+        with open('1111122222333333.txt', 'w', encoding='utf-8') as file:
+            file.write(el)
+        try:
+            loaded = json.loads(el)['listing']['listing']['ads']
+        except Exception:
+            count += 1
+            continue
+        for offer in loaded:
+            area, rooms = 0, ''
+            for val in offer['params']:
+                if val['key'] == 'number_of_rooms_string':
+                    rooms = val["value"]
+                elif val['key'] == 'total_area':
+                    area = val["normalizedValue"]
+            adv_set.add((tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
             count += 1
     return adv_set
 
@@ -225,10 +264,23 @@ def during_the_day():
         database.read_set_to_objects_olx(parser_olx(set(), i, i + 49))
     print('During the day done!')
 
+def add_during_the_day():
+    """
+    Update the database
+    """
+    current_time = int(time.strftime("%H:%M:%S").split(':')[0])
+    the_set=set()
+    if 10 < current_time < 23:
+        parser_olx_new(the_set, 15)
+        parser_dom(the_set, 15)
+    else:
+        parser_olx_new(the_set, 5)
+        parser_dom(the_set, 5)
+
 
 if __name__ == "__main__":
     my_check_set = set()
-    dict1 = parser_dom(500, my_check_set)
+    dict1 = parser_dom(100, my_check_set)
     data = DatabaseManipulation(38.81, 42.28)
     data.read_set_to_objects_dom(dict1)
     data.get_all_districts_and_cities()

@@ -44,9 +44,9 @@
                         <label for="city" class="montserrat-medium">Місто:</label>
                         <!-- <input type="text" class="form-control" name="city_tag" autocomplete="off" placeholder="Введіть місто"  value="{{ filters.get('city', '') }}"/> -->
                         <select name="city_tag" id="city_tag" class="sort-select">
-                            <!-- <option value="" {% if filters.get('city', '') ==  "all"  %} selected {% endif %}>Усі</option> -->
+                            <option value="" {% if filters.get('city', '') ==  "all"  %} selected {% endif %}>Усі</option>
                             {% for city in city_dis_dict.keys() %}
-                                <option value="{{ city }}">{{ city }}</option>
+                            <option value="{{ city }}" {% if filters.get('city', '') ==  city  %} selected {% endif %}>{{ city }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -170,7 +170,7 @@
                         </div>
                     </div>
                     {% endfor %}
-                
+
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                           {% if apartaments.has_prev %}
@@ -207,7 +207,7 @@
                     <div>
                         <img src="{{ url_for('static', filename = 'imgs/pngegg.png') }}" class='photo-not-found' alt="empty house">
                         <div class="text-not-found">
-                            <a class="montserrat-medium">На жаль, за вашим запитом нічого не знайдено</a>
+                            <a class="montserrat-medium">На жаль, за вашиим запитом нічого не знайдено</a>
                         </div>
                     </div>
                     
@@ -229,12 +229,12 @@
                 
                 
             </div>
+
         </div>
 
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-
             
             var citySelect = document.getElementById('city_tag');
             var regionSelect = document.getElementById('div_with_dis');
@@ -245,21 +245,14 @@
 
             var regionsByCity = {{ city_dis_dict | tojson }};
 
-            console.log(regionsByCity);
-
-            console.log('City_select', citySelect)
-            // console.log(regionsByCity['Київ'])
-
             var checked_was = {{ filters.get('regions', '') | tojson }}
             var city_was = {{ filters.get('city', '') | tojson }}
 
-            console.log('checked', city_was)
-
-            console.log('filters', {{ filters|tojson }})
+            console.log('checked_was: ', checked_was, 'city_was: ', city_was)
 
             if (city_was == ''){
-                // regionSelect.innerHTML = ''
-                regionSelect.children[1] = p_tag_c
+                regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label>'
+                regionSelect.appendChild(p_tag_c)
             }
             else{
                 regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label><select name="region" id="region" multiple><select/>'
@@ -288,25 +281,20 @@
                 });
             }
 
-            $("#city_tag").on("change", function () {
-
-                console.log('changed')
+            citySelect.addEventListener('change', function () {
                 regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label><select name="region" id="region" multiple><select/>'
                 select_s = regionSelect.children[1]
 
-                // p_tag = document.getElementById('city-first')
-                // if (p_tag){
-                //     p_tag.remove()
-                // }
+                p_tag = document.getElementById('city-first')
+                if (p_tag){
+                    p_tag.remove()
+                }
 
                 var selectedCity = this.value;
                 console.log('sel',selectedCity);
                 if (selectedCity == ''){
-                    console.log(select_s)
-                    console.log('select_s = p_tag_c')
-                    regionSelect.children[1].remove()
-                    regionSelect.appendChild(p_tag_c) 
-                    console.log(regionSelect.children[1])
+                    select_s.remove()
+                    regionSelect.appendChild(p_tag_c)
                     return
                 }
                 else{
@@ -321,6 +309,7 @@
                     opt = document.createElement("option");
                     opt.value = region;
                     opt.innerHTML = region
+                    // opt.style.cssText = "width: 80%";
                 
                     select_s.appendChild(opt)
 
@@ -328,22 +317,7 @@
                     // var option = new Option(region, region);
                     // regionSelect.add(option);
                 });
-                $('#region').select2({
-                    placeholder: "Виберіть район",
-                    allowClear: true
-                });
-                $('#city_tag').select2({
-                    placeholder: "Виберіть місто",
-                    allowClear: true,
-                    initSelection: function(element, callback) {                   
-                    }
-                });
             });
-
-            // citySelect.addEventListener('change', function () {
-                
-            // });
-
         });
 
     </script>
