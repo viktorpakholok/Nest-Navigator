@@ -279,6 +279,10 @@ input[type="submit"]:hover {
 
 }
 
+.select2-container--default .select2-selection--single{
+  
+}
+
 /* team page */
 
 .main-team-text {
