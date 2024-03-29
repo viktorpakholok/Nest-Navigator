@@ -131,12 +131,18 @@
 
                 {% if apartaments.items|length %}
                     {% for apartament in apartaments.items %}
+                {% if apartaments.items|length %}
+                    {% for apartament in apartaments.items %}
 
+                    <div class="flex adver-section">
+                        <div class="flex desc">
                     <div class="flex adver-section">
                         <div class="flex desc">
 
                             <div class="flex center-d">
+                            <div class="flex center-d">
 
+                                <button class="prev btns-sl" onclick="prev(this)">&#10094</button>
                                 <button class="prev btns-sl" onclick="prev(this)">&#10094</button>
 
                                 <div class="slider-wrap">
@@ -148,9 +154,38 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+                                <div class="slider-wrap">
+                                    <div class="slider-main">
+                                        {% for el in apartament.images.split(',') %}
+                                        <div class="item">
+                                            <img class="img-adver-section lazyload" src="{{ el }}" alt="">
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
 
                                 <button class="next btns-sl" onclick="next(this)">&#10095</button>
+                                <button class="next btns-sl" onclick="next(this)">&#10095</button>
 
+                            </div>
+                            
+                            <div class='adver-text'>
+                                <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name }}</a></h2>
+                                <div class="adver-description">
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.area }} м²</a></p>
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price_per_meter }} UAH/м²</a></p>
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">K-сть кімнат: {{ apartament.rooms }}</a></p>
+                                    {% if apartament.district != '' %}
+                                        <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
+                                    {% endif %}
+                                    <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.city }}</a></p>
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                             </div>
                             
                             <div class='adver-text'>
@@ -205,6 +240,62 @@
                 {% else %}
 
                     <p>We have nothing</p>
+                    
+                {% endif %}
+
+                <!-- <div class="col-12 slaider">
+                    <div class="pagination d-flex justify-content-center mt-5">
+                        <a href="#" class="rounded">&laquo;</a>
+                        <a href="#" class="active rounded">1</a>
+                        <a href="#" class="rounded">2</a>
+                        <a href="#" class="rounded">3</a>
+                        <a href="#" class="rounded">4</a>
+                        <a href="#" class="rounded">5</a>
+                        <a href="#" class="rounded">6</a>
+                        <a href="#" class="rounded">&raquo;</a>
+                    </div>
+                </div> -->
+
+                
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                          {% if apartaments.has_prev %}
+                          <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.prev_num)  }}">Previous</a></li>
+                          {% else %}
+                          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
+                          {% endif %}
+                
+                          {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
+                          {% if page %}
+                
+                              {% if page == apartaments.page %}
+                                  <li class = "page-item page-current"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                              {% else %}
+                              <li class = "page-item"><a class="page-link" href="{{ url_for('search', page=page)}}">{{ page }}</a></li>
+                              {% endif %}
+                
+                
+                          {% else %}
+                              <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">...</a></li>
+                          {% endif %}
+                          {% endfor %}
+                
+                          {% if apartaments.has_next %}
+                          <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.next_num) }}">Next</a></li>
+                          {% else %}
+                          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
+                          {% endif %}
+                        </ul>
+                    </nav>
+
+                {% else %}
+
+                    <div>
+                        <img src="{{ url_for('static', filename = 'imgs/pngegg.png') }}" class='photo-not-found' alt="empty house">
+                        <div class="text-not-found">
+                            <a class="montserrat-medium">На жаль, за вашиим запитом нічого не знайдено</a>
+                        </div>
+                    </div>
                     
                 {% endif %}
 
