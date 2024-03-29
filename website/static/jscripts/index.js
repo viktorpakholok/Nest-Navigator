@@ -3,6 +3,10 @@ $(document).ready(function() {
         placeholder: "Виберіть район",
         allowClear: true
     });
+    $('#city_tag').select2({
+        placeholder: "Виберіть місто",
+        allowClear: true
+    });
 });
 
 // window.addEventListener("load", () => {

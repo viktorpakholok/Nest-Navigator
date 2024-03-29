@@ -3,14 +3,14 @@ import random
 import json
 import time
 from sqlalchemy.engine import URL
-from sqlalchemy import create_engine, Column, String, Integer, REAL
+from sqlalchemy import create_engine, Column, String, Integer, REAL, func, update
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from bs4 import BeautifulSoup
 import requests
 
-from static.parsers.ria_parser import parser_dom
-from static.parsers.test_work_olx import parser_olx
+# from static.parsers.ria_parser import parser_dom
+# from static.parsers.test_work_olx import parser_olx
 
 session = requests.Session()
 
@@ -34,6 +34,64 @@ like Gecko) Version/16.1 Safari/605.1.15'
 headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
+def parser_dom(pages_to_parse: int, adv_set: set):
+
+    count = 1
+    url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
+    while count <= pages_to_parse:
+
+        response = requests.get(url+str(count), headers=headers_)
+
+        if response.status_code == 200:
+            print(f'Success {count}!')
+        else:
+            print('An error has occurred')
+            continue
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
+(']</script></div>', maxsplit=1)[0]))
+
+        for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
+            adv_set.add((tuple(offer['image']), offer['url'], offer['name'], \
+offer['price'], offer['priceCurrency']))
+        count += 1
+    return adv_set
+
+def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
+    for i in range(lower_price_bound, upper_price_bound - 5, 5):
+        count = 1
+        url = f"https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=2&search%5Bfilter_float_total_area%3Afrom%5D={i}&search%5Bfilter_float_total_area%3Ato%5D={i + 5}"
+        response = requests.get(url, headers=headers_)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        pages_to_read = int(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
+        while count <= pages_to_read:
+            url = url.replace('page=2', f"page={count}")
+            response = requests.get(url, headers=headers_)
+            if response.status_code == 200:
+                print(f'Success {count}!')
+            else:
+                print('An error has occurred')
+            soup = BeautifulSoup(response.content, 'html.parser')
+            el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ')
+            el = el.replace('"', "'").replace('":\'"', '":""').replace("\":' '",'":" "').replace('":\'."', '":" "').replace(' \',"', ' ","').replace("'},", '"},').replace("{'", '{"').replace("':{", '":{').replace("':", '":').replace(",'",',"').replace("\":'", '":"').replace('\',"', '","').replace('":[\'', '":["').replace('\'],"', '"],"').replace('\']},{"', '"]},{"').replace('\'}],"', '"}],"').replace('\']}', '"]}').replace('\'}}', '"}}').replace('": ', "': ")+'}}}'
+            with open('1111122222333333.txt', 'w', encoding='utf-8') as file:
+                file.write(el)
+            try:
+                loaded = json.loads(el)['listing']['listing']['ads']
+            except Exception:
+                count += 1
+                continue
+            for offer in loaded:
+                area, rooms = 0, ''
+                for val in offer['params']:
+                    if val['key'] == 'number_of_rooms_string':
+                        rooms = val["value"]
+                    elif val['key'] == 'total_area':
+                        area = val["normalizedValue"]
+                adv_set.add((tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
+            count += 1
+    return adv_set
 
 
 Base = declarative_base()
@@ -85,7 +143,7 @@ class Apartments(Base):
 
 class DatabaseManipulation:
     '''Do smth with a database'''
-    def __init__(self, usd_to_uah:float, eur_to_uah:float) -> None:
+    def __init__(self, usd_to_uah:float, eur_to_uah:float, Viktor_special = True) -> None:
         self.usd_to_uah = usd_to_uah
         self.eur_to_uah = eur_to_uah
         connection_string = URL.create('postgresql',
@@ -94,11 +152,10 @@ class DatabaseManipulation:
           host='ep-aged-pine-a29r8a5c.eu-central-1.aws.neon.tech',
           database='Housesdb',
         )
-
         engine = create_engine(connection_string, echo = True)
-        Base.metadata.drop_all(engine)
+        if Viktor_special:
+            Base.metadata.drop_all(engine)
         Base.metadata.create_all(bind=engine)
-
         Session = sessionmaker(bind = engine)
         self.session = Session()
 
@@ -107,22 +164,17 @@ class DatabaseManipulation:
         '''
         Read selected Viktortype dictinary to the database. 
         Can make a new database or delete the existing one and make another.
-
-        
         '''
         for dictinary in adv_set:
-            if isinstance(dictinary[3], str):
-                names = dictinary[2].split(',')[2:]
+            print(dictinary)
+            names = dictinary[2].split(',')[2:]
+            if isinstance(dictinary[3], str) and names[1][1].isnumeric():
                 if 'р‑н.' in names[2]:
-                    area, rooms, district, city = float(names[0][:-5].strip()), \
-        int(names[1][:-5].strip()[0]), names[2][5:].strip(), names[3].strip()
+                    area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), names[2][5:].strip(), names[3].strip()
                 else:
-                    area, rooms, district, city = float(names[0][:-5].strip()), \
-        int(names[1][:-5].strip()[0]), '', names[2].strip()
+                    area, rooms, district, city = float(names[0][:-5].strip()), int(names[1][:-5].strip()[0]), '', names[2].strip()
                 price = float("".join(dictinary[3].split()))
-                test = round(price/area, 1) if dictinary[4] == 'UAH' else round(price * \
-        self.usd_to_uah / area, 1) if dictinary[4]== 'USD' else \
-        round(price * self.eur_to_uah / area ,1)
+                test = round(price/area, 1) if dictinary[4] == 'UAH' else round(price * self.usd_to_uah / area, 1) if dictinary[4]== 'USD' else round(price * self.eur_to_uah / area ,1)
                 if test < 29:
                     continue
                 name = dictinary[2].split(',', maxsplit = 1)[1]
@@ -137,24 +189,18 @@ class DatabaseManipulation:
 
         '''
         for value in adv_set:
-            # print(value)
-            currency =  'UAH' if value[4][-4:-1] == 'грн' else 'USD' if \
-                value[4][-1] == '$' else 'EUR'
             price = value[4]
             area = float(value[3])
-
             self.session.add(Apartments(",".join(value[0]), value[1], value[2], area, price, value[5], \
 int(value[6][:-8]), value[7],value[8], round(price/area, 1) if value[5] == \
 'UAH' else round(price * self.usd_to_uah / area, 1) if value[5]== 'USD' else round(price * self.eur_to_uah / area, 1)))
         self.session.commit()
 
 
-    def get_all_districts_and_cities(self) -> dict:
+    def get_all_districts_and_cities(self) -> None:
         """
         Return all districts in a form of a dictinary
-
         {city : set of all districts}
-        
         """
         query = self.session.query(Apartments).filter(Apartments.district!='')
         output_dictinary = {}
@@ -164,12 +210,25 @@ int(value[6][:-8]), value[7],value[8], round(price/area, 1) if value[5] == \
             self.session.add(Districts(key, ",".join(value)))
         self.session.commit()
 
+def one_timer():
+    #  Dom Ria
+    dom_set = parser_dom(500, set())
+    database = DatabaseManipulation(38.81, 42)
+    database.read_set_to_objects_dom(dom_set)
+    #   OLX
+    database.read_set_to_objects_olx(parser_olx(set(), 10, 500))
+    print('One timer done!')
+
+def during_the_day():
+    for i in range(150, 500, 50):
+        database = DatabaseManipulation(38.81, 42, False)
+        database.read_set_to_objects_olx(parser_olx(set(), i, i + 49))
+    print('During the day done!')
+
+
 if __name__ == "__main__":
     my_check_set = set()
-
-    dict1 = parser_dom(10, my_check_set)
-
+    dict1 = parser_dom(500, my_check_set)
     data = DatabaseManipulation(38.81, 42.28)
-
     data.read_set_to_objects_dom(dict1)
     data.get_all_districts_and_cities()

@@ -44,9 +44,9 @@
                         <label for="city" class="montserrat-medium">Місто:</label>
                         <!-- <input type="text" class="form-control" name="city_tag" autocomplete="off" placeholder="Введіть місто"  value="{{ filters.get('city', '') }}"/> -->
                         <select name="city_tag" id="city_tag" class="sort-select">
-                            <option value="" {% if filters.get('city', '') ==  "all"  %} selected {% endif %}>Усі</option>
+                            <!-- <option value="" {% if filters.get('city', '') ==  "all"  %} selected {% endif %}>Усі</option> -->
                             {% for city in city_dis_dict.keys() %}
-                            <option value="{{ city }}" {% if filters.get('city', '') ==  city  %} selected {% endif %}>{{ city }}</option>
+                                <option value="{{ city }}" {% if filters.get('city', '') ==  city  %} selected {% endif %}>{{ city }}, {{filters.get('city', '') ==  city}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -230,6 +230,7 @@
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+
             
             var citySelect = document.getElementById('city_tag');
             var regionSelect = document.getElementById('div_with_dis');
@@ -241,15 +242,20 @@
             var regionsByCity = {{ city_dis_dict | tojson }};
 
             console.log(regionsByCity);
+
+            console.log('City_select', citySelect)
             // console.log(regionsByCity['Київ'])
 
             var checked_was = {{ filters.get('regions', '') | tojson }}
             var city_was = {{ filters.get('city', '') | tojson }}
 
-            console.log('checked', checked_was, city_was)
+            console.log('checked', city_was)
+
+            console.log('filters', {{ filters|tojson }})
 
             if (city_was == ''){
-                regionSelect.appendChild(p_tag_c)
+                // regionSelect.innerHTML = ''
+                regionSelect.children[1] = p_tag_c
             }
             else{
                 regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label><select name="region" id="region" multiple><select/>'
@@ -278,19 +284,25 @@
                 });
             }
 
-            citySelect.addEventListener('change', function () {
+            $("#city_tag").on("change", function () {
+
+                console.log('changed')
                 regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label><select name="region" id="region" multiple><select/>'
                 select_s = regionSelect.children[1]
 
-                p_tag = document.getElementById('city-first')
-                if (p_tag){
-                    p_tag.remove()
-                }
+                // p_tag = document.getElementById('city-first')
+                // if (p_tag){
+                //     p_tag.remove()
+                // }
 
                 var selectedCity = this.value;
                 console.log('sel',selectedCity);
                 if (selectedCity == ''){
-                    regionSelect.appendChild(p_tag_c)
+                    console.log(select_s)
+                    console.log('select_s = p_tag_c')
+                    regionSelect.children[1].remove()
+                    regionSelect.appendChild(p_tag_c) 
+                    console.log(regionSelect.children[1])
                     return
                 }
                 else{
@@ -317,6 +329,11 @@
                     allowClear: true
                 });
             });
+
+            // citySelect.addEventListener('change', function () {
+                
+            // });
+
         });
 
     </script>
