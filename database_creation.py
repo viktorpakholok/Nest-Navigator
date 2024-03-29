@@ -15,7 +15,7 @@ import random
 import json
 import time
 from urllib3 import PoolManager
-
+import datetime
 http = PoolManager()
 
 # headers = {'Accept-Encoding': 'gzip'}
@@ -89,6 +89,8 @@ offer['price'], offer['priceCurrency']))
         # print(time.time()-t_s)
     # print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/pages_to_parse}')
     return adv_set
+def parser_olx_new(adv_set:set, num_of_pages:int):
+    ...
 def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
     for i in range(lower_price_bound, upper_price_bound - 5, 5):
         count = 1
@@ -266,6 +268,21 @@ def during_the_day():
         database = DatabaseManipulation(38.81, 42, False)
         database.read_set_to_objects_olx(parser_olx(set(), i, i + 49))
     print('During the day done!')
+
+
+def add_during_the_day():
+    """
+    Update the database
+    """
+    current_time = int(time.strftime("%H:%M:%S").split(':')[0])
+    the_set=set()
+    if current_time < 23 and current_time > 10:
+        parser_olx_new(the_set, 15)
+        parser_dom(the_set, 15)
+    else:
+        parser_olx_new(the_set, 5)
+        parser_dom(the_set, 5)
+
 
 if __name__ == "__main__":
     my_check_set = set()
