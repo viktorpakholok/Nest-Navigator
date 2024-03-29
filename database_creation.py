@@ -43,16 +43,12 @@ headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
 def parser_dom(pages_to_parse: int, adv_set: set):
-    # all_time = time.time()
-    # dict_gen = {}
 
     count = 1
     url = 'https://dom.ria.com/uk/arenda-kvartir/?page='
     while count <= pages_to_parse:
 
-        # t_s = time.time()
         response = requests.get(url+str(count), headers=headers_)
-        # print(time.time() - t_s)
         if response.status_code == 200:
             print(f'Success {count}!')
 
@@ -62,35 +58,46 @@ def parser_dom(pages_to_parse: int, adv_set: set):
 
         soup = BeautifulSoup(response.content, 'html.parser')
 
-        # with open('sth.txt', 'a', encoding='UTF-8') as file:
-        #     file.write(str(soup))
-
-        # with open('sth_1.txt', 'a', encoding='UTF-8') as file:
-        #     file.write(f'{response.content}\n')
-
-        # with open('sth_0.txt', 'a', encoding='UTF-8') as file:
-        #     file.write(f'{soup}\n')
-
-
         loaded = json.loads('  {'+str(str(soup).split('  {', maxsplit=1)[1].split\
 (']</script></div>', maxsplit=1)[0]))
-
-        # with open('res.json', 'a', encoding='UTF-8') as file:
-        #     json.dump(loaded, file, indent=4, ensure_ascii=False)
-        #     file.write('\n')
-
-        # dict_gen.extend(loaded['mainEntity']['itemListElement'][0]['offers']['offers'])
         for offer in loaded['mainEntity']['itemListElement'][0]['offers']['offers']:
             adv_set.add((tuple(offer['image']), offer['url'], offer['name'], \
 offer['price'], offer['priceCurrency']))
-            # dict_gen[offer['url']] = offer
 
         count += 1
-        # print(time.time()-t_s)
-    # print(f'all_time: {(time.time()-all_time)}, on_one: {(time.time()-all_time)/pages_to_parse}')
     return adv_set
 def parser_olx_new(adv_set:set, num_of_pages:int):
-    ...
+    url = "https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/?currency=UAH&page=2&search%5Border%5D=created_at%3Adesc"
+    count = 1
+    while count <= num_of_pages:
+        url = url.replace('page=2', f"page={count}")
+        response = requests.get(url, headers=headers_)
+        if response.status_code == 200:
+            print(f'Success {count}!')
+        else:
+            print('An error has occurred')
+        soup = BeautifulSoup(response.content, 'html.parser')
+        el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ')\
+
+        el = el.replace('"', "'").replace('":\'"', '":""').replace("\":' '",'":" "').replace('":\'."', '":" "').replace(' \',"', ' ","').replace("'},", '"},').replace("{'", '{"').replace("':{", '":{').replace("':", '":').replace(",'",',"').replace("\":'", '":"').replace('\',"', '","').replace('":[\'', '":["').replace('\'],"', '"],"').replace('\']},{"', '"]},{"').replace('\'}],"', '"}],"').replace('\']}', '"]}').replace('\'}}', '"}}').replace('": ', "': ")+'}}}'
+
+        with open('1111122222333333.txt', 'w', encoding='utf-8') as file:
+            file.write(el)
+        try:
+            loaded = json.loads(el)['listing']['listing']['ads']
+        except Exception:
+            count += 1
+            continue
+        for offer in loaded:
+            area, rooms = 0, ''
+            for val in offer['params']:
+                if val['key'] == 'number_of_rooms_string':
+                    rooms = val["value"]
+                elif val['key'] == 'total_area':
+                    area = val["normalizedValue"]
+            adv_set.add((tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
+            count += 1
+    return adv_set
 def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
     for i in range(lower_price_bound, upper_price_bound - 5, 5):
         count = 1
@@ -98,6 +105,8 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
         response = requests.get(url, headers=headers_)
         soup = BeautifulSoup(response.content, 'html.parser')
         pages_to_read = int(soup.find_all('a', class_='css-1mi714g')[-1].get_text())
+        if soup.find_all('p', class_='css-1oc165u'):
+            continue
 
         while count <= pages_to_read:
             url = url.replace('page=2', f"page={count}")
@@ -276,7 +285,7 @@ def add_during_the_day():
     """
     current_time = int(time.strftime("%H:%M:%S").split(':')[0])
     the_set=set()
-    if current_time < 23 and current_time > 10:
+    if 10 < current_time < 23:
         parser_olx_new(the_set, 15)
         parser_dom(the_set, 15)
     else:
@@ -287,23 +296,24 @@ def add_during_the_day():
 if __name__ == "__main__":
     my_check_set = set()
     start = time.time()
-    dict1 = parser_dom(500, my_check_set)
+    parser_olx(set(), 15, 21)
+    # dict1 = parser_dom(500, my_check_set)
     # print(dict1)
     # print(dict1)
     # set2 = parser_olx1(1, my_check_set)
     # start = time.time()
     # set2 = parser_olx(10, my_check_set)
-    t = time.time() - start
-    # print(set2)
+    # t = time.time() - start
+    # # print(set2)
+    # # print(t)
+    # # print(set2)
+    # data = DatabaseManipulation(38.81, 42.28)
+    # # data.read_set_to_objects_olx(set2)
+    # # print(set2)
     # print(t)
-    # print(set2)
-    data = DatabaseManipulation(38.81, 42.28)
-    # data.read_set_to_objects_olx(set2)
-    # print(set2)
-    print(t)
-    data.read_set_to_objects_dom(dict1)
-    data.get_all_districts_and_cities()
-    print(t)
+    # data.read_set_to_objects_dom(dict1)
+    # data.get_all_districts_and_cities()
+    # print(t)
     # data.get_all_districts_and_cities()
     # data.fix_the_database()
     # start = time.time()
