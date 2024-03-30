@@ -42,6 +42,26 @@ like Gecko) Version/16.1 Safari/605.1.15'
 headers_ = {'Accept-Encoding': 'gzip', 'User-Agent': random.choice(user_agents)}
 headers_['User-Agent'] = random.choice(user_agents)
 
+class Advert:
+    def __init__(self, images, url, name, area, price, currency, rooms, district, city) -> None:
+        self.images = images
+        self.url = url
+        self.name = name
+        self.area = area
+        self.price = price
+        self.currency = currency
+        self.rooms = rooms
+        self.district = district
+        self.city = city
+    def __hash__(self):
+        return hash(self.url)
+
+    def __repr__(self) -> str:
+        return f"{self.url}, {self.price}"
+
+    def __eq__(self, value: object) -> bool:
+        return self.url == value.url
+
 def parser_dom(pages_to_parse: int, adv_set: set):
 
     count = 1
@@ -76,6 +96,8 @@ def parser_olx_new(adv_set:set, num_of_pages:int):
             print(f'Success {count}!')
         else:
             print('An error has occurred')
+            count += 1
+            continue
         soup = BeautifulSoup(response.content, 'html.parser')
         el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ')\
 
@@ -95,7 +117,7 @@ def parser_olx_new(adv_set:set, num_of_pages:int):
                     rooms = val["value"]
                 elif val['key'] == 'total_area':
                     area = val["normalizedValue"]
-            adv_set.add((tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
+            adv_set.add(Advert(tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
             count += 1
     return adv_set
 def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
@@ -118,6 +140,8 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
                 print(f'Success {count}!')
             else:
                 print('An error has occurred')
+                count += 1
+                continue
 
             soup = BeautifulSoup(response.content, 'html.parser')
             el = soup.find('script', id = 'olx-init-config').text.split('window.__PRERENDERED_STATE__= "', maxsplit=1)[1].split(',\\"metaData\\"', maxsplit=1)[0].replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', ' ').replace('\\\\u003Cbr \\\\u002F\\\\u003E\\\\n', '').replace('\\"', '"').replace('\\\\u002F', '/').replace('\\\\u003Cp\\\\u003E', '').replace('\\\\u003C/p\\\\u003E', ' ').replace('    ', '').replace('\\\\"', '"').replace(r'\\r\\n', ' ')\
@@ -138,8 +162,10 @@ def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
                         rooms = val["value"]
                     elif val['key'] == 'total_area':
                         area = val["normalizedValue"]
-                adv_set.add((tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
-
+                a = Advert(tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"])
+                adv_set.add(a)
+                with open('olx_test.txt', 'a', encoding='utf-8') as file:
+                    file.write(str(a) + '\n\n')
             count += 1
     return adv_set
 
@@ -199,7 +225,7 @@ class DatabaseManipulation:
           database='Housesdb',
         )
 
-        engine = create_engine(connection_string, echo = True)
+        engine = create_engine(connection_string, echo = True, pool_pre_ping = True, pool_recycle = 300)
         if Viktor_special:
             Base.metadata.drop_all(engine)
 
@@ -237,11 +263,11 @@ class DatabaseManipulation:
             print(value)
             # currency =  'UAH' if value[4][-4:-1] == 'грн' else 'USD' if \
             #     value[4][-1] == '$' else 'EUR'
-            price = value[4]
-            area = float(value[3])
-            self.session.add(Apartments(",".join(value[0]), value[1], value[2], area, price, value[5], \
-int(value[6][:-8]), value[7],value[8], round(price/area, 1) if value[5] == \
-'UAH' else round(price * self.usd_to_uah / area, 1) if value[5]== 'USD' else round(price * self.eur_to_uah / area, 1)))
+            price = value.price
+            area = float(value.area)
+            self.session.add(Apartments(",".join(value.images), value.url, value.name, area, price, value.currency, \
+int(value.rooms[:-8]), value.district, value.city, round(price/area, 1) if value.currency == \
+'UAH' else round(price * self.usd_to_uah / area, 1) if value.currency== 'USD' else round(price * self.eur_to_uah / area, 1)))
         self.session.commit()
 
     def get_all_districts_and_cities(self) -> None:
@@ -298,7 +324,8 @@ def add_during_the_day():
 if __name__ == "__main__":
     my_check_set = set()
     start = time.time()
-    my_check_set = parser_olx(set(), 10, 500)
+    my_check_set = parser_olx(my_check_set, 10, 500)
+    # my_check_set = parser_olx(my_check_set, 10, 16)
     # print(my_check_set)
     # dict1 = parser_dom(500, my_check_set)
     # print(dict1)
