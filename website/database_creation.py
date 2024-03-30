@@ -191,7 +191,7 @@ class DatabaseManipulation:
           host='ep-aged-pine-a29r8a5c.eu-central-1.aws.neon.tech',
           database='Housesdb',
         )
-        engine = create_engine(connection_string, echo = True)
+        engine = create_engine(connection_string, echo = True, pool_pre_ping=True, pool_recycle=300)
         if Viktor_special:
             Base.metadata.drop_all(engine)
         Base.metadata.create_all(bind=engine)
