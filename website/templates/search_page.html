@@ -175,9 +175,9 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                           {% if apartaments.has_prev %}
-                          <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.prev_num)  }}">Previous</a></li>
+                          <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.prev_num)  }}">Попередня</a></li>
                           {% else %}
-                          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Previous</a></li>
+                          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Попередня</a></li>
                           {% endif %}
                 
                           {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
@@ -196,16 +196,16 @@
                           {% endfor %}
                 
                           {% if apartaments.has_next %}
-                          <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.next_num) }}">Next</a></li>
+                          <li class = "page-item"> <a class="page-link" href = "{{ url_for('search', page = apartaments.next_num) }}">Наступна</a></li>
                           {% else %}
-                          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Next</a></li>
+                          <li class = "page-item"> <a class="page-link btn disabled" href = "#">Наступна</a></li>
                           {% endif %}
                         </ul>
                     </nav>
 
                 {% else %}
 
-                    <div>
+                    <div class="when-nothing">
                         <img src="{{ url_for('static', filename = 'imgs/pngegg.png') }}" class='photo-not-found' alt="empty house">
                         <div class="text-not-found">
                             <a class="montserrat-medium">На жаль, за вашим запитом нічого не знайдено</a>
