@@ -118,7 +118,7 @@ def parser_olx_new(adv_set:set, num_of_pages:int):
                 elif val['key'] == 'total_area':
                     area = val["normalizedValue"]
             adv_set.add(Advert(tuple(offer["photos"]), offer["url"], offer["title"], area, offer["price"]["regularPrice"]["value"], offer["price"]["regularPrice"]["currencyCode"], rooms, offer["location"]["districtName"], offer["location"]["cityName"]))
-            count += 1
+        count += 1
     return adv_set
 def parser_olx(adv_set:set, lower_price_bound:int, upper_price_bound:int):
     for i in range(lower_price_bound, upper_price_bound - 5, 5):
@@ -325,6 +325,7 @@ if __name__ == "__main__":
     my_check_set = set()
     start = time.time()
     my_check_set = parser_olx(my_check_set, 10, 500)
+    # my_check_set = parser_olx_new(my_check_set, 15)
     # my_check_set = parser_olx(my_check_set, 10, 16)
     # print(my_check_set)
     # dict1 = parser_dom(500, my_check_set)
