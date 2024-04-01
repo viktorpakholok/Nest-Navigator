@@ -155,13 +155,13 @@
                             </div>
                             
                             <div class='text-off'>
-                                <h2 class="adver-title montserrat-medium"><a href="{{ apartament.url }}">{{ apartament.name }}</a></h2>
+                                <h2 class="adver-title montserrat-meduim"><a href="{{ apartament.url }}">{{ apartament.name | replace('комн', 'кімн') }}</a></h2>
                                 <div class="adver-description">
                                     <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.area }} м²</a></p>
                                     <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price }} {{ apartament.currency }}</a></p>
                                     <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.price_per_meter }} UAH/м²</a></p>
                                     <p class="adver-description-item"><a href="{{ apartament.url }}">K-сть кімнат: {{ apartament.rooms }}</a></p>
-                                    {% if apartament.district != '' %}
+                                    {% if apartament.district != None and apartament.district != '' %}
                                         <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.district }}</a></p>
                                     {% endif %}
                                     <p class="adver-description-item"><a href="{{ apartament.url }}">{{ apartament.city }}</a></p>
@@ -180,7 +180,7 @@
                           <li class = "page-item"> <a class="page-link btn disabled" href = "#">Попередня</a></li>
                           {% endif %}
                 
-                          {% for page in apartaments.iter_pages(left_edge = 3, right_edge = 3) %}
+                          {% for page in apartaments.iter_pages(left_edge = 2, right_edge = 2) %}
                           {% if page %}
                 
                               {% if page == apartaments.page %}
@@ -249,7 +249,7 @@
             var checked_was = {{ filters.get('regions', '') | tojson }}
             var city_was = {{ filters.get('city', '') | tojson }}
 
-            console.log('checked_was: ', checked_was, 'city_was: ', city_was)
+            // console.log('checked_was: ', checked_was, 'city_was: ', city_was, 'regionsByCity: ', regionsByCity)
 
             if (city_was == ''){
                 regionSelect.innerHTML = '<label for="region" class="montserrat-medium">Район:</label>'
@@ -260,7 +260,7 @@
                 var regions = regionsByCity[city_was] || [];
                 select_s = regionSelect.children[1]
 
-                console.log('else, regions: ', regions)
+                // console.log('else, regions: ', regions)
                 regions.forEach(function (region) {
 
 
@@ -268,7 +268,7 @@
                     opt.value = region;
                     opt.innerHTML = region
                     if (checked_was.includes(region)){
-                        console.log('was', region)
+                        // console.log('was', region)
                         opt.selected = true
                     }
                 
@@ -276,7 +276,7 @@
 
                     
 
-                    console.log(region)
+                    // console.log(region)
                     // var option = new Option(region, region);
                     // regionSelect.add(option);
                 });

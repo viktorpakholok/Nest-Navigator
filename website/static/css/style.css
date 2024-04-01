@@ -897,6 +897,10 @@ a {
   }
 }
 
+.select2 {
+  width:100%!important;
+}
+
 .select2-container--default .select2-selection--multiple{
   box-sizing: border-box;
   background-color: #FFFCF2;
